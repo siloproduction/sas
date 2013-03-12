@@ -1,0 +1,7 @@
+@(greetings: List[bean.Greeting])
+
+<ul>
+    @for(greeting <- greetings) {
+        <li>Hello @greeting.name! and @greeting.repeat with @greeting.color</li>
+    }
+</ul>
