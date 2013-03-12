@@ -11,4 +11,5 @@ GET     /hello                      controllers.Application.sayHello
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
-GET     /ajaxTest                   controllers.Application.ajaxTest
+GET     /getGreetings               controllers.Application.getGreetings
+POST    /createGreeting             controllers.Application.createGreeting

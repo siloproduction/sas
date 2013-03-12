@@ -1,4 +1,4 @@
-@(helloForm: Form[(String,Int,Option[String])], message: String)
+@(helloForm: Form[(String)], greetingPanel: Html, message: String)
 
 @import helper._
 
@@ -15,45 +15,11 @@
             args = '_label -> "What's your name?", 'placeholder -> "World"
         )
 
-        @inputText(
-            field = helloForm("repeat"),
-            args = '_label -> "How many times?", 'size -> 3, 'placeholder -> 10
-        )
-
-        @select(
-            field = helloForm("color"),
-            options = options(
-                "" -> "Default",
-                "red" -> "Red",
-                "green" -> "Green",
-                "blue" -> "Blue"
-            ),
-            args = '_label -> "Choose a color"
-        )
-
         <p class="buttons">
-            <input type="submit" id="submit" />
-            <input type="button" id="ajaxCaller" onclick="callAjax();" value="Call ajax!" />
+            <input type="submit" id="submit" value="Classic form action" />
         </p>
-                                       <!--
-        <script type="text/javascript">
-            var callAjax = function() {
-                $.get('/ajaxTest', function(data) {
-                    $("#greetings").html("");
-                    data.forEach(function(entry) {
-                        $("#greetings").before("<li>" + data + "</li>");
-                    };
-                });
-            };
-        </script>                          -->
-        <script type="text/javascript">
-            var callAjax = function() {
-                $.get('/ajaxTest', function(data) {
-                    $("#greetings").html(data);
-                });
-            }
-        </script>
-        <ul id="greetings" />
-
     }
+
+    @greetingPanel
+
 }

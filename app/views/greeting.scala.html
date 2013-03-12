@@ -1,7 +1,35 @@
-@(greetings: List[bean.Greeting])
+@(greetingForm: Html, greetings: Html)
 
-<ul>
-    @for(greeting <- greetings) {
-        <li>Hello @greeting.name! and @greeting.repeat with @greeting.color</li>
+@import helper._
+
+<script type="text/javascript">
+    var fillCurrentGreetings = function() {
+        $.get('/getGreetings', function(data) {
+            $("#greetings").html(data);
+        });
     }
-</ul>
+    fillCurrentGreetings();
+    var postForm = function() {
+        $.post('/createGreeting', $('#greetingForm-form').serialize())
+            .done(function (form) {
+                $("#greetingForm").html(form);
+                fillCurrentGreetings();
+            })
+            .fail(function (error) {
+                $("#greetingForm").html(error.responseText);
+            });
+    }
+</script>
+
+<p class="buttons">
+    <input type="button" id="ajaxCaller" onclick="postForm();" value="Post ajax!" />
+</p>
+
+
+<div id="greetingForm">
+    @greetingForm
+</div>
+
+<div id="greetings">
+    @greetings
+</div>

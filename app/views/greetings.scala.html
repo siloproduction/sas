@@ -1,0 +1,9 @@
+@(greetings: List[bean.Greeting])
+
+<ul>
+    @for(greeting <- greetings) {
+        @for(_ <- 1 to greeting.repeat) {
+            <li>Hello @greeting.name! and @greeting.repeat with @greeting.color.getOrElse("inherited")"</li>
+        }
+    }
+</ul>

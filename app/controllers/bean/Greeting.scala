@@ -7,14 +7,15 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 
-case class Greeting(name: String, repeat: Int, color: Option[String]) {
+case class Greeting(name: String, repeat: Int, color: Option[String])
+object GreetingForm {
 
-  val form = Form(
-    tuple(
+  def create() =  {
+    Form(mapping(
       "name" -> nonEmptyText,
       "repeat" -> number(min = 1, max = 100),
       "color" -> optional(text)
+    )(Greeting.apply)(Greeting.unapply)
     )
-  )
-
+  }
 }
