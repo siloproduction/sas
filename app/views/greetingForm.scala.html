@@ -6,12 +6,12 @@
 
     @inputText(
         field = greetingForm("name"),
-        args = '_label -> "What's your name?", 'placeholder -> "World"
+        args = '_label -> "What's your name?", 'placeholder -> "World", '_showConstraints -> true
     )
 
     @inputText(
         field = greetingForm("repeat"),
-        args = '_label -> "How many times?", 'size -> 3, 'placeholder -> 10
+        args = '_label -> "How many times?", 'size -> 3, 'placeholder -> 10, '_showConstraints -> false, '_help -> "Custom help", '_error -> "Error msg", '_showErrors -> false
     )
 
     @select(
@@ -22,6 +22,6 @@
             "green" -> "Green",
             "blue" -> "Blue"
         ),
-        args = '_label -> "Choose a color"
+        args = '_label -> "Choose a color", '_showConstraints -> false
     )
 }
