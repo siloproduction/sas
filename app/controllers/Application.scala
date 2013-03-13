@@ -1,6 +1,7 @@
 package controllers
 
 import bean.{GreetingForm, Greeting}
+import dao.GreetingDao
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -21,7 +22,7 @@ object Application extends Controller {
   val greetingForm = GreetingForm.create()
 
   def createGreetingPanel: Html = {
-    views.html.greeting(views.html.greetingForm(greetingForm), views.html.greetings(greetings.toList))
+    views.html.greeting(views.html.greetingForm(greetingForm), views.html.greetings(GreetingDao.findAll()))
   }
 
   def index = Action {
@@ -38,22 +39,18 @@ object Application extends Controller {
     )
   }
 
-  val greetings: ListBuffer[Greeting] = ListBuffer()
-
   def createGreeting = Action { implicit request =>
-  //val g = new Greeting(name="Greeting" + greetings.length, Random.nextInt(5), Option.apply("red"))
     val requestFrom: Form[Greeting] = greetingForm.bindFromRequest()
-    val errors = requestFrom.globalErrors
     requestFrom.fold(
           formWithErrors => BadRequest(views.html.greetingForm(formWithErrors )),
         {case (greeting) => {
-          greetings += greeting
+          GreetingDao.create(greeting)
           Ok(views.html.greetingForm(greetingForm))
         }}
     )
   }
 
   def getGreetings = Action { implicit request =>
-    Ok(views.html.greetings(greetings.toList))
+    Ok(views.html.greetings(GreetingDao.findAll()))
   }
 }
