@@ -9,13 +9,6 @@ CREATE TABLE greeting (
   color                     VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE user (
-  login                     VARCHAR(255) PRIMARY KEY,
-  password                  VARCHAR(255) NOT NULL,
-  profile                   VARCHAR(255) NOT NULL
-);
-
 # --- !Downs
 
 DROP TABLE IF EXISTS greeting;
-DROP TABLE IF EXISTS user;
