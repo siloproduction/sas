@@ -1,12 +1,8 @@
 package controllers.bean
 
-import play.api.data.Form
 
-import play.api._
-import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
-import anorm.Pk
 
 case class Greeting(name: String, repeat: Int, color: Option[String]) {
   var id: Long = 0

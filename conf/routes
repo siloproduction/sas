@@ -13,3 +13,10 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 GET     /getGreetings               controllers.Application.getGreetings
 POST    /createGreeting             controllers.Application.createGreeting
+
+
+
+############### Admin
+GET     /admin/                     controllers.Admin.index
+GET     /admin/getUsers             controllers.Admin.getUsers
+POST    /admin/createUser           controllers.Admin.createUser

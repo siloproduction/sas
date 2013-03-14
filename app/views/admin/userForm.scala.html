@@ -1,0 +1,25 @@
+@(userForm: Form[bean.User])
+
+@import helper._
+
+@form(action = routes.Admin.createUser, args = 'id -> "userForm-form") {
+
+    @inputText(
+        field = userForm("login"),
+        args = '_label -> "What's the user name?", 'placeholder -> "username"
+    )
+
+    @inputPassword(
+        field = userForm("password"),
+        args = '_label -> "pwd", 'size -> 10, 'placeholder -> "xxxxxx", '_showConstraints -> false
+    )
+
+    @select(
+        field = userForm("profile"),
+        options = options(
+            "user" -> "User",
+            "admin" -> "Admin"
+        ),
+        args = '_label -> "Profile", '_showConstraints -> false
+    )
+}
