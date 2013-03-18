@@ -1,0 +1,29 @@
+@(categoryForm: Form[bean.Category], categories: Seq[bean.Category])
+
+@import helper._
+
+@form(action = routes.Admin.createCategory, args = 'id -> "categoryForm-form") {
+
+    @inputText(
+        field = categoryForm("name"),
+        args = '_label -> "What's the category name?", 'placeholder -> "name"
+    )
+
+    @select(
+        field = categoryForm("parent"),
+        categories.map{ c =>
+            c.name -> c.name
+        },
+        args = '_label -> "Parent", '_showConstraints -> false
+    )
+
+    @inputText(
+        field = categoryForm("rank"),
+        args = '_label -> "rank", 'placeholder -> "rank"
+    )
+
+    @checkbox(
+        field = categoryForm("enabled"),
+        args = '_label -> "Enable the category", 'placeholder -> "enabled"
+    )
+}

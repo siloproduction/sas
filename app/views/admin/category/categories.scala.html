@@ -1,0 +1,7 @@
+@(categories: Seq[bean.Category])
+
+<ul>
+    @for(category <- categories) {
+       <li>@category.name <small>(parent= @category.parent, rank= @category.rank, enabled= @category.enabled)</small></li>
+    }
+</ul>

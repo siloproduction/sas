@@ -1,4 +1,4 @@
-@(userPanel: Html)
+@(userPanel: Html, categoryPanel: Html)
 
 @import helper._
 
@@ -8,6 +8,9 @@
         <input type="button" id="admin_button" value=":(" />
     </p>
 
+    <h1>User</h1>
     @userPanel
 
+    <h1>Category</h1>
+    @categoryPanel
 }

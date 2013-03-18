@@ -18,5 +18,11 @@ POST    /createGreeting             controllers.Application.createGreeting
 
 ############### Admin
 GET     /admin/                     controllers.Admin.index
+
+### User
 GET     /admin/getUsers             controllers.Admin.getUsers
 POST    /admin/createUser           controllers.Admin.createUser
+
+### Category
+GET     /admin/getCategories        controllers.Admin.getCategories
+POST    /admin/createCategory       controllers.Admin.createCategory

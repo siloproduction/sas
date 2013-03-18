@@ -1,0 +1,35 @@
+@(categoryForm: Html, categories: Html)
+
+@import helper._
+
+<script type="text/javascript">
+    var fillCurrentCategories = function() {
+        $.get('/admin/getCategories', function(data) {
+            $("#categories").html(data);
+        });
+    }
+    fillCurrentCategories();
+    var createCategory = function() {
+        $.post('/admin/createCategory', $('#categoryForm-form').serialize())
+            .done(function (form) {
+                $("#categoryForm").html(form);
+                fillCurrentCategories();
+            })
+            .fail(function (error) {
+                $("#categoryForm").html(error.responseText);
+            });
+    }
+</script>
+
+<p class="buttons">
+    <input type="button" id="ajaxCaller" onclick="createCategory();" value="Create" />
+</p>
+
+
+<div id="categoryForm">
+    @categoryForm
+</div>
+
+<div id="categories">
+    @categories
+</div>

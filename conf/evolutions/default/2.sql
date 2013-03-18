@@ -8,6 +8,15 @@ CREATE TABLE users (
   profile                   VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE category (
+  name                      VARCHAR(255) NOT NULL,
+  parent                    VARCHAR(255) DEFAULT '',
+  rank                      INTEGER NOT NULL,
+  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
+  CONSTRAINT name_parent    PRIMARY KEY(name,parent)
+);
+insert into category(name, rank, enabled) values ('', 1, TRUE);
+
 # --- !Downs
 
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users, category;
