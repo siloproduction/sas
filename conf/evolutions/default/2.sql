@@ -11,4 +11,3 @@ CREATE TABLE user (
 # --- !Downs
 
 DROP TABLE IF EXISTS user;
-
