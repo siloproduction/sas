@@ -23,13 +23,13 @@ object UserDao {
 
   def findAll(): Seq[User] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from user").as(parser *)
+      SQL("select * from users").as(parser *)
     }
   }
 
   def create(user: User): Unit = {
     DB.withConnection { implicit connection =>
-      SQL("insert into user(login, password, profile) values ({login}, {password}, {profile})").on(
+      SQL("insert into users(login, password, profile) values ({login}, {password}, {profile})").on(
         'login -> user.login,
         'password -> user.password,
         'profile -> user.profile.toString
