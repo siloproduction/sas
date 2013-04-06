@@ -26,3 +26,7 @@ POST    /admin/createUser           controllers.Admin.createUser
 ### Category
 GET     /admin/getCategories        controllers.Admin.getCategories
 POST    /admin/createCategory       controllers.Admin.createCategory
+
+### Page
+GET     /admin/getPages             controllers.Admin.getPages
+POST    /admin/createPage           controllers.Admin.createPage

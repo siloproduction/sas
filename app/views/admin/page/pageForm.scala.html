@@ -1,0 +1,39 @@
+@(pageForm: Form[bean.Page], categories: Seq[bean.Category])
+
+@import helper._
+
+@form(action = routes.Admin.createPage, args = 'id -> "pageForm-form") {
+
+    @inputText(
+        field = pageForm("name"),
+        args = '_label -> "What's the Page name?", 'placeholder -> "name"
+    )
+
+    @select(
+        field = pageForm("category"),
+        categories.map{ c =>
+            c.name -> c.name
+        },
+        args = '_label -> "Category", '_showConstraints -> false
+    )
+
+    @inputText(
+        field = pageForm("permanentLink"),
+        args = '_label -> "Permanent link", 'placeholder -> "the_link_of_my_page", '_showConstraints -> false
+    )
+
+    @textarea(
+        field = pageForm("data"),
+        args = '_label -> "data", 'rows -> 6, 'cols -> "80%", '_showConstraints -> false, 'class -> "richtext_panel"
+    )
+
+    @inputText(
+        field = pageForm("rank"),
+        args = '_label -> "rank", 'placeholder -> "5", '_showConstraints -> false
+    )
+
+    @checkbox(
+        field = pageForm("enabled"),
+        args = '_label -> "Enable the page", 'placeholder -> "enabled", '_showConstraints -> false
+    )
+}

@@ -1,0 +1,35 @@
+@(pageForm: Html, pages: Html)
+
+@import helper._
+
+<script type="text/javascript">
+    var fillCurrentPages = function() {
+        $.get('/admin/getPages', function(data) {
+            $("#pages").html(data);
+        });
+    }
+    fillCurrentPages();
+    var createPage = function() {
+        $.post('/admin/createPage', $('#pageForm-form').serialize())
+            .done(function (form) {
+                $("#pageForm").html(form);
+                fillCurrentPages();
+            })
+            .fail(function (error) {
+                $("#pageForm").html(error.responseText);
+            });
+    }
+</script>
+
+<p class="buttons">
+    <input type="button" id="ajaxCaller" onclick="createPage();" value="Create" />
+</p>
+
+
+<div id="pageForm">
+    @pageForm
+</div>
+
+<div id="pages">
+    @pages
+</div>

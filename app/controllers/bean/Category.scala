@@ -7,6 +7,11 @@ import play.api.data.Forms._
 import controllers.dao.CategoryDao
 
 case class Category(name: String, parent: String, link: Option[String], rank: Int, enabled: Boolean)
+object Category {
+
+  def isRootCategory(categoryName: String):Boolean = categoryName.equals("")
+
+}
 object CategoryForm {
 
   def create() =  {

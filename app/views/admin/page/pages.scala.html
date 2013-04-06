@@ -1,0 +1,7 @@
+@(pages: Seq[bean.Page])
+
+<ul>
+    @for(page <- pages) {
+       <li>@page.name <small>(category= @page.category, enabled= @page.enabled, rank= @page.rank)</small></li>
+    }
+</ul>

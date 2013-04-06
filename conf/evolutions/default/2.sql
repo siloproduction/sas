@@ -18,6 +18,16 @@ CREATE TABLE category (
 );
 insert into category(name, rank, enabled) values ('', 1, TRUE);
 
+CREATE TABLE page (
+  name                      VARCHAR(255) NOT NULL,
+  category                  VARCHAR(255) references category(name),
+  permanentLink             VARCHAR(255) DEFAULT NULL,
+  data                      TEXT NOT NULL DEFAULT '',
+  rank                      INTEGER NOT NULL,
+  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
+  CONSTRAINT name_category  PRIMARY KEY(name,category)
+);
+
 # --- !Downs
 
-DROP TABLE IF EXISTS users, category;
+DROP TABLE IF EXISTS users, category, page;

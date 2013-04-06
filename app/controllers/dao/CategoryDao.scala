@@ -47,4 +47,13 @@ object CategoryDao {
       ).execute()
     }
   }
+
+  def findByName(name: String): Category = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from category where name={name}").on(
+        'name -> name
+      ).as(parser *)
+       .head
+    }
+  }
 }
