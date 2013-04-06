@@ -11,6 +11,7 @@ CREATE TABLE users (
 CREATE TABLE category (
   name                      VARCHAR(255) NOT NULL,
   parent                    VARCHAR(255) DEFAULT '',
+  link                      VARCHAR(255) DEFAULT NULL,
   rank                      INTEGER NOT NULL,
   enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
   CONSTRAINT name_parent    PRIMARY KEY(name,parent)

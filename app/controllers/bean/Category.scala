@@ -6,7 +6,7 @@ import play.api.data._
 import play.api.data.Forms._
 import controllers.dao.CategoryDao
 
-case class Category(name: String, parent: String, rank: Int, enabled: Boolean)
+case class Category(name: String, parent: String, link: Option[String], rank: Int, enabled: Boolean)
 object CategoryForm {
 
   def create() =  {
@@ -17,16 +17,16 @@ object CategoryForm {
                 }),
       "parent" -> optional(text)
                 .verifying("Must match an existing category", fields => fields match {
-                  case (parent) => isValidParent(parent)
+                  case (parent) => CategoryDao.isValidParent(parent)
+                }),
+      "link" -> optional(text)
+                .verifying("Must start with http://", fields => fields match {
+                  case (link) => link.getOrElse("http://").startsWith("http://")
                 }),
       "rank" -> number,
       "enabled" -> boolean
-    )((name, parent, rank, enabled) => Category(name, parent.getOrElse("" ), rank, enabled))
-     ((category) => Some(category.name, Option.apply(category.parent), category.rank, category.enabled))
+    )((name, parent, link, rank, enabled) => Category(name, parent.getOrElse(""), link, rank, enabled))
+     ((category) => Some(category.name, Option.apply(category.parent), category.link, category.rank, category.enabled))
     )
-  }
-
-  def isValidParent(parent: Option[String]):Boolean = {
-    CategoryDao.findAll().exists(_.name == parent.getOrElse(""))
   }
 }

@@ -15,9 +15,10 @@ object CategoryDao {
   val parser = {
     get[Pk[String]]("name") ~
     get[Pk[String]]("parent") ~
+    get[Option[String]]("link") ~
     get[Int]("rank") ~
     get[Boolean]("enabled") map {
-      case name~parent~rank~enabled => Category(name.get, parent.getOrElse(""), rank, enabled)
+      case name~parent~link~rank~enabled => Category(name.get, parent.getOrElse(""), link, rank, enabled)
     }
   }
 
@@ -29,12 +30,21 @@ object CategoryDao {
 
   def create(category: Category): Unit = {
     DB.withConnection { implicit connection =>
-      SQL("insert into category(name, parent, rank, enabled) values ({name}, {parent}, {rank}, {enabled})").on(
+      SQL("insert into category(name, parent, link, rank, enabled) values ({name}, {parent}, {link}, {rank}, {enabled})").on(
         'name -> category.name,
         'parent -> category.parent,
+        'link -> category.link,
         'rank -> category.rank,
         'enabled -> category.enabled
       ).executeUpdate()
+    }
+  }
+
+  def isValidParent(parent: Option[String]):Boolean = {
+    DB.withConnection { implicit connection =>
+      SQL("select 1 from category where name={name}").on(
+        'name -> parent.getOrElse("")
+      ).execute()
     }
   }
 }
