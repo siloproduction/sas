@@ -43,4 +43,12 @@ object PageDao {
       ).executeUpdate()
     }
   }
+
+  def findByCategory(categoryName: String): Seq[Page] = {
+    DB.withConnection { implicit  connection =>
+      SQL("select * from page where category={category}").on(
+        'category -> categoryName
+      ).as(parser *)
+    }
+  }
 }

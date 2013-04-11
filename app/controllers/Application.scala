@@ -1,7 +1,7 @@
 package controllers
 
 import bean.{GreetingForm, Greeting}
-import dao.GreetingDao
+import controllers.dao.{CategoryDao, GreetingDao}
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -26,7 +26,7 @@ object Application extends Controller {
   }
 
   def index = Action {
-    Ok(views.html.index(helloForm, createGreetingPanel, "Your new application is ready."))
+    Ok(views.html.index(helloForm, createGreetingPanel, CategoryDao.findAll()))
   }
 
   /**
@@ -34,7 +34,7 @@ object Application extends Controller {
    */
   def sayHello = Action { implicit request =>
     helloForm.bindFromRequest.fold(
-    formWithErrors => BadRequest(views.html.index(formWithErrors, createGreetingPanel, "Erreur de formulaire")),
+    formWithErrors => BadRequest(views.html.index(formWithErrors, createGreetingPanel, CategoryDao.findAll())),
     {case (name) => Ok(html.hello(name))}
     )
   }

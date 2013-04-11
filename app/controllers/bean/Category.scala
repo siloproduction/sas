@@ -4,9 +4,11 @@ import UserProfile.UserProfile
 
 import play.api.data._
 import play.api.data.Forms._
-import controllers.dao.CategoryDao
+import controllers.dao.{PageDao, CategoryDao}
 
-case class Category(name: String, parent: String, link: Option[String], rank: Int, enabled: Boolean)
+case class Category(name: String, parent: String, link: Option[String], rank: Int, enabled: Boolean) {
+  lazy val pages = PageDao.findByCategory(name)
+}
 object Category {
 
   def isRootCategory(categoryName: String):Boolean = categoryName.equals("")

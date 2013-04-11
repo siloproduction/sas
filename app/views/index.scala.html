@@ -1,13 +1,20 @@
-@(helloForm: Form[(String)], greetingPanel: Html, message: String)
+@(helloForm: Form[(String)], greetingPanel: Html, categories: Seq[bean.Category])
 
 @import helper._
 
 @main("Welcome to Play 2.1") {
 
-    <!--@play20.welcome(message)-->
-
-    <h1>Hey ! @message</h1>
-
+    <!--@play20.welcome("message")-->
+    @for(category <- categories) {
+        <li>
+            @category.name
+            <ul>
+                @for(page <- category.pages) {
+                    <li>@page.name</li>
+                }
+            </ul>
+        </li>
+    }
     @form(action = routes.Application.sayHello, args = 'id -> "helloform") {
 
         @inputText(
