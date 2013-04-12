@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, user: Option[bean.User])(content: Html)
 
 <!DOCTYPE html>
 
@@ -13,6 +13,16 @@
 
         <header>
             <a href="@routes.Application.index">@title</a>
+            @if(user.isEmpty) {
+                <a href="@routes.Application.login">Login</a>
+            } else {
+                <dl id="user">
+                    <dt>@user.get.login <span>(@user.get.profile)</span></dt>
+                    <dd>
+                        <a href="@routes.Application.logout()">Logout</a>
+                    </dd>
+                </dl>
+            }
         </header>
 
         @content

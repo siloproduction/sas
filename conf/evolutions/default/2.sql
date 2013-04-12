@@ -7,6 +7,8 @@ CREATE TABLE users (
   password                  VARCHAR(255) NOT NULL,
   profile                   VARCHAR(255) NOT NULL
 );
+INSERT INTO users (login, password, profile) VALUES ('admin', 'admin', 'Admin');
+INSERT INTO users (login, password, profile) VALUES ('user', 'user', 'User');
 
 CREATE TABLE category (
   id                        SERIAL PRIMARY KEY,
@@ -14,7 +16,8 @@ CREATE TABLE category (
   parent                    BIGINT DEFAULT NULL references category(id),
   link                      VARCHAR(255) DEFAULT '',
   rank                      INTEGER NOT NULL,
-  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE'
+  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
+  UNIQUE (name,parent)
 );
 insert into category(id, name, rank, enabled) values (0, 'None', 1, TRUE);
 

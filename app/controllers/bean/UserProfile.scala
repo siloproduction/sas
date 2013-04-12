@@ -5,14 +5,14 @@ object UserProfile extends Enumeration {
   val Admin, User = Value
 
   val mapping = Map(
-      Admin -> "admin",
-      User -> "user"
+      Admin -> "Admin",
+      User -> "User"
   )
   val reverse = Map(
-    "admin" -> Admin,
-    "user" -> User
+    "Admin" -> Admin,
+    "User" -> User
   )
 
-  def of(name: String) = reverse.get(name).get
+  def of(name: String) = reverse.get(name)
 
 }

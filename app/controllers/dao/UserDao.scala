@@ -5,8 +5,8 @@ import play.api.Play.current
 
 import anorm._
 import anorm.SqlParser._
-import controllers.bean.{UserProfile, User}
-import controllers.bean.UserProfile._
+import controllers.bean.{Credentials, UserProfile, User}
+import controllers.{InvalidCredentialsException, UserNotFoundException}
 
 /**
  * @Author("bltCrew")
@@ -34,6 +34,25 @@ object UserDao {
         'password -> user.password,
         'profile -> user.profile.toString
       ).executeUpdate()
+    }
+  }
+
+  def login(credentials: Credentials): User = {
+    DB.withConnection { implicit connection =>
+      val userOption = SQL("select * from users where login = {login}")
+        .on('login -> credentials.login)
+        .parse(parser *)
+        .headOption
+
+      userOption match {
+        case None => throw new UserNotFoundException("user with login: " + credentials.login + "has not been found")
+        case user:Some[User] => {
+          user.get.password match {
+            case credentials.password => user.get
+            case _ => throw new InvalidCredentialsException("Invalid credentials")
+          }
+        }
+      }
     }
   }
 }

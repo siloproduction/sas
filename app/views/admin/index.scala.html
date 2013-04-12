@@ -1,8 +1,8 @@
-@(userPanel: Html, categoryPanel: Html, pagePanel: Html)
+@(user: Option[bean.User], userPanel: Html, categoryPanel: Html, pagePanel: Html)
 
 @import helper._
 
-@main("Admin page") {
+@main("Admin page", user) {
 
     <p class="buttons">
         <input type="button" id="admin_button" value=":(" />

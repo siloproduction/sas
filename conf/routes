@@ -2,6 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+###############
+GET     /login                      controllers.Application.login
+GET     /logout                     controllers.Application.logout
+POST    /authenticate               controllers.Application.authenticate
+
 # Home page
 GET     /                           controllers.Application.index
 
@@ -17,6 +22,7 @@ POST    /createGreeting             controllers.Application.createGreeting
 
 
 ############### Admin
+GET     /authenticate               controllers.Application.authenticate
 GET     /admin/                     controllers.Admin.index
 
 ### User

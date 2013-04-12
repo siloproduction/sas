@@ -1,12 +1,13 @@
-@(helloForm: Form[(String)], greetingPanel: Html, categories: Seq[bean.Category])
+@(user: Option[bean.User], helloForm: Form[(String)], greetingPanel: Html, categories: Seq[bean.Category])
 
 @import helper._
 
-@main("Welcome to Play 2.1") {
+@main("Welcome to Play 2.1", user) {
 
     <!--@play20.welcome("message")-->
-    @for(category <- categories) {
-        <li>
+
+    <li>
+        @for(category <- categories) {
             @category.name
             <ul>
                 @for(page <- category.pages) {

@@ -5,7 +5,10 @@ import UserProfile.UserProfile
 import play.api.data._
 import play.api.data.Forms._
 
-case class User(login: String, password: String, profile: UserProfile)
+case class User(login: String, password: String, profile: UserProfile) {
+  def credentials = Credentials(login, password)
+}
+
 object UserForm {
 
   def create() =  {
@@ -23,9 +26,9 @@ object UserForm {
                 }),
       "profile" -> text
                 .verifying("admin or user", fields => fields match {
-                  case (msg) => msg.equals("admin") || msg.equals("user")
+                  case (msg) => UserProfile.of(msg).isDefined
                 })
-    )((login, password, profile) => User(login, password, UserProfile.of(profile)))
+    )((login, password, profile) => User(login, password, UserProfile.of(profile).get))
      ((user) => Some(user.login, user.password, user.profile.toString))
     )
   }

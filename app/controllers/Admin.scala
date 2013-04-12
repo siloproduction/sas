@@ -10,7 +10,7 @@ import controllers.bean.User
 import controllers.bean.Category
 import play.templates.TemplateMagic.anyToDefault
 
-object Admin extends Controller {
+object Admin extends Controller with Secured {
 
   val userForm = UserForm.create()
   val categoryForm = CategoryForm.create()
@@ -31,11 +31,11 @@ object Admin extends Controller {
     )
   }
 
-  def index = Action {
-    Ok(views.html.admin.index(createUserPanel,createCategoryPanel, createPagePanel))
+  def index = IsAdmin { username => implicit request =>
+    Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
   }
 
-  def createUser = Action { implicit request =>
+  def createUser = IsAdmin { username => implicit request =>
     val requestFrom: Form[User] = userForm.bindFromRequest()
     requestFrom.fold(
       formWithErrors => BadRequest(views.html.admin.userForm(formWithErrors )),
@@ -46,7 +46,7 @@ object Admin extends Controller {
     )
   }
 
-  def createCategory = Action { implicit request =>
+  def createCategory = IsAdmin { username => implicit request =>
     val requestFrom: Form[Category] = categoryForm.bindFromRequest()
     requestFrom.fold(
       formWithErrors => BadRequest(views.html.admin.category.categoryForm(formWithErrors, CategoryDao.findAll())),
@@ -57,7 +57,7 @@ object Admin extends Controller {
     )
   }
 
-  def createPage = Action { implicit request =>
+  def createPage = IsAdmin { username => implicit request =>
     val requestForm: Form[Page] = pageForm.bindFromRequest()
     requestForm.fold(
       formWithErrors => BadRequest(views.html.admin.page.pageForm(formWithErrors, CategoryDao.findAll())),
@@ -69,15 +69,15 @@ object Admin extends Controller {
 
   }
 
-  def getUsers = Action { implicit request =>
+  def getUsers = IsAdmin { username => implicit request =>
     Ok(views.html.admin.users(UserDao.findAll()))
   }
 
-  def getCategories = Action { implicit request =>
+  def getCategories = IsAdmin { username => implicit request =>
     Ok(views.html.admin.category.categories(CategoryDao.findAll()))
   }
 
-  def getPages = Action { implicit request =>
+  def getPages = IsAdmin { username => implicit request =>
     Ok(views.html.admin.page.pages(PageDao.findAll()))
   }
 }

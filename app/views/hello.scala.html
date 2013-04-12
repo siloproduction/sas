@@ -1,6 +1,6 @@
-@(name: String)
+@(user: Option[bean.User], name: String)
 
-@main("Here is the result:") {
+@main("Here is the result:", user) {
 
     @name
 
