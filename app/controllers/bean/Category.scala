@@ -6,12 +6,13 @@ import play.api.data._
 import play.api.data.Forms._
 import controllers.dao.{PageDao, CategoryDao}
 
-case class Category(name: String, parent: String, link: Option[String], rank: Int, enabled: Boolean) {
-  lazy val pages = PageDao.findByCategory(name)
+case class Category(name: String, parent: Category, link: Option[String], rank: Int, enabled: Boolean) {
+  var id: Long = 0
+  lazy val pages = PageDao.findByCategoryId(id)
 }
 object Category {
 
-  def isRootCategory(categoryName: String):Boolean = categoryName.equals("")
+  def noCategory = Category("no category", null, Option.empty, 0, false)
 
 }
 object CategoryForm {
@@ -22,9 +23,9 @@ object CategoryForm {
                 .verifying("3 characters minimum", fields => fields match {
                   case (name) => name.size > 2
                 }),
-      "parent" -> optional(text)
+      "parent" -> longNumber
                 .verifying("Must match an existing category", fields => fields match {
-                  case (parent) => CategoryDao.isValidParent(parent)
+                  case (parentId) => CategoryDao.isValidParent(parentId)
                 }),
       "link" -> optional(text)
                 .verifying("Must start with http://", fields => fields match {
@@ -32,8 +33,8 @@ object CategoryForm {
                 }),
       "rank" -> number,
       "enabled" -> boolean
-    )((name, parent, link, rank, enabled) => Category(name, parent.getOrElse(""), link, rank, enabled))
-     ((category) => Some(category.name, Option.apply(category.parent), category.link, category.rank, category.enabled))
+    )((name, parent, link, rank, enabled) => Category(name, CategoryDao.findById(parent), link, rank, enabled))
+     ((category) => Some(category.name, category.parent.id, category.link, category.rank, category.enabled))
     )
   }
 }

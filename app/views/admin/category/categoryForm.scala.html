@@ -12,7 +12,7 @@
     @select(
         field = categoryForm("parent"),
         categories.map{ c =>
-            c.name -> c.name
+            c.id.toString -> c.name
         },
         args = '_label -> "Parent", '_showConstraints -> false
     )

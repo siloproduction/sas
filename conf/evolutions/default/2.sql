@@ -9,23 +9,23 @@ CREATE TABLE users (
 );
 
 CREATE TABLE category (
+  id                        SERIAL PRIMARY KEY,
   name                      VARCHAR(255) NOT NULL,
-  parent                    VARCHAR(255) DEFAULT '',
-  link                      VARCHAR(255) DEFAULT NULL,
+  parent                    BIGINT DEFAULT NULL references category(id),
+  link                      VARCHAR(255) DEFAULT '',
   rank                      INTEGER NOT NULL,
-  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
-  CONSTRAINT name_parent    PRIMARY KEY(name,parent)
+  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE'
 );
-insert into category(name, rank, enabled) values ('', 1, TRUE);
+insert into category(id, name, rank, enabled) values (0, 'None', 1, TRUE);
 
 CREATE TABLE page (
+  id                        SERIAL PRIMARY KEY,
   name                      VARCHAR(255) NOT NULL,
-  category                  VARCHAR(255) references category(name),
+  categoryId                BIGINT DEFAULT NULL references category(id),
   permanentLink             VARCHAR(255) DEFAULT NULL,
   data                      TEXT NOT NULL DEFAULT '',
   rank                      INTEGER NOT NULL,
-  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
-  CONSTRAINT name_category  PRIMARY KEY(name,category)
+  enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE'
 );
 
 # --- !Downs

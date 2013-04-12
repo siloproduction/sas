@@ -12,7 +12,7 @@
     @select(
         field = pageForm("category"),
         categories.map{ c =>
-            c.name -> c.name
+            c.id.toString -> c.name
         },
         args = '_label -> "Category", '_showConstraints -> false
     )

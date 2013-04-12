@@ -13,14 +13,18 @@ import controllers.bean.{Greeting, Page, Category}
 object PageDao {
 
   val parser = {
-    get[Pk[String]]("name") ~
-    get[Pk[String]]("category") ~
+    get[Pk[Long]]("id") ~
+    get[String]("name") ~
+    get[Option[Long]]("categoryId") ~
     get[String]("permanentLink") ~
     get[String]("data") ~
     get[Int]("rank") ~
     get[Boolean]("enabled") map {
-      case name~category~permanentLink~data~rank~enabled =>
-        Page(name.get, CategoryDao.findByName(category.get), permanentLink, data, rank, enabled)
+      case id~name~categoryId~permanentLink~data~rank~enabled =>  {
+        val bean = Page(name, CategoryDao.findByIdOption(categoryId), permanentLink, data, rank, enabled)
+        bean.id = id.get
+        bean
+      }
     }
   }
 
@@ -32,10 +36,10 @@ object PageDao {
 
   def create(page: Page): Unit = {
     DB.withConnection { implicit connection =>
-      SQL("insert into page(name, category, permanentLink, data, rank, enabled)" +
-        " values ({name}, {category}, {permanentLink}, {data}, {rank}, {enabled})").on(
+      SQL("insert into page(name, categoryId, permanentLink, data, rank, enabled)" +
+        " values ({name}, {categoryId}, {permanentLink}, {data}, {rank}, {enabled})").on(
         'name -> page.name,
-        'category -> page.category.name,
+        'categoryId -> page.category.map(_.id),
         'permanentLink -> page.permanentLink,
         'data -> page.data,
         'rank -> page.rank,
@@ -44,10 +48,10 @@ object PageDao {
     }
   }
 
-  def findByCategory(categoryName: String): Seq[Page] = {
+  def findByCategoryId(categoryId: Long): Seq[Page] = {
     DB.withConnection { implicit  connection =>
-      SQL("select * from page where category={category}").on(
-        'category -> categoryName
+      SQL("select * from page where categoryId={categoryId}").on(
+        'categoryId -> categoryId
       ).as(parser *)
     }
   }

@@ -9,11 +9,13 @@ import views.html.admin.category.category
 
 case class Page(
        name: String,
-       category: Category,
+       category: Option[Category],
        permanentLink: String,
        data: String,
        rank: Int,
-       enabled: Boolean)
+       enabled: Boolean) {
+  var id: Long = 0
+}
 object PageForm {
 
   def create() =  {
@@ -22,9 +24,9 @@ object PageForm {
                 .verifying("3 characters minimum", fields => fields match {
                   case (name) => name.size > 2
                 }),
-      "category" -> text
+      "category" -> optional(longNumber)
                 .verifying("Must match an existing category", fields => fields match {
-                  case (category) => !Category.isRootCategory(category) && CategoryDao.isValidParent(Option.apply(category))
+                  case (categoryId) => categoryId.isDefined && CategoryDao.isValidParent(categoryId.get)
                 }),
       "permanentLink" -> text
                 .verifying("No space allowed", fields => fields match {
@@ -33,8 +35,10 @@ object PageForm {
       "data" -> nonEmptyText,
       "rank" -> number,
       "enabled" -> boolean
-    )((name, category, permanentLink, data, rank, enabled) => Page(name, CategoryDao.findByName(category), permanentLink, data, rank, enabled))
-     ((page) => Some(page.name, page.category.name, page.permanentLink, page.data, page.rank, page.enabled))
+    )((name, category, permanentLink, data, rank, enabled) => {
+        Page(name, CategoryDao.findByIdOption(category), permanentLink, data, rank, enabled)
+    })
+     ((page) => Some(page.name, page.category.map(_.id), page.permanentLink, page.data, page.rank, page.enabled))
     )
   }
 }
