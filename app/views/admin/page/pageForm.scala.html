@@ -22,11 +22,6 @@
         args = '_label -> "Permanent link", 'placeholder -> "the_link_of_my_page", '_showConstraints -> false
     )
 
-    @textarea(
-        field = pageForm("data"),
-        args = '_label -> "data", 'rows -> 6, 'cols -> "80%", '_showConstraints -> false, 'class -> "richtext_panel"
-    )
-
     @inputText(
         field = pageForm("rank"),
         args = '_label -> "rank", 'placeholder -> "5", '_showConstraints -> false
@@ -36,4 +31,22 @@
         field = pageForm("enabled"),
         args = '_label -> "Enable the page", 'placeholder -> "enabled", '_showConstraints -> false
     )
+
+    @textarea(
+        field = pageForm("data"),
+        args = '_label -> "data", 'rows -> 6, 'cols -> "80%", '_showConstraints -> false, 'class -> "richtext_panel"
+    )
 }
+
+<input id="pagePreviewUpdate" type="button" value="preview" />
+<input id="pagePreviewClear" type="button" value="clear preview" />
+<div id="pagePreview"></div>
+
+<script type="text/javascript">
+    $("#pagePreviewUpdate").click(function () {
+        $("#pagePreview").html($("#data").val());
+    });
+    $("#pagePreviewClear").click(function () {
+        $("#pagePreview").html("");
+    });
+</script>

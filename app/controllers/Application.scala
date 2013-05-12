@@ -7,11 +7,9 @@ import play.api.data._
 import play.api.data.Forms._
 
 import views._
-import collection.mutable.ListBuffer
 import play.api.templates.Html
 import controllers.bean.Greeting
 import controllers.bean.Credentials
-import controllers.bean
 
 object Application extends Controller with Secured {
 
