@@ -11,6 +11,7 @@
     </head>
     <body>
 
+        <!--
         <header>
             <a href="@routes.Application.index">@title</a>
             @if(user.isEmpty) {
@@ -24,7 +25,79 @@
                 </dl>
             }
         </header>
+        -->
 
         @content
+
+        <div class="container-fluid shadow-left">
+            <div id="banner">
+                <div class="pull-left margin-left-medium">
+                    <a id="bannerLeft" href="/">
+                        <img src="/media/images/asso-machete.png" alt="MACHETE!"></img>
+                    </a>
+                </div>
+                <div class="pull-right margin-right-medium">
+                    <div id="bannerRight">
+                        <div id="carousel">
+                            <div id="slides" class="pull-right shadow-right">
+                                <ul style="left: -500px;">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                            <div id="buttons" class="pull-right">
+                                <a id="prev" href="#">prev</a>
+                                <a id="next" href="#">next</a>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear">
+                    <hr>
+                </div>
+            </div>
+
+            <div id="breadcrumbs">
+                <ul class="topnav"></ul>
+                <ul class="topnav pull-right"></ul>
+            </div>
+
+            <div id="bodyColumn" class="content">
+                <div id="contentBox">
+                    <div class="section">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer shadow-left">
+            <div class="pull-left">
+                <span class="page-footer-item">© Association Machete</span>
+            </div>
+            <div class="clear">
+                <hr>
+            </div>
+            <div class="pull-left">
+                <span class="page-footer-item">N° Siret : 535 180 491 00024</span>
+            </div>
+            <div class="clear">
+                <hr>
+            </div>
+            <div class="pull-left">
+                <span class="page-footer-item">N° Waldec : w072001349</span>
+            </div>
+            <div class="clear">
+                <hr>
+            </div>
+            <div class="pull-left">
+                <span class="page-footer-item">Association à but non lucratif à Privas (07)</span>
+            </div>
+            <div class="clear">
+                <hr>
+            </div>
+        </footer>
+
     </body>
 </html>
