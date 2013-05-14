@@ -6,7 +6,7 @@ body {
     font-weight: normal;
     line-height: 18px;
     margin: 0;
-	background: url("../../media/images/background.jpg") repeat top left transparent;
+	background: url("../images/background.jpg") repeat top left transparent;
 }
 a {color:#404040;}
 /*Opera Fix
@@ -81,7 +81,7 @@ body:before {/* thanks to Maleika (Kohoutec)
 	color: black;
 }
 .home-block-top {
-    background: url("../../media/images/home/header_news.png") no-repeat left top transparent;
+    background: url("../images/home/header_news.png") no-repeat left top transparent;
 	height: 362px;
 }
 .home-block-center {
@@ -91,7 +91,7 @@ body:before {/* thanks to Maleika (Kohoutec)
 	padding: 0 15px;
 }
 .home-block-bottom {
-	background: url("../../media/images/home/footer_news.png") no-repeat top left transparent;
+	background: url("../images/home/footer_news.png") no-repeat top left transparent;
     height:54px;
 }
 .home-block-content {

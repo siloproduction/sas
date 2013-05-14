@@ -78,21 +78,21 @@
 }
  
 a#prev {
-    background:url(../../media/images/arrow.png) 5px -25px no-repeat;
+    background:url(../images/arrow.png) 5px -25px no-repeat;
 	height: 27px;
 }
  
 a#prev:hover {
-    background:url(../../media/images/arrow.png) 5px 3px no-repeat;
+    background:url(../images/arrow.png) 5px 3px no-repeat;
 	height: 27px;
 }
  
 a#next {
-    background:url(../../media/images/arrow.png) -25px -25px no-repeat;
+    background:url(../images/arrow.png) -25px -25px no-repeat;
 	height: 27px;
 }
  
 a#next:hover {
-    background:url(../../media/images/arrow.png) -25px 3px no-repeat;
+    background:url(../images/arrow.png) -25px 3px no-repeat;
 	height: 27px;
 }

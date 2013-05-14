@@ -80,7 +80,7 @@
 	width: 90%;
 }
 #breadcrumbs {
-	background: url("../../media/images/breadcrumb.png") repeat top left transparent;
+	background: url("../images/breadcrumb.png") repeat top left transparent;
 	width: 980px;
 	height: 40px;
     margin: 0 auto;
@@ -95,7 +95,7 @@
 	padding-top: 10px;
 }
 footer {
-	background: url("../../media/images/footer.png") repeat-x top left #32362f;
+	background: url("../images/footer.png") repeat-x top left #32362f;
 	border-top: 1px solid #EEEEEE;
 	color: white;
 	width: 940px;
