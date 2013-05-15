@@ -10,6 +10,9 @@ POST    /authenticate               controllers.Application.authenticate
 # Home page
 GET     /                           controllers.Application.index
 
+# Show a page
+GET     /page/:permanentLink        controllers.Application.page(permanentLink: String)
+
 # Hello action
 GET     /hello                      controllers.Application.sayHello
 

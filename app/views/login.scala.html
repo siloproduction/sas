@@ -1,8 +1,8 @@
-@(user: Option[bean.User], loginForm: Form[bean.Credentials])
+@(user: Option[bean.User], loginForm: Form[bean.Credentials], categories: Seq[bean.Category])
 
 @import helper._
 
-@main("Accueil", user) {
+@main("Accueil", user, categories) {
     @form(action = routes.Application.authenticate, args = 'id -> "loginform") {
 
         @inputText(

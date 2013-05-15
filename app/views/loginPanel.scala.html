@@ -1,0 +1,13 @@
+@(user: Option[bean.User])
+
+@if(user.isEmpty) {
+        <li><a href="@routes.Application.login">Login</a></li>
+} else {
+
+    @if(user.get.profile == bean.UserProfile.Admin) {
+        <li><a id="user" href="@routes.Admin.index">@user.get.login</a></li>
+    } else {
+        <li><a id="user">@user.get.login</a></li>
+    }
+    <li><a href="@routes.Application.logout()">Logout</a></li>
+}

@@ -2,20 +2,10 @@
 
 @import helper._
 
-@main("Welcome to Play 2.1", user) {
+@main("Association Machete", user, categories) {
 
     <!--@play20.welcome("message")-->
 
-    <li>
-        @for(category <- categories) {
-            @category.name
-            <ul>
-                @for(page <- category.pages) {
-                    <li>@page.name</li>
-                }
-            </ul>
-        </li>
-    }
     @form(action = routes.Application.sayHello, args = 'id -> "helloform") {
 
         @inputText(

@@ -55,4 +55,12 @@ object PageDao {
       ).as(parser *)
     }
   }
+
+  def findByPermanentLink(permanentLink: String): Page = {
+    DB.withConnection { implicit  connection =>
+      SQL("select * from page where permanentLink={permanentLink}").on(
+        'permanentLink -> permanentLink
+      ).as(parser *).head
+    }
+  }
 }

@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.bean._
-import controllers.dao.{UserDao, CategoryDao, GreetingDao}
+import controllers.dao.{PageDao, UserDao, CategoryDao, GreetingDao}
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -31,8 +31,12 @@ object Application extends Controller with Secured {
     Ok(views.html.index(user, helloForm, createGreetingPanel, CategoryDao.findAll()))
   }
 
+  def page(permanentLink: String) = Action { implicit request =>
+    Ok(views.html.page(user, CategoryDao.findAll(), PageDao.findByPermanentLink(permanentLink)))
+  }
+
   def login = Action { implicit request =>
-    Ok(views.html.login(user, loginForm))
+    Ok(views.html.login(user, loginForm, CategoryDao.findAll()))
   }
 
   def logout = Action {
@@ -44,7 +48,7 @@ object Application extends Controller with Secured {
   def authenticate = Action { implicit request =>
     val requestFrom: Form[Credentials] = loginForm.bindFromRequest()
     requestFrom.fold(
-      formWithErrors => BadRequest(views.html.login(user, formWithErrors)),
+      formWithErrors => BadRequest(views.html.login(user, formWithErrors, CategoryDao.findAll())),
       {case (credentials) => {
         try {
           val user = UserDao.login(credentials)
@@ -68,7 +72,7 @@ object Application extends Controller with Secured {
   def sayHello = Action { implicit request =>
     helloForm.bindFromRequest.fold(
     formWithErrors => BadRequest(views.html.index(user, formWithErrors, createGreetingPanel, CategoryDao.findAll())),
-    {case (name) => Ok(html.hello(user, name))}
+    {case (name) => Ok(html.hello(user, name, CategoryDao.findAll()))}
     )
   }
 

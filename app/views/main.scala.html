@@ -1,4 +1,4 @@
-@(title: String, user: Option[bean.User])(content: Html)
+@(title: String, user: Option[bean.User], categories: Seq[bean.Category])(content: Html)
 
 <!DOCTYPE html>
 
@@ -7,7 +7,7 @@
 
 
     <head>
-        <title> @title <!--{ % block title % }Association Machete{ % endblock % }--></title>
+        <title>@title</title>
 
         <meta name="google-site-verification" content="hGCNEn2AMIJ6CSutywv2bORBsW2au127a0gFi0gjJDY" />
         <meta name="keywords" content="Soirée, Machete, Musique, Jeune, Privas, Veyras, Ardèche, electro, concert, Oh My Dub, Step On The Beat, Surprise Jack, Session, Veyras'Oai, Musique actuelle, Culture, Spectacle, Théâtre, Association, Scène, Reggae, Rap, Hip Hop, Rock" />
@@ -22,8 +22,8 @@
             //<![CDATA[
 
             //google.load("search", "1");
-            google.load("jquery", "1.9.1");
-            google.load("jqueryui", "1.9.2");
+            google.load("jquery", "1.5.2");
+            google.load("jqueryui", "1.8.16");
 
             function OnLoad() {
             /*
@@ -63,6 +63,8 @@
             })();
 
         </script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js">
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
         <!-- include CSS always before including js -->
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")" />
@@ -82,96 +84,25 @@
 
     </head>
     <body>
-
-        <!--
-        <header>
-            <a href="@routes.Application.index">@title</a>
-            @if(user.isEmpty) {
-                <a href="@routes.Application.login">Login</a>
-            } else {
-                <dl id="user">
-                    <dt>@user.get.login <span>(@user.get.profile)</span></dt>
-                    <dd>
-                        <a href="@routes.Application.logout()">Logout</a>
-                    </dd>
-                </dl>
-            }
-        </header>
-        -->
-
         <div class="container-fluid shadow-left">
-            <div id="banner">
-                <div class="pull-left margin-left-medium">
-                    <a id="bannerLeft" href="/">
-                        <img src="@routes.Assets.at("images/asso-machete.png")" alt="MACHETE!"></img>
-                    </a>
-                </div>
-                <div class="pull-right margin-right-medium">
-                    <div id="bannerRight">
-                        <div id="carousel">
-                            <div id="slides" class="pull-right shadow-right">
-                                <ul style="left: -500px;">
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                </ul>
-                            </div>
-                            <div id="buttons" class="pull-right">
-                                <a id="prev" href="#">prev</a>
-                                <a id="next" href="#">next</a>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear">
-                    <hr>
-                </div>
-            </div>
-            <div id="breadcrumbs">
-                <ul class="topnav">
-                    <ul class="topnav">
-                        <li>
-                            <a href="/">ACCUEIL</a>
-                        </li>
-                        <li>
-                            <a>PROGRAMMATION</a>
-                            <ul class="subnav">
-                                <li>
-                                    <a href="/machete/page/45001/">27 AVRIL</a>
-                                </li>
-                                <li>
-                                    <a href="/machete/page/44001/">SAISON 2012</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                        </li>
-                    </ul>
-                </ul>
-                <ul class="topnav pull-right">
-                    <li>
-                        <a href="http://www.facebook.com/pages/Association-Machete/121181741251107">
-                            <img class="icon" src="@routes.Assets.at("images/facebook.png")" />
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div id="bodyColumn" class="content">
-                <div id="contentBox">
-                    <div class="section">
-                        <div class="home-section">
-                            <div class="home-block-top pull-left full-width">
-                                <div class="home-block-content">content !!!!!!!!!!!!!!!</div>
-                            </div>
-                            <div class="home-block-center pull-left">
-                                <div class="home-block-news">@content</div>
-                            </div>
-                            <div class="home-block-bottom pull-left full-width"> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--
+            <header>
+                <a href="@routes.Application.index">@title</a>
+                @if(user.isEmpty) {
+                    <a href="@routes.Application.login">Login</a>
+                } else {
+                    <dl id="user">
+                        <dt>@user.get.login <span>(@user.get.profile)</span></dt>
+                        <dd>
+                            <a href="@routes.Application.logout()">Logout</a>
+                        </dd>
+                    </dl>
+                }
+            </header>
+            -->
+            @views.html.banner()
+            @views.html.breadcrumbs(user, categories)
+            @views.html.bodyColumn(content)
         </div>
 
         <footer class="footer shadow-left">

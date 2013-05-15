@@ -32,7 +32,7 @@ object Admin extends Controller with Secured {
   }
 
   def index = IsAdmin { username => implicit request =>
-    Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
+    Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel, CategoryDao.findAll()))
   }
 
   def createUser = IsAdmin { username => implicit request =>

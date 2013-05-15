@@ -1,6 +1,6 @@
-@(user: Option[bean.User], name: String)
+@(user: Option[bean.User], name: String, categories: Seq[bean.Category])
 
-@main("Here is the result:", user) {
+@main("Here is the result:", user, categories) {
 
     @name
 
