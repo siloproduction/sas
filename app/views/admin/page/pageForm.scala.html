@@ -40,11 +40,12 @@
 
 <input id="pagePreviewUpdate" type="button" value="preview" />
 <input id="pagePreviewClear" type="button" value="clear preview" />
-<div id="pagePreview"></div>
+<div class="hidden"><div id="pagePreview" title="Page preview"></div></div>
 
 <script type="text/javascript">
     $("#pagePreviewUpdate").click(function () {
         $("#pagePreview").html($("#data").val());
+        $("#pagePreview").dialog({ position: { my: "center top", at: "center top", of: window }, width: "80%" });
     });
     $("#pagePreviewClear").click(function () {
         $("#pagePreview").html("");
