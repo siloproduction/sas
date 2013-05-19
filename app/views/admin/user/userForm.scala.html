@@ -1,0 +1,70 @@
+@(userForm: Form[bean.User], user: Option[bean.User])
+
+@import helper._
+
+
+<script type="text/javascript">
+    var fillCurrentUsers = function() {
+        $.get('/admin/getUsers', function(data) {
+            $("#users").html(data);
+        });
+    }
+    fillCurrentUsers();
+    var createUser = function() {
+        $.post('/admin/createUser', $('#userForm-form').serialize())
+        .done(function (form) {
+            $("#userForm").html(form);
+            fillCurrentUsers();
+        })
+        .fail(function (error) {
+            $("#userForm").html(error.responseText);
+        });
+    }
+    var updateUser = function(user.login) {
+        $.post('/admin/createUser', $('#userForm-form').serialize())
+        .done(function (form) {
+            $("#userForm").html(form);
+            fillCurrentUsers();
+        })
+        .fail(function (error) {
+            $("#userForm").html(error.responseText);
+        });
+    }
+</script>
+
+
+@form(
+action = user match {
+    case Some(user) => routes.Admin.updateUser(user.login)
+    case _ => routes.Admin.createUser
+}, args = 'id -> "userForm-form" ) {
+
+    @inputText(
+        field = userForm("login"),
+        args = '_label -> "What's the user name?", 'placeholder -> "username"
+    )
+
+    @inputPassword(
+        field = userForm("password"),
+        args = '_label -> "pwd", 'size -> 10, 'placeholder -> "xxxxxx", '_showConstraints -> false
+    )
+
+    @select(
+        field = userForm("profile"),
+        options = options(
+            "User" -> "User",
+            "Admin" -> "Admin"
+        ),
+        args = '_label -> "Profile", '_showConstraints -> false
+    )
+    <p class="buttons">
+        @user match {
+            case Some(user) => {
+                <input type="button" id="adminUserUpdateButton" onclick="updateUser(@user.login);" value="Update" />
+            }
+            case _ => {
+                <input type="button" id="adminUserCreateButton" onclick="createUser();" value="Create" />
+            }
+        }
+    </p>
+}

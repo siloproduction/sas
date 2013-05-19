@@ -37,6 +37,26 @@ object UserDao {
     }
   }
 
+  def update(originalLogin: String, user: User): Unit = {
+    DB.withConnection { implicit connection =>
+      SQL("UPDATE users SET login={login}, password={password}, profile={profile})" +
+        " WHERE users.login={originalLogin}").on(
+        'login -> user.login,
+        'password -> user.password,
+        'profile -> user.profile.toString,
+        'originalLogin -> originalLogin
+      ).executeUpdate()
+    }
+  }
+
+  def findByLogin(login: String): User = {
+    DB.withConnection { implicit  connection =>
+      SQL("select * from users where login={login}").on(
+        'login -> login
+      ).as(parser *).head
+    }
+  }
+
   def login(credentials: Credentials): User = {
     DB.withConnection { implicit connection =>
       val userOption = SQL("select * from users where login = {login}")

@@ -13,15 +13,8 @@ GET     /                           controllers.Application.index
 # Show a page
 GET     /page/:permanentLink        controllers.Application.page(permanentLink: String)
 
-# Hello action
-GET     /hello                      controllers.Application.sayHello
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
-GET     /getGreetings               controllers.Application.getGreetings
-POST    /createGreeting             controllers.Application.createGreeting
-
 
 
 ############### Admin
@@ -30,12 +23,15 @@ GET     /admin/                     controllers.Admin.index
 
 ### User
 GET     /admin/getUsers             controllers.Admin.getUsers
-POST    /admin/createUser           controllers.Admin.createUser
+POST    /admin/user                 controllers.Admin.createUser
+POST    /admin/user/:login          controllers.Admin.updateUser(login: String)
 
 ### Category
 GET     /admin/getCategories        controllers.Admin.getCategories
-POST    /admin/createCategory       controllers.Admin.createCategory
+POST    /admin/category             controllers.Admin.createCategory
+POST    /admin/category/:id         controllers.Admin.updateCategory(id: String)
 
 ### Page
 GET     /admin/getPages             controllers.Admin.getPages
-POST    /admin/createPage           controllers.Admin.createPage
+POST    /admin/page                 controllers.Admin.createPage
+POST    /admin/page/:permanentLink  controllers.Admin.updatePage(permanentLink: String)

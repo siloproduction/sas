@@ -5,12 +5,15 @@ import play.api.Play.current
 
 import anorm._
 import anorm.SqlParser._
-import controllers.bean.{Greeting, Page, Category}
+import controllers.bean.{Page, Category}
 
 /**
  * @Author("bltCrew")
  */
 object PageDao {
+
+  val PAGE_BOTTOM = "accueil_news"
+  val PAGE_TOP = "accueil_presentation"
 
   val parser = {
     get[Pk[Long]]("id") ~
@@ -63,4 +66,7 @@ object PageDao {
       ).as(parser *).head
     }
   }
+
+  def findPageTop()= findByPermanentLink(PAGE_TOP)
+  def findPageBottom()= findByPermanentLink(PAGE_BOTTOM)
 }

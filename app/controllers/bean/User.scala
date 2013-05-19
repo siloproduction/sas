@@ -11,6 +11,8 @@ case class User(login: String, password: String, profile: UserProfile) {
 
 object UserForm {
 
+  def update(user: User): Form[User] =  create().fill(user)
+
   def create() =  {
     Form(mapping(
       "login" -> text

@@ -19,12 +19,15 @@
                 $("#userForm").html(error.responseText);
             });
     }
+    val updateUser = function(userLogin) {
+        $.post('/admin/createUser', $('#admin-update-user-' + user.login).serialize())
+            .done(function (form) {
+            })
+            .fail(function (error) {
+                $("#userForm").html(error.responseText);
+            });
+    }
 </script>
-
-<p class="buttons">
-    <input type="button" id="ajaxCaller" onclick="createUser();" value="Create" />
-</p>
-
 
 <div id="userForm">
     @userForm

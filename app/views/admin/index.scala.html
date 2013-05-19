@@ -4,16 +4,26 @@
 
 @main("Admin page", user, categories) {
 
-    <p class="buttons">
-        <input type="button" id="admin_button" value=":(" />
-    </p>
+    <script>
+        $(function() {
+            $( "#admin-tabs" ).tabs();
+        });
+    </script>
 
-    <h1>User</h1>
-    @userPanel
-
-    <h1>Category</h1>
-    @categoryPanel
-
-    <h1>Page</h1>
-    @pagePanel
+    <div id="admin-tabs">
+        <ul>
+            <li><a href="#tabs-1">User</a></li>
+            <li><a href="#tabs-2">Category</a></li>
+            <li><a href="#tabs-3">Page</a></li>
+        </ul>
+        <div id="tabs-1">
+            @userPanel
+        </div>
+        <div id="tabs-2">
+            @categoryPanel
+        </div>
+        <div id="tabs-3">
+            @pagePanel
+        </div>
+    </div>
 }
