@@ -8,7 +8,10 @@ import play.api.data.Forms._
 case class User(login: String, password: String, profile: UserProfile) {
   def credentials = Credentials(login, password)
 }
-
+object User {
+  def asUpdateFormId(user: User): String = asUpdateFormId(user.login)
+  def asUpdateFormId(login: String) = "admin-update-user-" + login
+}
 object UserForm {
 
   def update(user: User): Form[User] =  create().fill(user)

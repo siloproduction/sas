@@ -1,43 +1,17 @@
-@(userForm: Form[bean.User], user: Option[bean.User])
+@(formAction: play.api.mvc.Call, formId: String, userForm: Form[bean.User])
 
 @import helper._
 
+@form(action = formAction, args = 'id -> (formId + "-form")) {
 
-<script type="text/javascript">
-    var fillCurrentUsers = function() {
-        $.get('/admin/getUsers', function(data) {
-            $("#users").html(data);
-        });
+    @userForm.value match {
+        case Some(user) => {
+            <input type="hidden" name="entityId" value="@userForm.get.login" xmlns="http://www.w3.org/1999/html"/>
+        }
+        case _ => {
+            <input type="hidden" name="entityId" value="" />
+        }
     }
-    fillCurrentUsers();
-    var createUser = function() {
-        $.post('/admin/createUser', $('#userForm-form').serialize())
-        .done(function (form) {
-            $("#userForm").html(form);
-            fillCurrentUsers();
-        })
-        .fail(function (error) {
-            $("#userForm").html(error.responseText);
-        });
-    }
-    var updateUser = function(user.login) {
-        $.post('/admin/createUser', $('#userForm-form').serialize())
-        .done(function (form) {
-            $("#userForm").html(form);
-            fillCurrentUsers();
-        })
-        .fail(function (error) {
-            $("#userForm").html(error.responseText);
-        });
-    }
-</script>
-
-
-@form(
-action = user match {
-    case Some(user) => routes.Admin.updateUser(user.login)
-    case _ => routes.Admin.createUser
-}, args = 'id -> "userForm-form" ) {
 
     @inputText(
         field = userForm("login"),
@@ -46,7 +20,7 @@ action = user match {
 
     @inputPassword(
         field = userForm("password"),
-        args = '_label -> "pwd", 'size -> 10, 'placeholder -> "xxxxxx", '_showConstraints -> false
+        args = '_label -> "pwd", 'size -> 10, 'placeholder -> "xxxxxx"
     )
 
     @select(
@@ -57,14 +31,31 @@ action = user match {
         ),
         args = '_label -> "Profile", '_showConstraints -> false
     )
+
     <p class="buttons">
-        @user match {
+        <button id="@formId-submit" type="submit">
+            <span class="ui-button-text"></span>
+        </button>
+    </p>
+
+    <script type="text/javascript">
+        @userForm.value match {
             case Some(user) => {
-                <input type="button" id="adminUserUpdateButton" onclick="updateUser(@user.login);" value="Update" />
+                $("#@formId-submit span").text("Update");
+                $("#@formId-form").submit(function() {
+                    alert($(this).serialize());
+                    updateUser("@routes.Admin.updateUser(user.login)", $(this), "@formId");
+                    return false;
+                });
             }
             case _ => {
-                <input type="button" id="adminUserCreateButton" onclick="createUser();" value="Create" />
+                $('#@formId-submit span').text('Create');
+                $('#@formId-form').submit(function() {
+                    alert($(this).serialize());
+                    createUser('@routes.Admin.createUser', $(this), '@formId');
+                    return false;
+                });
             }
         }
-    </p>
+    </script>
 }

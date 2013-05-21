@@ -1,0 +1,9 @@
+@(userForm: Form[bean.User], entityId: String)
+
+@defining(bean.User.asUpdateFormId(entityId)) { formId =>
+
+<div id="@formId" title="Update user: @entityId">
+    @views.html.admin.user.userForm(routes.Admin.updateUser(entityId), formId, userForm)
+
+</div>
+}

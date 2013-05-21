@@ -39,7 +39,7 @@ object UserDao {
 
   def update(originalLogin: String, user: User): Unit = {
     DB.withConnection { implicit connection =>
-      SQL("UPDATE users SET login={login}, password={password}, profile={profile})" +
+      SQL("UPDATE users SET login={login}, password={password}, profile={profile}" +
         " WHERE users.login={originalLogin}").on(
         'login -> user.login,
         'password -> user.password,

@@ -1,15 +1,22 @@
 @(users: Seq[bean.User])
 
-<ul>
-    @for(user <- users) {
-        @defining("admin-update-user-" + user.login) { updateUserId =>
-           <li>
-               <div class="hidden"><div id="@updateUserId" title="Update user: @user.login">
-                   @views.html.admin.user.userForm(bean.UserForm.update(user), Option.apply(user))
-               </div></div>
-               <button onclick="$('#@updateUserId').dialog();">EDIT</button>
-               @user.login <small>(@user.profile)</small>
-           </li>
-       }
-    }
-</ul>
+
+<div id="admin-list-user">
+    <ul>
+        @for(user <- users) {
+            @defining(bean.User.asUpdateFormId(user)) { formId =>
+               <li>
+                   <div class="hidden">
+                       @views.html.admin.user.userUpdateForm(bean.UserForm.update(user), user.login)
+                   </div>
+                   <button onclick="$('#@formId').dialog({
+                        close: function( event, ui ) {
+                            fillCurrentUsers();
+                        }
+                   });">EDIT</button>
+                   @user.login <small>(@user.profile)</small>
+               </li>
+           }
+        }
+    </ul>
+</div>

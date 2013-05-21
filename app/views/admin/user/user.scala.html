@@ -1,38 +1,6 @@
-@(userForm: Html, users: Html)
+@(userCreateForm: Html, users: Html)
 
 @import helper._
 
-<script type="text/javascript">
-    var fillCurrentUsers = function() {
-        $.get('/admin/getUsers', function(data) {
-            $("#users").html(data);
-        });
-    }
-    fillCurrentUsers();
-    var createUser = function() {
-        $.post('/admin/createUser', $('#userForm-form').serialize())
-            .done(function (form) {
-                $("#userForm").html(form);
-                fillCurrentUsers();
-            })
-            .fail(function (error) {
-                $("#userForm").html(error.responseText);
-            });
-    }
-    val updateUser = function(userLogin) {
-        $.post('/admin/createUser', $('#admin-update-user-' + user.login).serialize())
-            .done(function (form) {
-            })
-            .fail(function (error) {
-                $("#userForm").html(error.responseText);
-            });
-    }
-</script>
-
-<div id="userForm">
-    @userForm
-</div>
-
-<div id="users">
-    @users
-</div>
+@userCreateForm
+@users

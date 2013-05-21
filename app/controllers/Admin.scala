@@ -12,12 +12,12 @@ import play.templates.TemplateMagic.anyToDefault
 
 object Admin extends Controller with Secured {
 
-  val userForm = UserForm.create()
+  val userBindingForm = UserForm.create()
   val categoryForm = CategoryForm.create()
   val pageForm = PageForm.create()
 
   def createUserPanel: Html = {
-    views.html.admin.user.user(views.html.admin.user.userForm(userForm, Option.empty), views.html.admin.user.users(UserDao.findAll()))
+    views.html.admin.user.user(views.html.admin.user.userCreateForm(UserForm.create()), views.html.admin.user.users(UserDao.findAll()))
   }
   def createCategoryPanel: Html = {
     views.html.admin.category.category(
@@ -36,22 +36,25 @@ object Admin extends Controller with Secured {
   }
 
   def createUser = IsAdmin { username => implicit request =>
-    val requestFrom: Form[User] = userForm.bindFromRequest()
-    requestFrom.fold(
-      formWithErrors => BadRequest(views.html.admin.user.userForm(formWithErrors, Option.empty)),
+    val requestForm: Form[User] = userBindingForm.bindFromRequest()
+    requestForm.fold(
+      formWithErrors => BadRequest(views.html.admin.user.userCreateForm(formWithErrors)),
       {case (user) => {
         UserDao.create(user)
-        Ok(views.html.admin.user.userForm(userForm, Option.empty))
+        Ok(views.html.admin.user.userCreateForm(UserForm.create()))
       }}
     )
   }
   def updateUser(login: String) = IsAdmin { username => implicit request =>
-    val requestFrom: Form[User] = userForm.bindFromRequest()
-    requestFrom.fold(
-      formWithErrors => BadRequest(views.html.admin.user.userForm(formWithErrors, Option.apply(UserDao.findByLogin(login)))),
+    val requestForm: Form[User] = userBindingForm.bindFromRequest()
+    requestForm.fold(
+      formWithErrors => {
+        val entityId = requestForm.data("entityId")
+        BadRequest(views.html.admin.user.userUpdateForm(formWithErrors, entityId))
+      },
       {case (user) => {
         UserDao.update(login, user)
-        Ok(views.html.admin.user.userForm(userForm, Option.apply(user)))
+        Ok(views.html.admin.user.userUpdateForm(requestForm, user.login))
       }}
     )
   }

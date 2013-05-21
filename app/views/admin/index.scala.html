@@ -4,10 +4,11 @@
 
 @main("Admin page", user, categories) {
 
-    <script>
+    <script type="text/javascript">
         $(function() {
             $( "#admin-tabs" ).tabs();
         });
+        fillCurrentUsers();
     </script>
 
     <div id="admin-tabs">
