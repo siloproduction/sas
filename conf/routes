@@ -25,6 +25,7 @@ GET     /admin/                     controllers.Admin.index
 GET     /admin/getUsers             controllers.Admin.getUsers
 POST    /admin/user                 controllers.Admin.createUser
 POST    /admin/user/:login          controllers.Admin.updateUser(login: String)
+DELETE  /admin/user/:login          controllers.Admin.deleteUser(login: String)
 
 ### Category
 GET     /admin/getCategories        controllers.Admin.getCategories

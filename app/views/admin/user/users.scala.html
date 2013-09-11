@@ -14,6 +14,21 @@
                             fillCurrentUsers();
                         }
                    });">EDIT</button>
+
+                   <button onclick="confirmDialog('Delete user @user.login',
+                        function (dialogInstance) {
+                            $.ajax({
+                                url: '@routes.Admin.deleteUser(user.login)',
+                                type: 'DELETE'
+                            }).done(function() {
+                                fillCurrentUsers();
+                                $(dialogInstance).dialog('close');
+                            }).fail(function( msg ) {
+                                var alertContent = 'Error: ' + msg.responseText
+                                alert(alertContent);
+                            });
+                        }
+                   );">DELETE</button>
                    @user.login <small>(@user.profile)</small>
                </li>
            }

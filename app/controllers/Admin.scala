@@ -8,7 +8,6 @@ import play.api.data._
 import play.api.templates.Html
 import controllers.bean.User
 import controllers.bean.Category
-import play.templates.TemplateMagic.anyToDefault
 
 object Admin extends Controller with Secured {
 
@@ -57,6 +56,18 @@ object Admin extends Controller with Secured {
         Ok(views.html.admin.user.userUpdateForm(requestForm, user.login))
       }}
     )
+  }
+  def deleteUser(login: String) = IsAdmin { username => implicit request =>
+    try {
+      UserDao.delete(login) match {
+        case 0 => NotFound("No user has been removed")
+        case _ => Ok("Success")
+      }
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
   def createCategory = IsAdmin { username => implicit request =>

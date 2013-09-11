@@ -27,6 +27,14 @@ object UserDao {
     }
   }
 
+  def delete(userLogin: String): Int = {
+    DB.withConnection { implicit connection =>
+      SQL("DELETE FROM users WHERE login={login}").on(
+        'login -> userLogin
+      ).executeUpdate()
+    }
+  }
+
   def create(user: User): Unit = {
     DB.withConnection { implicit connection =>
       SQL("insert into users(login, password, profile) values ({login}, {password}, {profile})").on(
