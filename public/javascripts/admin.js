@@ -8,26 +8,40 @@ var admin = {
 
     fillCurrentUsers: function() {
         $.get('/admin/getUsers', function(data) {
-            $("#admin-list-user").html(data);
+            $("#admin-list-user").replaceWith(data);
         });
+    },
+
+    updateUserDialogButton: function(buttonId, formId) {
+         $('#' + formId).dialog({
+            modal: true,
+             close: function( event, ui ) {
+                 admin.fillCurrentUsers();
+             }
+         });
+         return false;
     },
 
     createUserSubmitButton: function(actionUrl, formId) {
         $('#' + formId + '-submit span').text('Create');
         admin.formOf(formId).submit(function() {
-            admin.createOrUpdateUser(actionUrl, admin.formOf(formId), formId, function() {
+            admin.createOrUpdateUser(actionUrl, admin.formOf(formId), formId, function(form) {
+                $('#' + formId).replaceWith(form);
                 admin.fillCurrentUsers();
             });
+            return false;
         });
     },
 
     updateUserSubmitButton: function(actionUrl, formId) {
         $('#' + formId + '-submit span').text('Update');
         admin.formOf(formId).submit(function() {
-            admin.createOrUpdateUser(actionUrl, admin.formOf(formId), formId, function() {
-                admin.fillCurrentUsers();
-                $("#userFormId").dialog( "close" );
-            });
+            admin.createOrUpdateUser(actionUrl, admin.formOf(formId), formId, function(form) {
+                 $('#' + formId).dialog('close');
+                 $('#' + formId).replaceWith(form);
+                 admin.fillCurrentUsers();
+             });
+            return false;
         });
     },
 
@@ -36,11 +50,14 @@ var admin = {
         var newUserLogin = form.get()[0].login.value;
         $.post(actionUrl, serializedForm)
            .done(function (form) {
-               $("#" + formId).html(form);
-               finishedHandler();
+               finishedHandler(form);
            })
            .fail(function (error) {
-               $("#" + formId).html(error.responseText);
+                if (typeof error === "string") {
+                    window.alert(error)
+                } else {
+                    $("#" + formId).replaceWith(error.responseText);
+                }
            });
         return false;
     },

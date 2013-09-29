@@ -36,12 +36,16 @@ object UserDao {
   }
 
   def create(user: User): Unit = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into users(login, password, profile) values ({login}, {password}, {profile})").on(
-        'login -> user.login,
-        'password -> user.password,
-        'profile -> user.profile.toString
-      ).executeUpdate()
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("insert into users(login, password, profile) values ({login}, {password}, {profile})").on(
+          'login -> user.login,
+          'password -> user.password,
+          'profile -> user.profile.toString
+        ).executeUpdate()
+      }
+    } catch {
+      case e: Exception => throw new DAOException("Cannot create user: " + e.getMessage)
     }
   }
 

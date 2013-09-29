@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.bean._
-import controllers.dao.{PageDao, CategoryDao, UserDao}
+import controllers.dao.{DAOException, PageDao, CategoryDao, UserDao}
 import play.api.mvc._
 import play.api.data._
 
@@ -39,8 +39,14 @@ object Admin extends Controller with Secured {
     requestForm.fold(
       formWithErrors => BadRequest(views.html.admin.user.userCreateForm(formWithErrors)),
       {case (user) => {
-        UserDao.create(user)
-        Ok(views.html.admin.user.userCreateForm(UserForm.create()))
+        try {
+          UserDao.create(user)
+          Ok(views.html.admin.user.userCreateForm(UserForm.create()))
+        } catch {
+          case e: Exception => {
+            InternalServerError(e.getMessage)
+          }
+        }
       }}
     )
   }

@@ -9,11 +9,11 @@
                    <div class="hidden">
                        @views.html.admin.user.userUpdateForm(bean.UserForm.update(user), user.login)
                    </div>
-                   <button onclick="$('#@formId').dialog({
-                        close: function( event, ui ) {
-                            admin.fillCurrentUsers();
-                        }
-                   });">EDIT</button>
+                   <button
+                       id="admin-list-user-edit-@user.login"
+                       onclick="admin.updateUserDialogButton('admin-list-user-edit-@user.login', '@formId');">
+                           EDIT
+                   </button>
 
                    <button onclick="admin.deleteUser('@routes.Admin.deleteUser(user.login)', '@user.login')">DELETE</button>
                    @user.login <small>(@user.profile)</small>

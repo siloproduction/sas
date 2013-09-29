@@ -2,7 +2,7 @@
 
 @import helper._
 
-@form(action = formAction, args = 'id -> (formId + "-form")) {
+<form id="@formId-form">
 
     @userForm.value match {
         case Some(user) => {
@@ -13,10 +13,20 @@
         }
     }
 
-    @inputText(
-        field = userForm("login"),
-        args = '_label -> "What's the user name?", 'placeholder -> "username"
-    )
+    @userForm.value match {
+        case Some(user) => {
+            @inputText(
+                field = userForm("login"),
+                args = '_label -> "What's the user name?", 'placeholder -> "username", 'id -> formId.concat("-form-login"), 'readonly -> "true"
+            )
+        }
+        case _ => {
+            @inputText(
+                field = userForm("login"),
+                args = '_label -> "What's the user name?", 'placeholder -> "username", 'id -> formId.concat("-form-login")
+            )
+        }
+    }
 
     @inputPassword(
         field = userForm("password"),
@@ -48,4 +58,4 @@
             }
         }
     </script>
-}
+</form>
