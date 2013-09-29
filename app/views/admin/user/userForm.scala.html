@@ -41,20 +41,10 @@
     <script type="text/javascript">
         @userForm.value match {
             case Some(user) => {
-                $("#@formId-submit span").text("Update");
-                $("#@formId-form").submit(function() {
-                    alert($(this).serialize());
-                    updateUser("@routes.Admin.updateUser(user.login)", $(this), "@formId");
-                    return false;
-                });
+                admin.updateUserSubmitButton('@routes.Admin.updateUser(user.login)', '@formId');
             }
             case _ => {
-                $('#@formId-submit span').text('Create');
-                $('#@formId-form').submit(function() {
-                    alert($(this).serialize());
-                    createUser('@routes.Admin.createUser', $(this), '@formId');
-                    return false;
-                });
+                admin.createUserSubmitButton('@routes.Admin.createUser', '@formId');
             }
         }
     </script>

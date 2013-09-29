@@ -11,24 +11,11 @@
                    </div>
                    <button onclick="$('#@formId').dialog({
                         close: function( event, ui ) {
-                            fillCurrentUsers();
+                            admin.fillCurrentUsers();
                         }
                    });">EDIT</button>
 
-                   <button onclick="confirmDialog('Delete user @user.login',
-                        function (dialogInstance) {
-                            $.ajax({
-                                url: '@routes.Admin.deleteUser(user.login)',
-                                type: 'DELETE'
-                            }).done(function() {
-                                fillCurrentUsers();
-                                $(dialogInstance).dialog('close');
-                            }).fail(function( msg ) {
-                                var alertContent = 'Error: ' + msg.responseText
-                                alert(alertContent);
-                            });
-                        }
-                   );">DELETE</button>
+                   <button onclick="admin.deleteUser('@routes.Admin.deleteUser(user.login)', '@user.login')">DELETE</button>
                    @user.login <small>(@user.profile)</small>
                </li>
            }
