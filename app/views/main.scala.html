@@ -1,24 +1,18 @@
 @(title: String, user: Option[bean.User], categories: Seq[bean.Category])(content: Html)
 
 <!DOCTYPE html>
-
 <html>
-    <head>
-
-
     <head>
         <title>@title</title>
 
         <meta name="google-site-verification" content="hGCNEn2AMIJ6CSutywv2bORBsW2au127a0gFi0gjJDY" />
         <meta name="keywords" content="Soirée, Machete, Musique, Jeune, Privas, Veyras, Ardèche, electro, concert, Oh My Dub, Step On The Beat, Surprise Jack, Session, Veyras'Oai, Musique actuelle, Culture, Spectacle, Théâtre, Association, Scène, Reggae, Rap, Hip Hop, Rock" />
         <meta name="description" content="Vouée à la diffusion culturelle dans les domaines du théâtre, des arts plastiques et plus particulièrement des musiques actuelles, elle propose des événements d'une grande diversité, défendant des spectacles qu'elle considère de qualité, fidèle à des valeurs d’éclectisme et d’accessibilité tarifaire."/>
-        <meta name="author" content="Hilaire Thomas">
-        <meta name="copyright" content="Hilaire Thomas">
-        <meta name="expires" content="30 July 2015">
-        <meta name="robots" content="all">
+        <meta name="author" content="Hilaire Thomas" />
+        <meta name="robots" content="all" />
 
         <script src="https://www.google.com/jsapi?key=ABQIAAAA8bCVXNx3wJu9Tsb1ogWnPBSCRev8DqEXxtwVfKHDYNYvOS8sABTy1MNXLruufFGcM-vqHJaF72zP8Q" type="text/javascript"></script>
-        <script language="Javascript" type="text/javascript">
+        <script type="text/javascript">
             //<![CDATA[
 
             //google.load("search", "1");
@@ -81,7 +75,7 @@
 
         <!-- include dropdown plugin -->
         <script type="text/javascript" src="@routes.Assets.at("javascripts/dropdown.js")"></script>
-        <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/dropdown.css")"></link>
+        <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/dropdown.css")">
 
     </head>
     <body>

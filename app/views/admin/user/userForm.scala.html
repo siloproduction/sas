@@ -6,7 +6,7 @@
 
     @userForm.value match {
         case Some(user) => {
-            <input type="hidden" name="entityId" value="@userForm.get.login" xmlns="http://www.w3.org/1999/html"/>
+            <input type="hidden" name="entityId" value="@userForm.get.login" />
         }
         case _ => {
             <input type="hidden" name="entityId" value="" />
@@ -30,7 +30,7 @@
 
     @inputPassword(
         field = userForm("password"),
-        args = '_label -> "pwd", 'size -> 10, 'placeholder -> "xxxxxx"
+        args = '_label -> "pwd", 'size -> 10, 'placeholder -> "xxxxxx", 'id -> formId.concat("-form-password")
     )
 
     @select(
@@ -39,7 +39,7 @@
             "User" -> "User",
             "Admin" -> "Admin"
         ),
-        args = '_label -> "Profile", '_showConstraints -> false
+        args = '_label -> "Profile", '_showConstraints -> false, 'id -> formId.concat("-form-profile")
     )
 
     <p class="buttons">
