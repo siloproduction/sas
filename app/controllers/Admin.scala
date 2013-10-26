@@ -21,9 +21,9 @@ object Admin extends Controller with Secured {
       initialEntities = views.html.admin.user.users(UserDao.findAll()))
   }
   def createCategoryPanel: Html = {
-    views.html.admin.category.category(
-        categoryForm = views.html.admin.category.categoryForm(categoryForm, CategoryDao.findAll()),
-        categories = views.html.admin.category.categories(CategoryDao.findAll()))
+    views.html.admin.entityPanel(
+      entityCreateForm = views.html.admin.category.categoryCreateForm(CategoryForm.create()),
+      initialEntities = views.html.admin.category.categories(CategoryDao.findAll()))
   }
   def createPagePanel: Html = {
     views.html.admin.page.page(
@@ -81,22 +81,36 @@ object Admin extends Controller with Secured {
   def createCategory = IsAdmin { username => implicit request =>
     val requestFrom: Form[Category] = categoryForm.bindFromRequest()
     requestFrom.fold(
-      formWithErrors => BadRequest(views.html.admin.category.categoryForm(formWithErrors, CategoryDao.findAll())),
+      formWithErrors => BadRequest(views.html.admin.category.categoryCreateForm(formWithErrors)),
       {case (category) => {
         CategoryDao.create(category)
-        Ok(views.html.admin.category.categoryForm(categoryForm, CategoryDao.findAll()))
+        Ok(views.html.admin.category.categoryCreateForm(CategoryForm.create()))
       }}
     )
   }
-  def updateCategory(id: String) = IsAdmin { username => implicit request =>
-    val requestFrom: Form[Category] = categoryForm.bindFromRequest()
-    requestFrom.fold(
-      formWithErrors => BadRequest(views.html.admin.category.categoryForm(formWithErrors, CategoryDao.findAll())),
+  def updateCategory(id: Long) = IsAdmin { username => implicit request =>
+    val requestForm: Form[Category] = categoryForm.bindFromRequest()
+    requestForm.fold(
+      formWithErrors => {
+        BadRequest(views.html.admin.category.categoryUpdateForm(formWithErrors, id))
+      },
       {case (category) => {
-        CategoryDao.create(category)
-        Ok(views.html.admin.category.categoryForm(categoryForm, CategoryDao.findAll()))
+        CategoryDao.update(category)
+        Ok(views.html.admin.category.categoryUpdateForm(requestForm, category.id))
       }}
     )
+  }
+  def deleteCategory(id: Long) = IsAdmin { username => implicit request =>
+    try {
+      CategoryDao.delete(id) match {
+        case 0 => NotFound("No category has been removed")
+        case _ => Ok("Success")
+      }
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
   def createPage = IsAdmin { username => implicit request =>

@@ -1,11 +1,8 @@
 package controllers.bean
 
-import UserProfile.UserProfile
-
 import play.api.data._
 import play.api.data.Forms._
 import controllers.dao.CategoryDao
-import views.html.admin.category.category
 
 case class Page(
        name: String,

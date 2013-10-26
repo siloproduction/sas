@@ -1,34 +1,59 @@
-@(categoryForm: Form[bean.Category], categories: Seq[bean.Category])
+@(formAction: play.api.mvc.Call, formId: String, entityForm: Form[bean.Category])
 
 @import helper._
 
-@form(action = routes.Admin.createCategory, args = 'id -> "categoryForm-form") {
+<form id="@formId-form">
+
+    @entityForm.value match {
+        case Some(entity) => {
+            <input type="hidden" name="entityId" value="@entityForm.get.id" />
+        }
+        case _ => {
+            <input type="hidden" name="entityId" value="" />
+        }
+    }
 
     @inputText(
-        field = categoryForm("name"),
-        args = '_label -> "What's the category name?", 'placeholder -> "name"
+        field = entityForm("name"),
+        args = '_label -> "What's the category name?", 'placeholder -> "name", 'id -> formId.concat("-form-login")
     )
 
     @select(
-        field = categoryForm("parent"),
-        categories.map{ c =>
+        field = entityForm("parent"),
+        dao.CategoryDao.findAll().map{ c =>
             c.id.toString -> c.name
         },
         args = '_label -> "Parent", '_showConstraints -> false
     )
 
     @inputText(
-        field = categoryForm("link"),
+        field = entityForm("link"),
         args = '_label -> "link", 'placeholder -> "link"
     )
 
     @inputText(
-        field = categoryForm("rank"),
+        field = entityForm("rank"),
         args = '_label -> "rank", 'placeholder -> "rank"
     )
 
     @checkbox(
-        field = categoryForm("enabled"),
+        field = entityForm("enabled"),
         args = '_label -> "Enable the category", 'placeholder -> "enabled", '_showConstraints -> false
     )
-}
+    <p class="buttons">
+        <button id="@formId-submit" type="submit">
+            <span class="ui-button-text"></span>
+        </button>
+    </p>
+
+    <script type="text/javascript">
+        @entityForm.value match {
+            case Some(entity) => {
+                admin.updateCategorySubmitButton('@routes.Admin.updateCategory(entity.id)', '@formId');
+            }
+            case _ => {
+                admin.createCategorySubmitButton('@routes.Admin.createCategory', '@formId');
+            }
+        }
+    </script>
+</form>

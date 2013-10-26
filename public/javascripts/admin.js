@@ -1,60 +1,98 @@
 var admin = {
 
-    updateUserPanelIdPrefix: "admin-update-user-",
+    updateUserPanelIdPrefix: 'admin-update-user-',
 
-    formOf: function(formId) {
-        return $('#' + formId + '-form')
+    formOf: function (formId) {
+        return $('#' + formId + '-form');
     },
 
-    fillCurrentUsers: function() {
-        $.get('/admin/getUsers', function(data) {
+    fillCurrentUsers: function () {
+        $.get('/admin/getUsers', function (data) {
             $("#admin-list-user").replaceWith(data);
         });
     },
 
-    updateUserDialogButton: function(buttonId, formId) {
+    fillCurrentCategories: function () {
+        $.get('/admin/getCategories', function (data) {
+            $('#admin-list-category').replaceWith(data);
+        });
+    },
+
+    updateUserDialogButton: function (buttonId, formId) {
+        admin.updateEntityDialogButton(buttonId, formId, function ( event, ui ) {
+            admin.fillCurrentUsers();
+        });
+    },
+
+    updateCategoryDialogButton: function (buttonId, formId) {
+        admin.updateEntityDialogButton(buttonId, formId, function ( event, ui ) {
+            admin.fillCurrentCategories();
+        });
+    },
+
+    updateEntityDialogButton: function (buttonId, formId, finishedHandler) {
          $('#' + formId).dialog({
-            modal: true,
-             close: function( event, ui ) {
-                 admin.fillCurrentUsers();
-             }
+             modal: true,
+             close: finishedHandler
          });
          return false;
     },
 
-    createUserSubmitButton: function(actionUrl, formId) {
+    createUserSubmitButton: function (actionUrl, formId) {
+        admin.createEntitySubmitButton(actionUrl, formId, function () {
+            admin.fillCurrentUsers();
+        });
+    },
+
+    createCategorySubmitButton: function (actionUrl, formId) {
+        admin.createEntitySubmitButton(actionUrl, formId, function () {
+            admin.fillCurrentCategories();
+        });
+    },
+
+    createEntitySubmitButton: function (actionUrl, formId, finishedHandler) {
         $('#' + formId + '-submit span').text('Create');
-        admin.formOf(formId).submit(function() {
-            admin.createOrUpdateUser(actionUrl, admin.formOf(formId), formId, function(form) {
+        admin.formOf(formId).submit(function () {
+            admin.createOrUpdateEntity(actionUrl, admin.formOf(formId), formId, function (form) {
                 $('#' + formId).replaceWith(form);
-                admin.fillCurrentUsers();
+                finishedHandler();
             });
             return false;
         });
     },
 
-    updateUserSubmitButton: function(actionUrl, formId) {
+    updateUserSubmitButton: function (actionUrl, formId) {
+        admin.updateEntitySubmitButton(actionUrl, formId, function () {
+            admin.fillCurrentUsers();
+        });
+    },
+
+    updateCategorySubmitButton: function (actionUrl, formId) {
+        admin.updateEntitySubmitButton(actionUrl, formId, function () {
+            admin.fillCurrentCategories();
+        });
+    },
+
+    updateEntitySubmitButton: function (actionUrl, formId, finishedHandler) {
         $('#' + formId + '-submit span').text('Update');
-        admin.formOf(formId).submit(function() {
-            admin.createOrUpdateUser(actionUrl, admin.formOf(formId), formId, function(form) {
+        admin.formOf(formId).submit(function () {
+            admin.createOrUpdateEntity(actionUrl, admin.formOf(formId), formId, function (form) {
                  $('#' + formId).dialog('close');
                  $('#' + formId).replaceWith(form);
-                 admin.fillCurrentUsers();
+                 finishedHandler();
              });
             return false;
         });
     },
 
-    createOrUpdateUser: function(actionUrl, form, formId, finishedHandler) {
+    createOrUpdateEntity: function (actionUrl, form, formId, finishedHandler) {
         var serializedForm = form.serialize();
-        var newUserLogin = form.get()[0].login.value;
         $.post(actionUrl, serializedForm)
-           .done(function (form) {
+            .done(function (form) {
                finishedHandler(form);
-           })
-           .fail(function (error) {
+            }).fail(function (error) {
                 if (typeof error === "string") {
-                    window.alert(error)
+                    window.alert(error);
                 } else {
                     $("#" + formId).replaceWith(error.responseText);
                 }
@@ -62,19 +100,31 @@ var admin = {
         return false;
     },
 
-    deleteUser: function(actionUrl, userLogin) {
-        utils.confirmDialog('Delete user ' + userLogin, function (dialogInstance) {
+    deleteUser: function (actionUrl, userLogin) {
+        admin.deleteEntity(actionUrl, 'Delete user ' + userLogin, function () {
+            admin.fillCurrentUsers();
+        });
+    },
+
+    deleteCategory: function (actionUrl, categoryId, categoryName) {
+        admin.deleteEntity(actionUrl, 'Delete category ' + categoryName, function () {
+            admin.fillCurrentCategories();
+        });
+    },
+
+    deleteEntity: function (actionUrl, title, finishedHandler) {
+        utils.confirmDialog(title, function (dialogInstance) {
                 $.ajax({
                     url: actionUrl,
                     type: 'DELETE'
-                }).done(function() {
-                    admin.fillCurrentUsers();
+                }).done(function () {
+                    finishedHandler();
                     $(dialogInstance).dialog('close');
-                }).fail(function( msg ) {
-                    var alertContent = 'Error: ' + msg.responseText
+                }).fail(function ( msg ) {
+                    var alertContent = 'Error: ' + msg.responseText;
                     alert(alertContent);
                 });
             }
        );
     }
-}
+};

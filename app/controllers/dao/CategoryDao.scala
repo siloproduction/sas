@@ -27,6 +27,14 @@ object CategoryDao {
     }
   }
 
+  def delete(id: Long): Int = {
+    DB.withConnection { implicit connection =>
+      SQL("DELETE FROM category WHERE id={id}").on(
+        'id -> id
+      ).executeUpdate()
+    }
+  }
+
   def findAll(): Seq[Category] = {
     DB.withConnection { implicit connection =>
       SQL("select * from category").as(parser *)
@@ -41,6 +49,20 @@ object CategoryDao {
         'link -> category.link,
         'rank -> category.rank,
         'enabled -> category.enabled
+      ).executeUpdate()
+    }
+  }
+
+  def update(category: Category): Unit = {
+    DB.withConnection { implicit connection =>
+      SQL("UPDATE category SET name={name}, parent={parent}, link={link}, rank={rank}, enabled={enabled}" +
+        " WHERE category.id={id}").on(
+          'id -> category.id,
+          'name -> category.name,
+          'parent -> category.parent.id,
+          'link -> category.link,
+          'rank -> category.rank,
+          'enabled -> category.enabled
       ).executeUpdate()
     }
   }

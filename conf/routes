@@ -30,7 +30,8 @@ DELETE  /admin/user/:login          controllers.Admin.deleteUser(login: String)
 ### Category
 GET     /admin/getCategories        controllers.Admin.getCategories
 POST    /admin/category             controllers.Admin.createCategory
-POST    /admin/category/:id         controllers.Admin.updateCategory(id: String)
+POST    /admin/category/:id         controllers.Admin.updateCategory(id: Long)
+DELETE  /admin/category/:id         controllers.Admin.deleteCategory(id: Long)
 
 ### Page
 GET     /admin/getPages             controllers.Admin.getPages

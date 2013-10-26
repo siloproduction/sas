@@ -14,8 +14,13 @@ object Category {
 
   def noCategory = Category("no category", null, Option.empty, 0, false)
 
+  def asUpdateFormId(category: Category): String = asUpdateFormId(category.id)
+  def asUpdateFormId(id: Long) = "admin-update-category-" + id
+  def asCreateFormId(): String = "admin-create-category"
 }
 object CategoryForm {
+
+  def update(category: Category): Form[Category] =  create().fill(category)
 
   def create() =  {
     Form(mapping(
