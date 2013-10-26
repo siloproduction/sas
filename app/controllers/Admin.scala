@@ -16,7 +16,9 @@ object Admin extends Controller with Secured {
   val pageForm = PageForm.create()
 
   def createUserPanel: Html = {
-    views.html.admin.user.user(views.html.admin.user.userCreateForm(UserForm.create()), views.html.admin.user.users(UserDao.findAll()))
+    views.html.admin.entityPanel(
+      entityCreateForm = views.html.admin.user.userCreateForm(UserForm.create()),
+      initialEntities = views.html.admin.user.users(UserDao.findAll()))
   }
   def createCategoryPanel: Html = {
     views.html.admin.category.category(
