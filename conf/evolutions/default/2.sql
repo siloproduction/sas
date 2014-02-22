@@ -30,6 +30,8 @@ CREATE TABLE page (
   rank                      INTEGER NOT NULL,
   enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE'
 );
+INSERT INTO page VALUES (1, 'PRESENTATION', NULL, 'accueil_presentation', 'UNE PRESENTATION', 1, true);
+INSERT INTO page VALUES (2, 'NEWS', NULL, 'accueil_news', 'LES NEWS', 1, true);
 
 # --- !Downs
 
