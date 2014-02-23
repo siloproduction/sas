@@ -1,15 +1,15 @@
-@(formAction: play.api.mvc.Call, formId: String, userForm: Form[bean.User])
+@(isUpdate: Boolean, id: Long, formId: String, userForm: Form[bean.User])
 
 @import helper._
 
 <form id="@formId-form">
 
-    @userForm.value match {
-        case Some(user) => {
-            <input type="hidden" name="entityId" value="@userForm.get.login" />
+    @isUpdate match {
+        case true => {
+            <input type="hidden" name="id" value="@id" />
         }
-        case _ => {
-            <input type="hidden" name="entityId" value="" />
+        case false => {
+            <input type="hidden" name="id" value="0" />
         }
     }
 
@@ -49,11 +49,11 @@
     </p>
 
     <script type="text/javascript">
-        @userForm.value match {
-            case Some(user) => {
-                admin.updateUserSubmitButton('@routes.Admin.updateUser(user.login)', '@formId');
+        @isUpdate match {
+            case true => {
+                admin.updateUserSubmitButton('@routes.Admin.updateUser(id)', '@formId');
             }
-            case _ => {
+            case false => {
                 admin.createUserSubmitButton('@routes.Admin.createUser', '@formId');
             }
         }

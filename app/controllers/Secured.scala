@@ -46,9 +46,10 @@ trait Secured {
     }
 
     def user(implicit request: Request[AnyContent]): Option[User] = {
-      request.session.get("user.login") match {
+      request.session.get("user.id") match {
         case x:Some[String] => Option.apply(User.apply(
-          x.get,
+          x.get.toLong,
+          request.session.get("user.login").get,
           request.session.get("user.password").get,
           request.session.get("user.profile").map { profile => bean.UserProfile.of(profile).get}.get ))
         case _ => Option.empty

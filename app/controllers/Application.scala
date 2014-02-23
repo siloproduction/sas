@@ -42,6 +42,7 @@ object Application extends Controller with Secured {
           val user = UserDao.login(credentials)
           Ok(indexView(Option.apply(user)))
             .withSession(
+              "user.id" -> user.id.toString,
               "user.profile" -> user.profile.toString,
               "user.login" -> user.login,
               "user.password" -> user.password)

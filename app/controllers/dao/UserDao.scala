@@ -14,10 +14,11 @@ import controllers.{InvalidCredentialsException, UserNotFoundException}
 object UserDao {
 
   val parser = {
-    get[Pk[String]]("login") ~
+    get[Pk[Long]]("id") ~
+    get[String]("login") ~
     get[String]("password") ~
     get[String]("profile") map {
-      case login~password~profile => User(login.get, password, UserProfile.withName(profile))
+      case id~login~password~profile => User(id.get, login, password, UserProfile.withName(profile))
     }
   }
 
@@ -27,10 +28,10 @@ object UserDao {
     }
   }
 
-  def delete(userLogin: String): Int = {
+  def delete(userId: Long): Int = {
     DB.withConnection { implicit connection =>
-      SQL("DELETE FROM users WHERE login={login}").on(
-        'login -> userLogin
+      SQL("DELETE FROM users WHERE id={id}").on(
+        'id -> userId
       ).executeUpdate()
     }
   }
@@ -49,22 +50,22 @@ object UserDao {
     }
   }
 
-  def update(originalLogin: String, user: User): Unit = {
+  def update(user: User): Unit = {
     DB.withConnection { implicit connection =>
       SQL("UPDATE users SET login={login}, password={password}, profile={profile}" +
-        " WHERE users.login={originalLogin}").on(
+        " WHERE users.id={id}").on(
         'login -> user.login,
         'password -> user.password,
         'profile -> user.profile.toString,
-        'originalLogin -> originalLogin
+        'id -> user.id
       ).executeUpdate()
     }
   }
 
-  def findByLogin(login: String): User = {
+  def findByLogin(id: Long): User = {
     DB.withConnection { implicit  connection =>
-      SQL("select * from users where login={login}").on(
-        'login -> login
+      SQL("select * from users where id={id}").on(
+        'id -> id
       ).as(parser *).head
     }
   }

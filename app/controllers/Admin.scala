@@ -52,22 +52,23 @@ object Admin extends Controller with Secured {
       }}
     )
   }
-  def updateUser(login: String) = IsAdmin { username => implicit request =>
+  def updateUser(id: Long) = IsAdmin { username => implicit request =>
     val requestForm: Form[User] = userBindingForm.bindFromRequest()
     requestForm.fold(
       formWithErrors => {
-        val entityId = requestForm.data("entityId")
-        BadRequest(views.html.admin.user.userUpdateForm(formWithErrors, entityId))
+        val entityId = requestForm.data("id").toLong
+        val formId = User.asUpdateFormId(entityId)
+        BadRequest(views.html.admin.user.userForm(true, entityId, formId, formWithErrors))
       },
       {case (user) => {
-        UserDao.update(login, user)
-        Ok(views.html.admin.user.userUpdateForm(requestForm, user.login))
+        UserDao.update(user)
+        Ok(views.html.admin.user.userUpdateForm(requestForm, user.id))
       }}
     )
   }
-  def deleteUser(login: String) = IsAdmin { username => implicit request =>
+  def deleteUser(id: Long) = IsAdmin { username => implicit request =>
     try {
-      UserDao.delete(login) match {
+      UserDao.delete(id) match {
         case 0 => NotFound("No user has been removed")
         case _ => Ok("Success")
       }

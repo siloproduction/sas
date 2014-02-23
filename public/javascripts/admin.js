@@ -54,7 +54,7 @@ var admin = {
         $('#' + formId + '-submit span').text('Create');
         admin.formOf(formId).submit(function () {
             admin.createOrUpdateEntity(actionUrl, admin.formOf(formId), formId, function (form) {
-                $('#' + formId).replaceWith(form);
+                //$('#' + formId).replaceWith(form);
                 finishedHandler();
             });
             return false;
@@ -78,7 +78,7 @@ var admin = {
         admin.formOf(formId).submit(function () {
             admin.createOrUpdateEntity(actionUrl, admin.formOf(formId), formId, function (form) {
                  $('#' + formId).dialog('close');
-                 $('#' + formId).replaceWith(form);
+                 //$('#' + formId).replaceWith(form);
                  finishedHandler();
              });
             return false;
@@ -94,7 +94,7 @@ var admin = {
                 if (typeof error === "string") {
                     window.alert(error);
                 } else {
-                    $("#" + formId).replaceWith(error.responseText);
+                    form.replaceWith(error.responseText);
                 }
            });
         return false;

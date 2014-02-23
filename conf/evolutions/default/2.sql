@@ -3,7 +3,8 @@
 # --- !Ups
 
 CREATE TABLE users (
-  login                     VARCHAR(255) PRIMARY KEY,
+  id                        SERIAL PRIMARY KEY,
+  login                     VARCHAR(255) NOT NULL,
   password                  VARCHAR(255) NOT NULL,
   profile                   VARCHAR(255) NOT NULL
 );
@@ -19,7 +20,7 @@ CREATE TABLE category (
   enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
   UNIQUE (name,parent)
 );
-insert into category(id, name, rank, enabled) values (0, 'None', 1, TRUE);
+insert into category(id, name, rank, enabled) values (0, 'None', 1, FALSE);
 
 CREATE TABLE page (
   id                        SERIAL PRIMARY KEY,
@@ -30,9 +31,12 @@ CREATE TABLE page (
   rank                      INTEGER NOT NULL,
   enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE'
 );
-INSERT INTO page VALUES (1, 'PRESENTATION', NULL, 'accueil_presentation', 'UNE PRESENTATION', 1, true);
-INSERT INTO page VALUES (2, 'NEWS', NULL, 'accueil_news', 'LES NEWS', 1, true);
+INSERT INTO page (name, permanentLink, data, rank, enabled) VALUES
+                ('PRESENTATION', 'accueil_presentation', 'UNE PRESENTATION', 1, true);
+INSERT INTO page (name, permanentLink, data, rank, enabled) VALUES
+                ('NEWS', 'accueil_news', 'LES NEWS', 1, true);
 
 # --- !Downs
 
-DROP TABLE IF EXISTS users, category, page;
+DROP TABLE IF EXISTS page;
+DROP TABLE IF EXISTS users, category;

@@ -7,7 +7,7 @@
             @defining(bean.User.asUpdateFormId(user)) { formId =>
                <li>
                    <div class="hidden">
-                       @views.html.admin.user.userUpdateForm(bean.UserForm.update(user), user.login)
+                       @views.html.admin.user.userUpdateForm(bean.UserForm.update(user), user.id)
                    </div>
                    <button
                        id="admin-list-user-edit-@user.login"
@@ -15,7 +15,7 @@
                            EDIT
                    </button>
 
-                   <button onclick="admin.deleteUser('@routes.Admin.deleteUser(user.login)', '@user.login')">DELETE</button>
+                   <button onclick="admin.deleteUser('@routes.Admin.deleteUser(user.id)', '@user.login')">DELETE</button>
                    @user.login <small>(@user.profile)</small>
                </li>
            }
