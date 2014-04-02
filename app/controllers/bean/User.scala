@@ -11,6 +11,7 @@ case class User(id: Long = 0, login: String, password: String, profile: UserProf
 object User {
   def asUpdateFormId(user: User): String = asUpdateFormId(user.id)
   def asUpdateFormId(id: Long) = "admin-update-user-" + id
+  val asCreateFormId = "admin-create-user"
 }
 object UserForm {
 

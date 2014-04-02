@@ -1,3 +1,6 @@
+var dialogCreatePopup = null;
+var dialogPopup = $('<div id="admin-update-user-popup"></div>');
+
 var admin = {
 
     updateUserPanelIdPrefix: 'admin-update-user-',
@@ -8,7 +11,7 @@ var admin = {
 
     fillCurrentUsers: function () {
         $.get('/admin/getUsers', function (data) {
-            $("#admin-list-user").replaceWith(data);
+            $("#admin-list-user-container").html(data);
         });
     },
 
@@ -18,9 +21,54 @@ var admin = {
         });
     },
 
-    updateUserDialogButton: function (buttonId, formId) {
-        admin.updateEntityDialogButton(buttonId, formId, function ( event, ui ) {
+    userOpenCreateDialog: function () {
+        dialogCreatePopup.dialog({
+            title: 'Create user',
+            buttons: {
+                Create: function (event, ui) {
+                    dialogCreatePopup.children(":first").submit();
+                },
+                Close: function (event, ui) {
+                    $(this).dialog('close');
+                }
+            }
+        });
+        dialogCreatePopup.dialog('open');
+        return false;
+    },
+
+    userOpenUpdateDialog: function (userId) {
+        $.get('/admin/user/' + userId, function (data) {
+            dialogPopup.html(data);
+            dialogPopup.dialog({
+                title: 'Edit user' + userId,
+                buttons: {
+                    Edit: function (event, ui) {
+                        dialogPopup.children(":first").submit();
+                    },
+                    Close: function (event, ui) {
+                        $(this).dialog('close');
+                    }
+                }
+            });
+            dialogPopup.dialog('open');
+        });
+        return false;
+    },
+
+    userCreateFormSubmit: function (form) {
+        var actionUrl = '/admin/user';
+        var formElement = $(form);
+        admin.createOrUpdateEntity(actionUrl, formElement, "not used", function (form) {
+            formElement.get(0).reset();
             admin.fillCurrentUsers();
+        });
+    },
+
+    userUpdateFormSubmit: function (form, userId) {
+        var actionUrl = '/admin/user/' + userId;
+        admin.createOrUpdateEntity(actionUrl, $(form), "not used", function (form) {
+            // nothing
         });
     },
 
@@ -38,12 +86,6 @@ var admin = {
          return false;
     },
 
-    createUserSubmitButton: function (actionUrl, formId) {
-        admin.createEntitySubmitButton(actionUrl, formId, function () {
-            admin.fillCurrentUsers();
-        });
-    },
-
     createCategorySubmitButton: function (actionUrl, formId) {
         admin.createEntitySubmitButton(actionUrl, formId, function () {
             admin.fillCurrentCategories();
@@ -58,12 +100,6 @@ var admin = {
                 finishedHandler();
             });
             return false;
-        });
-    },
-
-    updateUserSubmitButton: function (actionUrl, formId) {
-        admin.updateEntitySubmitButton(actionUrl, formId, function () {
-            admin.fillCurrentUsers();
         });
     },
 
@@ -88,8 +124,9 @@ var admin = {
     createOrUpdateEntity: function (actionUrl, form, formId, finishedHandler) {
         var serializedForm = form.serialize();
         $.post(actionUrl, serializedForm)
-            .done(function (form) {
-               finishedHandler(form);
+            .done(function (formResult) {
+               form.replaceWith(formResult);
+               finishedHandler(formResult);
             }).fail(function (error) {
                 if (typeof error === "string") {
                     window.alert(error);
@@ -128,3 +165,25 @@ var admin = {
        );
     }
 };
+
+$(document).ready( function() {
+    dialogPopup.dialog({
+        autoOpen: false,
+        modal: true,
+        close: admin.fillCurrentUsers,
+        zIndex: 10000,
+        width: 'auto',
+        resizable: true
+    });
+
+    dialogCreatePopup = $('#admin-create-user');
+    dialogCreatePopup.dialog({
+        autoOpen: false,
+        modal: true,
+        zIndex: 10000,
+        width: 'auto',
+        resizable: true
+    });
+
+    admin.fillCurrentUsers();
+});

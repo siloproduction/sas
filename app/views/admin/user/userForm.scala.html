@@ -1,32 +1,24 @@
-@(isUpdate: Boolean, id: Long, formId: String, userForm: Form[bean.User])
+@(id: Long, formId: String, userForm: Form[bean.User])
 
 @import helper._
 
-<form id="@formId-form">
 
-    @isUpdate match {
-        case true => {
-            <input type="hidden" name="id" value="@id" />
-        }
-        case false => {
-            <input type="hidden" name="id" value="0" />
-        }
+@id match {
+    case 0 => {
+        <form id="@formId-form" onsubmit="admin.userCreateFormSubmit(this);return false;">
     }
+    case _ => {
+        <form id="@formId-form" onsubmit="admin.userUpdateFormSubmit(this, '@id');return false;">
+    }
+}
 
-    @userForm.value match {
-        case Some(user) => {
-            @inputText(
-                field = userForm("login"),
-                args = '_label -> "What's the user name?", 'placeholder -> "username", 'id -> formId.concat("-form-login"), 'readonly -> "true"
-            )
-        }
-        case _ => {
-            @inputText(
-                field = userForm("login"),
-                args = '_label -> "What's the user name?", 'placeholder -> "username", 'id -> formId.concat("-form-login")
-            )
-        }
-    }
+
+    <input type="hidden" name="id" value="@id" />
+
+    @inputText(
+        field = userForm("login"),
+        args = '_label -> "What's the user name?", 'placeholder -> "username", 'id -> formId.concat("-form-login")
+    )
 
     @inputPassword(
         field = userForm("password"),
@@ -42,20 +34,4 @@
         args = '_label -> "Profile", '_showConstraints -> false, 'id -> formId.concat("-form-profile")
     )
 
-    <p class="buttons">
-        <button id="@formId-submit" type="submit">
-            <span class="ui-button-text"></span>
-        </button>
-    </p>
-
-    <script type="text/javascript">
-        @isUpdate match {
-            case true => {
-                admin.updateUserSubmitButton('@routes.Admin.updateUser(id)', '@formId');
-            }
-            case false => {
-                admin.createUserSubmitButton('@routes.Admin.createUser', '@formId');
-            }
-        }
-    </script>
 </form>

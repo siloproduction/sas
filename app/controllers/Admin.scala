@@ -15,16 +15,9 @@ object Admin extends Controller with Secured {
   val categoryForm = CategoryForm.create()
   val pageForm = PageForm.create()
 
-  def createUserPanel: Html = {
-    views.html.admin.entityPanel(
-      entityCreateForm = views.html.admin.user.userCreateForm(UserForm.create()),
-      initialEntities = views.html.admin.user.users(UserDao.findAll()))
-  }
-  def createCategoryPanel: Html = {
-    views.html.admin.entityPanel(
-      entityCreateForm = views.html.admin.category.categoryCreateForm(CategoryForm.create()),
-      initialEntities = views.html.admin.category.categories(CategoryDao.findAll()))
-  }
+  def createUserPanel: Html = views.html.admin.user.userPanel(UserForm.create())
+  def createCategoryPanel: Html = views.html.admin.entityPanel(UserForm.create())
+
   def createPagePanel: Html = {
     views.html.admin.page.page(
       pageForm = views.html.admin.page.pageForm(pageForm, CategoryDao.findAll()),
@@ -36,14 +29,20 @@ object Admin extends Controller with Secured {
     Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel, CategoryDao.findAll()))
   }
 
+  def getUpdateUserForm(id: Long) = IsAdmin { username => implicit request =>
+    val user = UserDao.findByLogin(id)
+    Ok(views.html.admin.user.userForm(user.id, User.asUpdateFormId(id), UserForm.update(user)))
+  }
+
+
   def createUser = IsAdmin { username => implicit request =>
     val requestForm: Form[User] = userBindingForm.bindFromRequest()
     requestForm.fold(
-      formWithErrors => BadRequest(views.html.admin.user.userCreateForm(formWithErrors)),
+      formWithErrors => BadRequest(views.html.admin.user.userForm(0, User.asCreateFormId, formWithErrors)),
       {case (user) => {
         try {
           UserDao.create(user)
-          Ok(views.html.admin.user.userCreateForm(UserForm.create()))
+          Ok(views.html.admin.user.userForm(0, User.asCreateFormId, UserForm.create))
         } catch {
           case e: Exception => {
             InternalServerError(e.getMessage)
@@ -56,13 +55,12 @@ object Admin extends Controller with Secured {
     val requestForm: Form[User] = userBindingForm.bindFromRequest()
     requestForm.fold(
       formWithErrors => {
-        val entityId = requestForm.data("id").toLong
-        val formId = User.asUpdateFormId(entityId)
-        BadRequest(views.html.admin.user.userForm(true, entityId, formId, formWithErrors))
+        val userId = requestForm.data("id").toLong
+        BadRequest(views.html.admin.user.userForm(userId, User.asUpdateFormId(id), formWithErrors))
       },
       {case (user) => {
         UserDao.update(user)
-        Ok(views.html.admin.user.userUpdateForm(requestForm, user.id))
+        Ok(views.html.admin.user.userForm(user.id, User.asUpdateFormId(id), requestForm))
       }}
     )
   }

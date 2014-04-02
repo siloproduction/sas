@@ -1,9 +1,0 @@
-@(userForm: Form[bean.User], id: Long)
-
-@defining(bean.User.asUpdateFormId(id)) { formId =>
-
-<div id="@formId" title="Update user: @userForm.get.login">
-    @views.html.admin.user.userForm(true, id, formId, userForm)
-
-</div>
-}
