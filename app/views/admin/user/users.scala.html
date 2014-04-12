@@ -5,7 +5,7 @@
         @for(user <- users) {
            <li>
                <button
-                   id="admin-list-user-edit-@user.login"
+                   id="admin-list-user-edit-@user.id"
                    onclick="admin.userOpenUpdateDialog('@user.id');">
                        EDIT
                </button>

@@ -1,17 +1,18 @@
-@(formAction: play.api.mvc.Call, formId: String, entityForm: Form[bean.Category])
+@(id: Long, formId: String, entityForm: Form[bean.Category])
 
 @import helper._
 
-<form id="@formId-form">
-
-    @entityForm.value match {
-        case Some(entity) => {
-            <input type="hidden" name="entityId" value="@entityForm.get.id" />
-        }
-        case _ => {
-            <input type="hidden" name="entityId" value="" />
-        }
+@id match {
+    case 0 => {
+        <form id="@formId-form" onsubmit="admin.categoryCreateFormSubmit(this);return false;">
     }
+    case _ => {
+        <form id="@formId-form" onsubmit="admin.categoryUpdateFormSubmit(this, '@id');return false;">
+    }
+}
+
+
+    <input type="hidden" name="id" value="@id" />
 
     @inputText(
         field = entityForm("name"),
@@ -40,20 +41,5 @@
         field = entityForm("enabled"),
         args = '_label -> "Enable the category", 'placeholder -> "enabled", '_showConstraints -> false
     )
-    <p class="buttons">
-        <button id="@formId-submit" type="submit">
-            <span class="ui-button-text"></span>
-        </button>
-    </p>
 
-    <script type="text/javascript">
-        @entityForm.value match {
-            case Some(entity) => {
-                admin.updateCategorySubmitButton('@routes.Admin.updateCategory(entity.id)', '@formId');
-            }
-            case _ => {
-                admin.createCategorySubmitButton('@routes.Admin.createCategory', '@formId');
-            }
-        }
-    </script>
 </form>

@@ -1,8 +1,0 @@
-@(categoryForm: Form[bean.Category], entityId: Long)
-
-@defining(bean.Category.asUpdateFormId(entityId)) { formId =>
-
-    <div id="@formId" title="Update category: @entityId">
-        @views.html.admin.category.categoryForm(routes.Admin.updateCategory(entityId), formId, categoryForm)
-    </div>
-}

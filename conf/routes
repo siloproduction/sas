@@ -32,6 +32,7 @@ DELETE  /admin/user/:id             controllers.Admin.deleteUser(id: Long)
 GET     /admin/getCategories        controllers.Admin.getCategories
 POST    /admin/category             controllers.Admin.createCategory
 POST    /admin/category/:id         controllers.Admin.updateCategory(id: Long)
+GET     /admin/category/:id         controllers.Admin.getUpdateCategoryForm(id: Long)
 DELETE  /admin/category/:id         controllers.Admin.deleteCategory(id: Long)
 
 ### Page

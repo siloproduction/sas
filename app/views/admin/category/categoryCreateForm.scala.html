@@ -1,8 +1,0 @@
-@(categoryForm: Form[bean.Category])
-
-@defining(bean.Category.asCreateFormId()) { formId =>
-
-    <div id="@formId">
-        @views.html.admin.category.categoryForm(routes.Admin.createCategory, formId, categoryForm)
-    </div>
-}

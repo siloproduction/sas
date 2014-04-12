@@ -12,11 +12,11 @@ import controllers.bean.Category
 object Admin extends Controller with Secured {
 
   val userBindingForm = UserForm.create()
-  val categoryForm = CategoryForm.create()
+  val categoryBindingForm = CategoryForm.create()
   val pageForm = PageForm.create()
 
   def createUserPanel: Html = views.html.admin.user.userPanel(UserForm.create())
-  def createCategoryPanel: Html = views.html.admin.entityPanel(UserForm.create())
+  def createCategoryPanel: Html = views.html.admin.category.categoryPanel(CategoryForm.create())
 
   def createPagePanel: Html = {
     views.html.admin.page.page(
@@ -30,8 +30,13 @@ object Admin extends Controller with Secured {
   }
 
   def getUpdateUserForm(id: Long) = IsAdmin { username => implicit request =>
-    val user = UserDao.findByLogin(id)
+    val user = UserDao.findById(id)
     Ok(views.html.admin.user.userForm(user.id, User.asUpdateFormId(id), UserForm.update(user)))
+  }
+
+  def getUpdateCategoryForm(id: Long) = IsAdmin { username => implicit request =>
+    val category = CategoryDao.findById(id)
+    Ok(views.html.admin.category.categoryForm(category.id, Category.asUpdateFormId(id), CategoryForm.update(category)))
   }
 
 
@@ -77,25 +82,34 @@ object Admin extends Controller with Secured {
     }
   }
 
+
+
   def createCategory = IsAdmin { username => implicit request =>
-    val requestFrom: Form[Category] = categoryForm.bindFromRequest()
+    val requestFrom: Form[Category] = categoryBindingForm.bindFromRequest()
     requestFrom.fold(
-      formWithErrors => BadRequest(views.html.admin.category.categoryCreateForm(formWithErrors)),
+      formWithErrors => BadRequest(views.html.admin.category.categoryForm(0, Category.asCreateFormId, formWithErrors)),
       {case (category) => {
-        CategoryDao.create(category)
-        Ok(views.html.admin.category.categoryCreateForm(CategoryForm.create()))
+        try {
+          CategoryDao.create(category)
+          Ok(views.html.admin.category.categoryForm(0, Category.asCreateFormId, CategoryForm.create()))
+        } catch {
+          case e: Exception => {
+            InternalServerError(e.getMessage)
+          }
+        }
       }}
     )
   }
   def updateCategory(id: Long) = IsAdmin { username => implicit request =>
-    val requestForm: Form[Category] = categoryForm.bindFromRequest()
+    val requestForm: Form[Category] = categoryBindingForm.bindFromRequest()
     requestForm.fold(
       formWithErrors => {
-        BadRequest(views.html.admin.category.categoryUpdateForm(formWithErrors, id))
+        val categoryId = requestForm.data("id").toLong
+        BadRequest(views.html.admin.category.categoryForm(categoryId, Category.asUpdateFormId(id), formWithErrors))
       },
       {case (category) => {
         CategoryDao.update(category)
-        Ok(views.html.admin.category.categoryUpdateForm(requestForm, category.id))
+        Ok(views.html.admin.category.categoryForm(category.id, Category.asUpdateFormId(id), requestForm))
       }}
     )
   }

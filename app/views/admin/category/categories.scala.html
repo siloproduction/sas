@@ -1,24 +1,21 @@
 @(categories: Seq[bean.Category])
 
-
 <div id="admin-list-category">
-    <ul>
+    <ul class="no-bullet">
         @for(category <- categories) {
-        @defining(bean.Category.asUpdateFormId(category)) { formId =>
-        <li>
-            <div class="hidden">
-                @views.html.admin.category.categoryUpdateForm(bean.CategoryForm.update(category), category.id)
-            </div>
-            <button
+            <li>
+                <button
                     id="admin-list-category-edit-@category.id"
-                    onclick="admin.updateCategoryDialogButton('admin-list-category-edit-@category.id', '@formId');">
-                EDIT
-            </button>
+                    onclick="admin.categoryOpenUpdateDialog('@category.id');">
+                        EDIT
+                </button>
 
-            <button onclick="admin.deleteCategory('@routes.Admin.deleteCategory(category.id)', '@category.id', '@category.name')">DELETE</button>
-            @category.name <small>(id: @category.id, enabled: @category.enabled)</small>
-        </li>
-        }
+                <button
+                    onclick="admin.deleteCategory('@routes.Admin.deleteCategory(category.id)', '@category.name')">
+                        DELETE</button>
+
+                @category.name <small>(id: @category.id, enabled: @category.enabled)</small>
+            </li>
         }
     </ul>
 </div>

@@ -1,0 +1,22 @@
+@(userForm: Form[bean.User])
+
+@import helper._
+
+@defining("admin-create-user") { formId =>
+
+<div id="@formId">
+    @views.html.admin.user.userForm(0, formId, userForm)
+</div>
+
+<p class="buttons">
+    <button id="@formId-submit" onclick="admin.userOpenCreateDialog();">
+        <span class="ui-button-text">Create an user</span>
+    </button>
+</p>
+
+
+<div id="admin-list-user-container">
+
+</div>
+
+}

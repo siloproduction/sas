@@ -1,0 +1,22 @@
+@(entityForm: Form[bean.Category])
+
+@import helper._
+
+@defining("admin-create-category") { formId =>
+
+<div id="@formId">
+    @views.html.admin.category.categoryForm(0, formId, entityForm)
+</div>
+
+<p class="buttons">
+    <button id="@formId-submit" onclick="admin.categoryOpenCreateDialog();">
+        <span class="ui-button-text">Create a category</span>
+    </button>
+</p>
+
+
+<div id="admin-list-category-container">
+
+</div>
+
+}

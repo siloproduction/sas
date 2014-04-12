@@ -19,11 +19,7 @@ object CategoryDao {
     get[Option[String]]("link") ~
     get[Int]("rank") ~
     get[Boolean]("enabled") map {
-      case id~name~parent~link~rank~enabled => {
-        val bean = Category(name, CategoryDao.findByIdOption(parent).getOrElse(Category.noCategory), link, rank, enabled)
-        bean.id = id.get
-        bean
-      }
+      case id~name~parent~link~rank~enabled => Category(id.get, name, CategoryDao.findByIdOption(parent).getOrElse(Category.noCategory), link, rank, enabled)
     }
   }
 
@@ -54,6 +50,9 @@ object CategoryDao {
   }
 
   def update(category: Category): Unit = {
+    if (category.isCategoryNone() || category.isParentLoop()) {
+      return
+    }
     DB.withConnection { implicit connection =>
       SQL("UPDATE category SET name={name}, parent={parent}, link={link}, rank={rank}, enabled={enabled}" +
         " WHERE category.id={id}").on(

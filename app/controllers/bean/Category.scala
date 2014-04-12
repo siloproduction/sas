@@ -6,17 +6,19 @@ import play.api.data._
 import play.api.data.Forms._
 import controllers.dao.{PageDao, CategoryDao}
 
-case class Category(name: String, parent: Category, link: Option[String], rank: Int, enabled: Boolean) {
-  var id: Long = 0
+case class Category(id: Long = 0, name: String, parent: Category, link: Option[String] = Option.empty, rank: Int = 0, enabled: Boolean) {
   lazy val pages = PageDao.findByCategoryId(id)
+
+  def isCategoryNone() = id == 0
+  def isParentLoop() = id == parent.id
 }
 object Category {
 
-  def noCategory = Category("no category", null, Option.empty, 0, false)
+  def noCategory = Category(name = "None", parent = null, enabled = false)
 
   def asUpdateFormId(category: Category): String = asUpdateFormId(category.id)
   def asUpdateFormId(id: Long) = "admin-update-category-" + id
-  def asCreateFormId(): String = "admin-create-category"
+  val asCreateFormId = "admin-create-category"
 }
 object CategoryForm {
 
@@ -24,6 +26,7 @@ object CategoryForm {
 
   def create() =  {
     Form(mapping(
+      "id" -> longNumber,
       "name" -> text
                 .verifying("3 characters minimum", fields => fields match {
                   case (name) => name.size > 2
@@ -38,8 +41,12 @@ object CategoryForm {
                 }),
       "rank" -> number,
       "enabled" -> boolean
-    )((name, parent, link, rank, enabled) => Category(name, CategoryDao.findById(parent), link, rank, enabled))
-     ((category) => Some(category.name, category.parent.id, category.link, category.rank, category.enabled))
+    )
+     ((id, name, parent, link, rank, enabled) => Category(id, name, CategoryDao.findById(parent), link, rank, enabled))
+     ((category) => Some(category.id, category.name, category.parent.id, category.link, category.rank, category.enabled))
+      verifying("The parent cannot be itself", category => category match {
+        case (category) => category.id != category.parent.id
+      })
     )
   }
 }

@@ -1,5 +1,6 @@
-var dialogCreatePopup = null;
-var dialogPopup = $('<div id="admin-update-user-popup"></div>');
+var dialogCreateUserPopup = null;
+var dialogCreateCategoryPopup = null;
+var dialogPopup = $('<div id="admin-update-popup"></div>');
 
 var admin = {
 
@@ -17,23 +18,23 @@ var admin = {
 
     fillCurrentCategories: function () {
         $.get('/admin/getCategories', function (data) {
-            $('#admin-list-category').replaceWith(data);
+            $('#admin-list-category-container').html(data);
         });
     },
 
     userOpenCreateDialog: function () {
-        dialogCreatePopup.dialog({
+        dialogCreateUserPopup.dialog({
             title: 'Create user',
             buttons: {
                 Create: function (event, ui) {
-                    dialogCreatePopup.children(":first").submit();
+                    dialogCreateUserPopup.children(":first").submit();
                 },
                 Close: function (event, ui) {
                     $(this).dialog('close');
                 }
             }
         });
-        dialogCreatePopup.dialog('open');
+        dialogCreateUserPopup.dialog('open');
         return false;
     },
 
@@ -47,6 +48,7 @@ var admin = {
                         dialogPopup.children(":first").submit();
                     },
                     Close: function (event, ui) {
+                        admin.fillCurrentUsers();
                         $(this).dialog('close');
                     }
                 }
@@ -59,7 +61,7 @@ var admin = {
     userCreateFormSubmit: function (form) {
         var actionUrl = '/admin/user';
         var formElement = $(form);
-        admin.createOrUpdateEntity(actionUrl, formElement, "not used", function (form) {
+        admin.createOrUpdateEntity(actionUrl, formElement, function (form) {
             formElement.get(0).reset();
             admin.fillCurrentUsers();
         });
@@ -67,61 +69,64 @@ var admin = {
 
     userUpdateFormSubmit: function (form, userId) {
         var actionUrl = '/admin/user/' + userId;
-        admin.createOrUpdateEntity(actionUrl, $(form), "not used", function (form) {
+        admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
             // nothing
         });
     },
 
-    updateCategoryDialogButton: function (buttonId, formId) {
-        admin.updateEntityDialogButton(buttonId, formId, function ( event, ui ) {
-            admin.fillCurrentCategories();
+    categoryOpenCreateDialog: function () {
+        dialogCreateCategoryPopup.dialog({
+            title: 'Create a category',
+            buttons: {
+                Create: function (event, ui) {
+                    dialogCreateCategoryPopup.children(":first").submit();
+                },
+                Close: function (event, ui) {
+                    $(this).dialog('close');
+                }
+            }
         });
+        dialogCreateCategoryPopup.dialog('open');
+        return false;
     },
 
-    updateEntityDialogButton: function (buttonId, formId, finishedHandler) {
-         $('#' + formId).dialog({
-             modal: true,
-             close: finishedHandler
-         });
-         return false;
-    },
-
-    createCategorySubmitButton: function (actionUrl, formId) {
-        admin.createEntitySubmitButton(actionUrl, formId, function () {
-            admin.fillCurrentCategories();
-        });
-    },
-
-    createEntitySubmitButton: function (actionUrl, formId, finishedHandler) {
-        $('#' + formId + '-submit span').text('Create');
-        admin.formOf(formId).submit(function () {
-            admin.createOrUpdateEntity(actionUrl, admin.formOf(formId), formId, function (form) {
-                //$('#' + formId).replaceWith(form);
-                finishedHandler();
+    categoryOpenUpdateDialog: function (categoryId) {
+        $.get('/admin/category/' + categoryId, function (data) {
+            dialogPopup.html(data);
+            dialogPopup.dialog({
+                title: 'Edit a category' + categoryId,
+                buttons: {
+                    Edit: function (event, ui) {
+                        dialogPopup.children(":first").submit();
+                    },
+                    Close: function (event, ui) {
+                        admin.fillCurrentCategories();
+                        $(this).dialog('close');
+                    }
+                }
             });
-            return false;
+            dialogPopup.dialog('open');
         });
+        return false;
     },
 
-    updateCategorySubmitButton: function (actionUrl, formId) {
-        admin.updateEntitySubmitButton(actionUrl, formId, function () {
+    categoryCreateFormSubmit: function (form) {
+        var actionUrl = '/admin/category';
+        var formElement = $(form);
+        admin.createOrUpdateEntity(actionUrl, formElement, function (form) {
+            formElement.get(0).reset();
             admin.fillCurrentCategories();
         });
     },
 
-    updateEntitySubmitButton: function (actionUrl, formId, finishedHandler) {
-        $('#' + formId + '-submit span').text('Update');
-        admin.formOf(formId).submit(function () {
-            admin.createOrUpdateEntity(actionUrl, admin.formOf(formId), formId, function (form) {
-                 $('#' + formId).dialog('close');
-                 //$('#' + formId).replaceWith(form);
-                 finishedHandler();
-             });
-            return false;
+    categoryUpdateFormSubmit: function (form, categoryId) {
+        var actionUrl = '/admin/category/' + categoryId;
+        admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
+            // nothing
         });
     },
 
-    createOrUpdateEntity: function (actionUrl, form, formId, finishedHandler) {
+    createOrUpdateEntity: function (actionUrl, form, finishedHandler) {
         var serializedForm = form.serialize();
         $.post(actionUrl, serializedForm)
             .done(function (formResult) {
@@ -143,7 +148,7 @@ var admin = {
         });
     },
 
-    deleteCategory: function (actionUrl, categoryId, categoryName) {
+    deleteCategory: function (actionUrl, categoryName) {
         admin.deleteEntity(actionUrl, 'Delete category ' + categoryName, function () {
             admin.fillCurrentCategories();
         });
@@ -170,14 +175,22 @@ $(document).ready( function() {
     dialogPopup.dialog({
         autoOpen: false,
         modal: true,
-        close: admin.fillCurrentUsers,
         zIndex: 10000,
         width: 'auto',
         resizable: true
     });
 
-    dialogCreatePopup = $('#admin-create-user');
-    dialogCreatePopup.dialog({
+    dialogCreateUserPopup = $('#admin-create-user');
+    dialogCreateUserPopup.dialog({
+        autoOpen: false,
+        modal: true,
+        zIndex: 10000,
+        width: 'auto',
+        resizable: true
+    });
+
+    dialogCreateCategoryPopup = $('#admin-create-category');
+    dialogCreateCategoryPopup.dialog({
         autoOpen: false,
         modal: true,
         zIndex: 10000,
@@ -186,4 +199,5 @@ $(document).ready( function() {
     });
 
     admin.fillCurrentUsers();
+    admin.fillCurrentCategories();
 });

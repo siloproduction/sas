@@ -62,7 +62,7 @@ object UserDao {
     }
   }
 
-  def findByLogin(id: Long): User = {
+  def findById(id: Long): User = {
     DB.withConnection { implicit  connection =>
       SQL("select * from users where id={id}").on(
         'id -> id
