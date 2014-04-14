@@ -5,18 +5,32 @@ import play.api.data.Forms._
 import controllers.dao.CategoryDao
 
 case class Page(
+       id: Long = 0,
        name: String,
        category: Option[Category],
        permanentLink: String,
        data: String,
        rank: Int,
        enabled: Boolean) {
-  var id: Long = 0
+
+
+  def categoryName = category.getOrElse(Category.noCategory).name
 }
+
+object Page {
+
+  def asUpdateFormId(page: Page): String = asUpdateFormId(page.id)
+  def asUpdateFormId(id: Long) = "admin-update-page-" + id
+  val asCreateFormId = "admin-create-page"
+}
+
 object PageForm {
+
+  def update(page: Page): Form[Page] =  create().fill(page)
 
   def create() =  {
     Form(mapping(
+      "id" -> longNumber,
       "name" -> text
                 .verifying("3 characters minimum", fields => fields match {
                   case (name) => name.size > 2
@@ -32,10 +46,10 @@ object PageForm {
       "data" -> nonEmptyText,
       "rank" -> number,
       "enabled" -> boolean
-    )((name, category, permanentLink, data, rank, enabled) => {
-        Page(name, CategoryDao.findByIdOption(category), permanentLink, data, rank, enabled)
+    )((id, name, category, permanentLink, data, rank, enabled) => {
+        Page(id, name, CategoryDao.findByIdOption(category), permanentLink, data, rank, enabled)
     })
-     ((page) => Some(page.name, page.category.map(_.id), page.permanentLink, page.data, page.rank, page.enabled))
+     ((page) => Some(page.id, page.name, page.category.map(_.id), page.permanentLink, page.data, page.rank, page.enabled))
     )
   }
 }

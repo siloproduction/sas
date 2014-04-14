@@ -38,4 +38,6 @@ DELETE  /admin/category/:id         controllers.Admin.deleteCategory(id: Long)
 ### Page
 GET     /admin/getPages             controllers.Admin.getPages
 POST    /admin/page                 controllers.Admin.createPage
-POST    /admin/page/:permanentLink  controllers.Admin.updatePage(permanentLink: String)
+POST    /admin/page/:id             controllers.Admin.updatePage(id: Long)
+GET     /admin/page/:id             controllers.Admin.getUpdatePageForm(id: Long)
+DELETE  /admin/page/:id             controllers.Admin.deletePage(id: Long)

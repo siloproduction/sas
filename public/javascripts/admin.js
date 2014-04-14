@@ -1,14 +1,11 @@
 var dialogCreateUserPopup = null;
 var dialogCreateCategoryPopup = null;
+var dialogCreatePagePopup = null;
 var dialogPopup = $('<div id="admin-update-popup"></div>');
 
+var pagePreviewPopup = $('<div id="admin-page-preview-popup"></div>');
+
 var admin = {
-
-    updateUserPanelIdPrefix: 'admin-update-user-',
-
-    formOf: function (formId) {
-        return $('#' + formId + '-form');
-    },
 
     fillCurrentUsers: function () {
         $.get('/admin/getUsers', function (data) {
@@ -19,6 +16,12 @@ var admin = {
     fillCurrentCategories: function () {
         $.get('/admin/getCategories', function (data) {
             $('#admin-list-category-container').html(data);
+        });
+    },
+
+    fillCurrentPages: function () {
+        $.get('/admin/getPages', function (data) {
+            $('#admin-list-page-container').html(data);
         });
     },
 
@@ -126,6 +129,61 @@ var admin = {
         });
     },
 
+
+    pageOpenCreateDialog: function () {
+        dialogCreatePagePopup.dialog({
+            title: 'Create a page',
+            buttons: {
+                Create: function (event, ui) {
+                    dialogCreatePagePopup.children(":first").submit();
+                },
+                Close: function (event, ui) {
+                    $(this).dialog('close');
+                }
+            }
+        });
+        dialogCreatePagePopup.dialog('open');
+        return false;
+    },
+
+    pageOpenUpdateDialog: function (pageId) {
+        $.get('/admin/page/' + pageId, function (data) {
+            dialogPopup.html(data);
+            dialogPopup.dialog({
+                title: 'Edit a page' + pageId,
+                buttons: {
+                    Edit: function (event, ui) {
+                        dialogPopup.children(":first").submit();
+                    },
+                    Close: function (event, ui) {
+                        admin.fillCurrentPages();
+                        $(this).dialog('close');
+                    }
+                }
+            });
+            dialogPopup.dialog('open');
+        });
+        return false;
+    },
+
+    pageCreateFormSubmit: function (form) {
+        var actionUrl = '/admin/page';
+        var formElement = $(form);
+        admin.createOrUpdateEntity(actionUrl, formElement, function (form) {
+            formElement.get(0).reset();
+            admin.fillCurrentPages();
+        });
+    },
+
+    pageUpdateFormSubmit: function (form, pageId) {
+        var actionUrl = '/admin/page/' + pageId;
+        admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
+            // nothing
+        });
+    },
+
+
+
     createOrUpdateEntity: function (actionUrl, form, finishedHandler) {
         var serializedForm = form.serialize();
         $.post(actionUrl, serializedForm)
@@ -154,6 +212,12 @@ var admin = {
         });
     },
 
+    deletePage: function (actionUrl, pageName) {
+        admin.deleteEntity(actionUrl, 'Delete page ' + pageName, function () {
+            admin.fillCurrentPages();
+        });
+    },
+
     deleteEntity: function (actionUrl, title, finishedHandler) {
         utils.confirmDialog(title, function (dialogInstance) {
                 $.ajax({
@@ -168,6 +232,11 @@ var admin = {
                 });
             }
        );
+    },
+
+    popupPagePreview: function (pageDataId) {
+        pagePreviewPopup.html($("#" + pageDataId).val());
+        pagePreviewPopup.dialog('open');
     }
 };
 
@@ -198,6 +267,25 @@ $(document).ready( function() {
         resizable: true
     });
 
+    pagePreviewPopup.dialog({
+        title: "Page preview",
+        position: { my: "center top", at: "center top", of: window },
+        autoOpen: false,
+        modal: true,
+        zIndex: 10000,
+        resizable: true,
+        width: "80%"
+    });
+    dialogCreatePagePopup = $('#admin-create-page');
+    dialogCreatePagePopup.dialog({
+        autoOpen: false,
+        modal: true,
+        zIndex: 10000,
+        width: 'auto',
+        resizable: true
+    });
+
     admin.fillCurrentUsers();
     admin.fillCurrentCategories();
+    admin.fillCurrentPages();
 });

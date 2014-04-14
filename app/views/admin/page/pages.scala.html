@@ -1,7 +1,21 @@
 @(pages: Seq[bean.Page])
 
-<ul>
-    @for(page <- pages) {
-       <li>@page.name <small>(category= @page.category, enabled= @page.enabled, rank= @page.rank)</small></li>
-    }
-</ul>
+<div id="admin-list-page">
+    <ul class="no-bullet">
+        @for(page <- pages) {
+        <li>
+            <button
+                    id="admin-list-page-edit-@page.id"
+                    onclick="admin.pageOpenUpdateDialog('@page.id');">
+                EDIT
+            </button>
+
+            <button
+                    onclick="admin.deletePage('@routes.Admin.deletePage(page.id)', '@page.name')">
+                DELETE</button>
+
+            @page.name <small>(@page.categoryName, enabled= @page.enabled, rank= @page.rank)</small>
+        </li>
+        }
+    </ul>
+</div>

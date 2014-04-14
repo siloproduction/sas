@@ -1,8 +1,17 @@
-@(pageForm: Form[bean.Page], categories: Seq[bean.Category])
+@(id: Long, formId: String, pageForm: Form[bean.Page])
 
 @import helper._
 
-@form(action = routes.Admin.createPage, args = 'id -> "pageForm-form") {
+@id match {
+    case 0 => {
+        <form id="@formId-form" onsubmit="admin.pageCreateFormSubmit(this);return false;">
+    }
+    case _ => {
+        <form id="@formId-form" onsubmit="admin.pageUpdateFormSubmit(this, '@id');return false;">
+    }
+}
+
+    <input type="hidden" name="id" value="@id" />
 
     @inputText(
         field = pageForm("name"),
@@ -11,7 +20,7 @@
 
     @select(
         field = pageForm("category"),
-        categories.map{ c =>
+        dao.CategoryDao.findAll().map{ c =>
             c.id.toString -> c.name
         },
         args = '_label -> "Category", '_showConstraints -> false
@@ -34,20 +43,9 @@
 
     @textarea(
         field = pageForm("data"),
-        args = '_label -> "data", 'rows -> 6, 'cols -> "80", '_showConstraints -> false, 'class -> "richtext_panel"
+        args = 'id -> formId.concat("-data"), '_label -> "data", 'rows -> 6, 'cols -> "80", '_showConstraints -> false, 'class -> "richtext_panel"
     )
-}
 
-<input id="pagePreviewUpdate" type="button" value="preview" />
-<input id="pagePreviewClear" type="button" value="clear preview" />
-<div class="hidden"><div id="pagePreview" title="Page preview"></div></div>
+    <input id="pagePreviewUpdate" type="button" value="preview" onclick="admin.popupPagePreview('@formId-data');"/>
 
-<script type="text/javascript">
-    $("#pagePreviewUpdate").click(function () {
-        $("#pagePreview").html($("#data").val());
-        $("#pagePreview").dialog({ position: { my: "center top", at: "center top", of: window }, width: "80%" });
-    });
-    $("#pagePreviewClear").click(function () {
-        $("#pagePreview").html("");
-    });
-</script>
+</form>

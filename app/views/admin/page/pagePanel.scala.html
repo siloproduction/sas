@@ -1,0 +1,22 @@
+@(entityForm: Form[bean.Page])
+
+@import helper._
+
+@defining("admin-create-page") { formId =>
+
+<div id="@formId">
+    @views.html.admin.page.pageForm(0, formId, entityForm)
+</div>
+
+<p class="buttons">
+    <button id="@formId-submit" onclick="admin.pageOpenCreateDialog();">
+        <span class="ui-button-text">Create a page</span>
+    </button>
+</p>
+
+
+<div id="admin-list-page-container">
+
+</div>
+
+}

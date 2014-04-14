@@ -13,17 +13,11 @@ object Admin extends Controller with Secured {
 
   val userBindingForm = UserForm.create()
   val categoryBindingForm = CategoryForm.create()
-  val pageForm = PageForm.create()
+  val pageBindingForm = PageForm.create()
 
   def createUserPanel: Html = views.html.admin.user.userPanel(UserForm.create())
   def createCategoryPanel: Html = views.html.admin.category.categoryPanel(CategoryForm.create())
-
-  def createPagePanel: Html = {
-    views.html.admin.page.page(
-      pageForm = views.html.admin.page.pageForm(pageForm, CategoryDao.findAll()),
-      pages = views.html.admin.page.pages(PageDao.findAll())
-    )
-  }
+  def createPagePanel: Html = views.html.admin.page.pagePanel(PageForm.create())
 
   def index = IsAdmin { username => implicit request =>
     Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel, CategoryDao.findAll()))
@@ -37,6 +31,11 @@ object Admin extends Controller with Secured {
   def getUpdateCategoryForm(id: Long) = IsAdmin { username => implicit request =>
     val category = CategoryDao.findById(id)
     Ok(views.html.admin.category.categoryForm(category.id, Category.asUpdateFormId(id), CategoryForm.update(category)))
+  }
+
+  def getUpdatePageForm(id: Long) = IsAdmin { username => implicit request =>
+    val page = PageDao.findById(id)
+    Ok(views.html.admin.page.pageForm(page.id, Page.asUpdateFormId(id), PageForm.update(page)))
   }
 
 
@@ -127,26 +126,45 @@ object Admin extends Controller with Secured {
   }
 
   def createPage = IsAdmin { username => implicit request =>
-    val requestForm: Form[Page] = pageForm.bindFromRequest()
+    val requestForm: Form[Page] = pageBindingForm.bindFromRequest()
     requestForm.fold(
-      formWithErrors => BadRequest(views.html.admin.page.pageForm(formWithErrors, CategoryDao.findAll())),
+      formWithErrors => BadRequest(views.html.admin.page.pageForm(0, Page.asCreateFormId, formWithErrors)),
       {case (page) =>
-        PageDao.create(page)
-        Ok(views.html.admin.page.pageForm(pageForm, CategoryDao.findAll()))
+        try {
+            PageDao.create(page)
+            Ok(views.html.admin.page.pageForm(0, Page.asCreateFormId, PageForm.create()))
+        } catch {
+          case e: Exception => {
+            InternalServerError(e.getMessage)
+          }
+        }
       }
     )
-
   }
-  def updatePage(permanentLink: String) = IsAdmin { username => implicit request =>
-    val requestForm: Form[Page] = pageForm.bindFromRequest()
+  def updatePage(id: Long) = IsAdmin { username => implicit request =>
+    val requestForm: Form[Page] = pageBindingForm.bindFromRequest()
     requestForm.fold(
-      formWithErrors => BadRequest(views.html.admin.page.pageForm(formWithErrors, CategoryDao.findAll())),
+      formWithErrors => {
+        val pageId = requestForm.data("id").toLong
+        BadRequest(views.html.admin.page.pageForm(pageId, Page.asUpdateFormId(id), formWithErrors))
+      },
       {case (page) =>
-        PageDao.create(page)
-        Ok(views.html.admin.page.pageForm(pageForm, CategoryDao.findAll()))
+        PageDao.update(page)
+        Ok(views.html.admin.page.pageForm(page.id, Page.asUpdateFormId(id), requestForm))
       }
     )
-
+  }
+  def deletePage(id: Long) = IsAdmin { username => implicit request =>
+    try {
+      PageDao.delete(id) match {
+        case 0 => NotFound("No page has been removed")
+        case _ => Ok("Success")
+      }
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
   def getUsers = IsAdmin { username => implicit request =>

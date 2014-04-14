@@ -23,11 +23,7 @@ object PageDao {
     get[String]("data") ~
     get[Int]("rank") ~
     get[Boolean]("enabled") map {
-      case id~name~categoryId~permanentLink~data~rank~enabled =>  {
-        val bean = Page(name, CategoryDao.findByIdOption(categoryId), permanentLink, data, rank, enabled)
-        bean.id = id.get
-        bean
-      }
+      case id~name~categoryId~permanentLink~data~rank~enabled => Page(id.get, name, CategoryDao.findByIdOption(categoryId), permanentLink, data, rank, enabled)
     }
   }
 
@@ -51,6 +47,21 @@ object PageDao {
     }
   }
 
+  def update(page: Page): Unit = {
+    DB.withConnection { implicit connection =>
+      SQL("UPDATE page SET name={name}, categoryId={categoryId}, permanentLink={permanentLink}, data={data}, rank={rank}, enabled={enabled}" +
+        " WHERE page.id={id}").on(
+        'id -> page.id,
+        'name -> page.name,
+        'categoryId-> page.category.get.id,
+        'permanentLink -> page.permanentLink,
+        'data -> page.data,
+        'rank -> page.rank,
+        'enabled -> page.enabled
+      ).executeUpdate()
+    }
+  }
+
   def findByCategoryId(categoryId: Long): Seq[Page] = {
     DB.withConnection { implicit  connection =>
       SQL("select * from page where categoryId={categoryId}").on(
@@ -64,6 +75,22 @@ object PageDao {
       SQL("select * from page where permanentLink={permanentLink}").on(
         'permanentLink -> permanentLink
       ).as(parser *).head
+    }
+  }
+
+  def findById(id: Long): Page = {
+    DB.withConnection { implicit  connection =>
+      SQL("select * from page where id={id}").on(
+        'id -> id
+      ).as(parser *).head
+    }
+  }
+
+  def delete(pageId: Long): Int = {
+    DB.withConnection { implicit connection =>
+      SQL("DELETE FROM page WHERE id={id}").on(
+        'id -> pageId
+      ).executeUpdate()
     }
   }
 
