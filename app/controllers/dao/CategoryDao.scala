@@ -33,7 +33,13 @@ object CategoryDao {
 
   def findAll(): Seq[Category] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from category").as(parser *)
+      SQL("select * from category order by name asc").as(parser *)
+    }
+  }
+
+  def findAllVisible(): Seq[Category] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from category where id > 0 and enabled = true order by rank asc").as(parser *)
     }
   }
 

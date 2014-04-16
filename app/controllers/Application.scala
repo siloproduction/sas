@@ -13,18 +13,18 @@ import controllers.bean.Credentials
 object Application extends Controller with Secured {
 
   val loginForm = LoginForm.create()
-  def indexView(user: Option[User]) = views.html.index(user, CategoryDao.findAll(), PageDao.findPageTop(), PageDao.findPageBottom())
+  def indexView(user: Option[User]) = views.html.index(user, PageDao.findPageTop(), PageDao.findPageBottom())
 
   def index = Action { implicit request =>
     Ok(indexView(user))
   }
 
   def page(permanentLink: String) = Action { implicit request =>
-    Ok(views.html.page(user, CategoryDao.findAll(), PageDao.findByPermanentLink(permanentLink)))
+    Ok(views.html.page(user, PageDao.findByPermanentLink(permanentLink)))
   }
 
   def login = Action { implicit request =>
-    Ok(views.html.login(user, loginForm, CategoryDao.findAll()))
+    Ok(views.html.login(user, loginForm))
   }
 
   def logout = Action {
@@ -36,7 +36,7 @@ object Application extends Controller with Secured {
   def authenticate = Action { implicit request =>
     val requestFrom: Form[Credentials] = loginForm.bindFromRequest()
     requestFrom.fold(
-      formWithErrors => BadRequest(views.html.login(user, formWithErrors, CategoryDao.findAll())),
+      formWithErrors => BadRequest(views.html.login(user, formWithErrors)),
       {case (credentials) => {
         try {
           val user = UserDao.login(credentials)

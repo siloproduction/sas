@@ -29,7 +29,7 @@ object PageDao {
 
   def findAll(): Seq[Page] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from page").as(parser *)
+      SQL("select * from page order by name asc").as(parser *)
     }
   }
 
@@ -64,7 +64,7 @@ object PageDao {
 
   def findByCategoryId(categoryId: Long): Seq[Page] = {
     DB.withConnection { implicit  connection =>
-      SQL("select * from page where categoryId={categoryId}").on(
+      SQL("select * from page where categoryId={categoryId} order by rank asc").on(
         'categoryId -> categoryId
       ).as(parser *)
     }
@@ -72,7 +72,7 @@ object PageDao {
 
   def findByPermanentLink(permanentLink: String): Page = {
     DB.withConnection { implicit  connection =>
-      SQL("select * from page where permanentLink={permanentLink}").on(
+      SQL("select * from page where permanentLink={permanentLink} order by rank asc").on(
         'permanentLink -> permanentLink
       ).as(parser *).head
     }

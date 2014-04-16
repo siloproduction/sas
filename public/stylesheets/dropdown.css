@@ -13,6 +13,7 @@ ul.topnav li {
     padding: 2px 15px 0 0;  
     position: relative; /*--Declare X and Y axis base for sub navigation--*/
     cursor: pointer;
+    z-index: 100;
 }
 ul.topnav li a{  
     padding: 10px 5px;  

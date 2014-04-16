@@ -1,7 +1,7 @@
-@(user: Option[bean.User], categories: Seq[bean.Category], page: bean.Page)
+@(user: Option[bean.User], page: bean.Page)
 
 @import helper._
 
-@main(page.name, user, categories) {
+@main(page.name, user) {
     @Html(page.data)
 }

@@ -1,8 +1,8 @@
-@(user: Option[bean.User], userPanel: Html, categoryPanel: Html, pagePanel: Html, categories: Seq[bean.Category])
+@(user: Option[bean.User], userPanel: Html, categoryPanel: Html, pagePanel: Html)
 
 @import helper._
 
-@main("Admin page", user, categories) {
+@main("Admin page", user) {
 
     <script type="text/javascript">
         $(function() {

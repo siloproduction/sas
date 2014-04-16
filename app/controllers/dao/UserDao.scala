@@ -24,7 +24,7 @@ object UserDao {
 
   def findAll(): Seq[User] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from users").as(parser *)
+      SQL("select * from users order by login asc").as(parser *)
     }
   }
 

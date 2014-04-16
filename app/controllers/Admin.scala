@@ -20,7 +20,7 @@ object Admin extends Controller with Secured {
   def createPagePanel: Html = views.html.admin.page.pagePanel(PageForm.create())
 
   def index = IsAdmin { username => implicit request =>
-    Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel, CategoryDao.findAll()))
+    Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
   }
 
   def getUpdateUserForm(id: Long) = IsAdmin { username => implicit request =>

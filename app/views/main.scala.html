@@ -1,4 +1,4 @@
-@(title: String, user: Option[bean.User], categories: Seq[bean.Category])(content: Html)
+@(title: String, user: Option[bean.User])(content: Html)
 
 <!DOCTYPE html>
 <html>
@@ -96,7 +96,7 @@
             </header>
             -->
             @views.html.banner()
-            @views.html.breadcrumbs(user, categories)
+            @views.html.breadcrumbs(user)
             @views.html.bodyColumn(content)
         </div>
 

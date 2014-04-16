@@ -1,4 +1,4 @@
-@(user: Option[bean.User], categories: Seq[bean.Category])
+@(user: Option[bean.User])
 
 <div id="breadcrumbs">
     <ul class="topnav">
@@ -6,7 +6,7 @@
             <li>
                 <a href="@routes.Application.index">ACCUEIL</a>
             </li>
-            @for(category <- categories) {
+            @for(category <- dao.CategoryDao.findAllVisible()) {
             <li>
                 <a>@category.name</a>
                 <ul class="subnav">
