@@ -50,7 +50,7 @@ object CategoryDao {
   }
 
   def update(category: Category): Unit = {
-    if (category.isCategoryNone() || category.isParentLoop()) {
+    if (!category.canBePersisted) {
       return
     }
     DB.withConnection { implicit connection =>
