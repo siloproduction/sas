@@ -73,7 +73,7 @@ var admin = {
     userUpdateFormSubmit: function (form, userId) {
         var actionUrl = '/admin/user/' + userId;
         admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
-            // nothing
+            admin.fillCurrentUsers();
         });
     },
 
@@ -125,7 +125,7 @@ var admin = {
     categoryUpdateFormSubmit: function (form, categoryId) {
         var actionUrl = '/admin/category/' + categoryId;
         admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
-            // nothing
+            admin.fillCurrentCategories();
         });
     },
 
@@ -178,7 +178,7 @@ var admin = {
     pageUpdateFormSubmit: function (form, pageId) {
         var actionUrl = '/admin/page/' + pageId;
         admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
-            // nothing
+            admin.fillCurrentPages();
         });
     },
 
