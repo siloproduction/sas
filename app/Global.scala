@@ -7,8 +7,8 @@ object Global extends WithFilters(HostFilter) {
 
 object HostFilter extends Filter with Results {
 
-  val REDITECT_FROM = "the-from-url"
-  val REDITECT_TO = "http://url"
+  val REDITECT_FROM = "annehengy.herokuapp.com"
+  val REDITECT_TO = "http://www.annehengy.fr"
 
   def apply(next: (RequestHeader) => Future[SimpleResult])(request: RequestHeader): Future[SimpleResult] = {
     request.headers.get("host") match {
