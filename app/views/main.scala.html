@@ -5,9 +5,6 @@
     <head>
         <title>@title</title>
 
-        <meta name="google-site-verification" content="hGCNEn2AMIJ6CSutywv2bORBsW2au127a0gFi0gjJDY" />
-        <meta name="keywords" content="Soirée, Machete, Musique, Jeune, Privas, Veyras, Ardèche, electro, concert, Oh My Dub, Step On The Beat, Surprise Jack, Session, Veyras'Oai, Musique actuelle, Culture, Spectacle, Théâtre, Association, Scène, Reggae, Rap, Hip Hop, Rock" />
-        <meta name="description" content="Vouée à la diffusion culturelle dans les domaines du théâtre, des arts plastiques et plus particulièrement des musiques actuelles, elle propose des événements d'une grande diversité, défendant des spectacles qu'elle considère de qualité, fidèle à des valeurs d’éclectisme et d’accessibilité tarifaire."/>
         <meta name="author" content="Hilaire Thomas" />
         <meta name="robots" content="all" />
 
@@ -80,21 +77,6 @@
     </head>
     <body>
         <div class="container-fluid shadow-left">
-            <!--
-            <header>
-                <a href="@routes.Application.index">@title</a>
-                @if(user.isEmpty) {
-                    <a href="@routes.Application.login">Login</a>
-                } else {
-                    <dl id="user">
-                        <dt>@user.get.login <span>(@user.get.profile)</span></dt>
-                        <dd>
-                            <a href="@routes.Application.logout()">Logout</a>
-                        </dd>
-                    </dl>
-                }
-            </header>
-            -->
             @views.html.banner()
             @views.html.breadcrumbs(user)
             @views.html.bodyColumn(content)
@@ -102,25 +84,13 @@
 
         <footer class="footer shadow-left">
             <div class="pull-left">
-                <span class="page-footer-item">© Association Machete</span>
+                <span class="page-footer-item">Anne Hengy - Conte</span>
             </div>
             <div class="clear">
                 <hr>
             </div>
             <div class="pull-left">
-                <span class="page-footer-item">N° Siret : 535 180 491 00024</span>
-            </div>
-            <div class="clear">
-                <hr>
-            </div>
-            <div class="pull-left">
-                <span class="page-footer-item">N° Waldec : w072001349</span>
-            </div>
-            <div class="clear">
-                <hr>
-            </div>
-            <div class="pull-left">
-                <span class="page-footer-item">Association à but non lucratif à Privas (07)</span>
+                <span class="page-footer-item">N° tél : xx xx xx xx xx</span>
             </div>
             <div class="clear">
                 <hr>

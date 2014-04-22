@@ -91,11 +91,21 @@
 #banner {
 	margin-top: 15px;
 }
+#bannerLogo {
+    margin-left:50px;
+	-moz-box-shadow: -1px -1px 10px 2px #444;
+	-webkit-box-shadow: -1px -1px 10px 2px #444;
+	box-shadow: -1px -1px 10px 2px #444;
+}
+#bannerRight {
+    position:relative;
+    top:60px;
+}
 .section {
 	padding-top: 10px;
 }
 footer {
-	background: url("../images/footer.png") repeat-x top left #32362f;
+	background: url("../images/footer.png") repeat-x top left #000;
 	border-top: 1px solid #EEEEEE;
 	color: white;
 	width: 940px;
