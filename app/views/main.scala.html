@@ -1,4 +1,4 @@
-@(title: String, user: Option[bean.User])(content: Html)
+@(title: String, user: Option[bean.User], scripts: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
 <html>
@@ -74,6 +74,8 @@
         <script type="text/javascript" src="@routes.Assets.at("javascripts/dropdown.js")"></script>
         <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/dropdown.css")">
 
+        <!-- more scripts from sub pages -->
+        @scripts
     </head>
     <body>
         <div class="container-fluid shadow-left">

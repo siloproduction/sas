@@ -2,7 +2,18 @@
 
 @import helper._
 
-@main("Admin page", user) {
+@scripts = {
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/jquery.wysiwyg.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.colorpicker.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.cssWrap.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.image.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.link.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.table.js")"></script>
+
+    <link type="text/css" rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/jwysiwyg/jquery.wysiwyg.css")" />
+}
+
+@main("Admin page", user, scripts) {
 
     <script type="text/javascript">
         $(function() {

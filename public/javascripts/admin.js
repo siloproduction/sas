@@ -149,6 +149,7 @@ var admin = {
     pageOpenUpdateDialog: function (pageId) {
         $.get('/admin/page/' + pageId, function (data) {
             dialogPopup.html(data);
+            utils.setupAllWysiwygInto(dialogPopup);
             dialogPopup.dialog({
                 title: 'Edit a page' + pageId,
                 buttons: {
@@ -172,29 +173,37 @@ var admin = {
         admin.createOrUpdateEntity(actionUrl, formElement, function (form) {
             formElement.get(0).reset();
             admin.fillCurrentPages();
+        }, function (form) {
+            utils.setupAllWysiwyg();
         });
     },
 
     pageUpdateFormSubmit: function (form, pageId) {
         var actionUrl = '/admin/page/' + pageId;
-        admin.createOrUpdateEntity(actionUrl, $(form), function (form) {
+        var formElement = $(form);
+        admin.createOrUpdateEntity(actionUrl, formElement, function (form) {
             admin.fillCurrentPages();
+        }, function (form) {
+            utils.setupAllWysiwyg();
         });
     },
 
 
 
-    createOrUpdateEntity: function (actionUrl, form, finishedHandler) {
+    createOrUpdateEntity: function (actionUrl, form, finishedHandler, formChangedHandler) {
+        formChangedHandler = lang.isDefined(formChangedHandler) ? formChangedHandler : function(form) {};
         var serializedForm = form.serialize();
         $.post(actionUrl, serializedForm)
             .done(function (formResult) {
                form.replaceWith(formResult);
+               formChangedHandler(formResult);
                finishedHandler(formResult);
             }).fail(function (error) {
                 if (typeof error === "string") {
                     window.alert(error);
                 } else {
                     form.replaceWith(error.responseText);
+                    formChangedHandler(form);
                 }
            });
         return false;
@@ -288,4 +297,6 @@ $(document).ready( function() {
     admin.fillCurrentUsers();
     admin.fillCurrentCategories();
     admin.fillCurrentPages();
+
+    utils.setupAllWysiwyg();
 });

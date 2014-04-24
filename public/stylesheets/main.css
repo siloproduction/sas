@@ -17,7 +17,17 @@ body:before {/* thanks to Maleika (Kohoutec)
 	width:0;
 	margin-top:-32767px;/* thank you Erik J - negate effect of float
 }*/
-
+.wysiwyg-frame {
+    width: auto;
+}
+div.wysiwyg {
+    resize: none;
+    width: 100% !important;
+}
+div.wysiwyg iframe {
+    resize: none;
+    width: 100% !important;
+}
 .page-content {
 	float:left;
 	width: 70%;
