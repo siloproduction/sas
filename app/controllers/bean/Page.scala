@@ -22,6 +22,15 @@ object Page {
   def asUpdateFormId(page: Page): String = asUpdateFormId(page.id)
   def asUpdateFormId(id: Long) = "admin-update-page-" + id
   val asCreateFormId = "admin-create-page"
+
+  val PAGE_NOT_FOUND = Page(
+    name = "Page not found",
+    category = None,
+    permanentLink = "404",
+    data = "404 - Oops this page cannot be found!",
+    rank = 0,
+    enabled = true
+  )
 }
 
 object PageForm {

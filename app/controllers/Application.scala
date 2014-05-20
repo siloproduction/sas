@@ -20,7 +20,11 @@ object Application extends Controller with Secured {
   }
 
   def page(permanentLink: String) = Action { implicit request =>
-    Ok(views.html.page(user, PageDao.findByPermanentLink(permanentLink)))
+    try {
+      Ok(views.html.page(user, PageDao.findByPermanentLink(permanentLink)))
+    } catch {
+      case e:Exception => BadRequest(views.html.page(user, Page.PAGE_NOT_FOUND))
+    }
   }
 
   def login = Action { implicit request =>
