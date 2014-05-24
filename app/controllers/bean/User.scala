@@ -5,8 +5,8 @@ import UserProfile.UserProfile
 import play.api.data._
 import play.api.data.Forms._
 
-case class User(id: Long = 0, login: String, password: String, profile: UserProfile) {
-  def credentials = Credentials(login, password)
+case class User(id: Long = 0, login: String, password: Option[String] = None, profile: UserProfile) {
+  def credentials = Credentials(login, password.get)
 }
 object User {
   def asUpdateFormId(user: User): String = asUpdateFormId(user.id)
@@ -35,8 +35,8 @@ object UserForm {
                 .verifying("admin or user", fields => fields match {
                   case (msg) => UserProfile.of(msg).isDefined
                 })
-    )((id, login, password, profile) => User(id, login, password, UserProfile.of(profile).get))
-     ((user) => Some(user.id, user.login, user.password, user.profile.toString))
+    )((id, login, password, profile) => User(id, login, Some(password), UserProfile.of(profile).get))
+     ((user) => Some(user.id, user.login, user.password.getOrElse(""), user.profile.toString))
     )
   }
 }

@@ -18,7 +18,7 @@ object UserDao {
     get[String]("login") ~
     get[String]("password") ~
     get[String]("profile") map {
-      case id~login~password~profile => User(id.get, login, password, UserProfile.withName(profile))
+      case id~login~password~profile => User(id.get, login, Some(password), UserProfile.withName(profile))
     }
   }
 
@@ -79,10 +79,13 @@ object UserDao {
 
       userOption match {
         case None => throw new UserNotFoundException("user with login: " + credentials.login + "has not been found")
-        case user:Some[User] => {
-          user.get.password match {
-            case credentials.password => user.get
-            case _ => throw new InvalidCredentialsException("Invalid credentials")
+        case user:Some[User] => { user.get.password match {
+            case None => throw new UserNotFoundException("user with login: " + credentials.login + "has no password")
+            case pwd:Some[String] => { pwd.get match {
+                case credentials.password => user.get
+                case _ => throw new InvalidCredentialsException("Invalid credentials")
+              }
+            }
           }
         }
       }

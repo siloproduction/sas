@@ -50,7 +50,7 @@ trait Secured {
         case x:Some[String] => Option.apply(User.apply(
           x.get.toLong,
           request.session.get("user.login").get,
-          request.session.get("user.password").get,
+          Some(request.session.get("user.password").get),
           request.session.get("user.profile").map { profile => bean.UserProfile.of(profile).get}.get ))
         case _ => Option.empty
       }
