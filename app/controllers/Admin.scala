@@ -2,12 +2,14 @@ package controllers
 
 import controllers.bean._
 import controllers.dao.{DAOException, PageDao, CategoryDao, UserDao}
+import json.JsonWriters._
 import play.api.mvc._
 import play.api.data._
 
 import play.api.templates.Html
 import controllers.bean.User
 import controllers.bean.Category
+import play.api.libs.json.Json
 
 object Admin extends Controller with Secured {
 
@@ -177,5 +179,9 @@ object Admin extends Controller with Secured {
 
   def getPages = IsAdmin { username => implicit request =>
     Ok(views.html.admin.page.pages(PageDao.findAll()))
+  }
+
+  def getUsersJson = IsAdmin { username => implicit request =>
+    Ok(Json.toJson(UserDao.findAll()))
   }
 }

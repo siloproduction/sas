@@ -3,6 +3,8 @@
 @import helper._
 
 @scripts = {
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/ang-admin.js")"></script>
+
     <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/jquery.wysiwyg.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.colorpicker.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.cssWrap.js")"></script>
@@ -24,10 +26,59 @@
 
     <div id="admin-tabs">
         <ul>
+            <li><a href="#tabs-4">Angular</a></li>
             <li><a href="#tabs-1">User</a></li>
             <li><a href="#tabs-2">Category</a></li>
             <li><a href="#tabs-3">Page</a></li>
         </ul>
+        <div id="tabs-4">
+
+
+
+            <div ng-controller="AdminUserCtrl">
+                <form>
+                    <input type="hidden" ng-model="user.id" value="0">
+
+                    <dl class=" ">
+                        <dd><input type="text" ng-model="user.username" value="" placeholder="username" required></dd>
+                    </dl>
+
+                    <dl class=" ">
+                        <dd><input type="password" ng-model="user.password" size="10" placeholder="xxxxxx" required></dd>
+                    </dl>
+
+                    <dl class=" " >
+                        <dd>
+                            <select name="profile" ng-model="user.profile" >
+                                <option value="User">User</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </dd>
+                    </dl>
+
+                    <dl class=" " >
+                        [ <a href="" ng-click="createUser(user)">Create user</a> ]
+                    </dl>
+
+                    <span>{{users.length}} users</span>
+
+                    <div>
+                        <ul class="no-bullet" ng-repeat="user in users">
+                            <li>
+                                <button>EDIT</button>
+                                <button>DELETE</button>
+                                {{user.username}} <small>{{user.profile}}</small>
+                            </li>
+                        </ul>
+                    </div>
+
+                </form>
+
+            </div>
+
+
+
+        </div>
         <div id="tabs-1">
             @userPanel
         </div>
