@@ -48,8 +48,7 @@ object Application extends Controller with Secured {
             .withSession(
               "user.id" -> user.id.toString,
               "user.profile" -> user.profile.toString,
-              "user.login" -> user.login,
-              "user.password" -> user.password.get)
+              "user.login" -> user.login)
         }
         catch{
           case x:UserNotFoundException => Results.Redirect(routes.Application.login)

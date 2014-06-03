@@ -37,21 +37,13 @@ trait Secured {
       }
     }
 
-    def IsAuthTmp(key: String)(f: => String => Request[AnyContent] => Result) = IsAuthenticated { user => request =>
-      if(key.equals("tmp")) {
-        f(user)(request)
-      } else {
-        Results.Forbidden
-      }
-    }
-
     def user(implicit request: Request[AnyContent]): Option[User] = {
       request.session.get("user.id") match {
         case x:Some[String] => Option.apply(User.apply(
-          x.get.toLong,
-          request.session.get("user.login").get,
-          Some(request.session.get("user.password").get),
-          request.session.get("user.profile").map { profile => bean.UserProfile.of(profile).get}.get ))
+          id = x.get.toLong,
+          login = request.session.get("user.login").get,
+          password = None,
+          profile = request.session.get("user.profile").map { profile => bean.UserProfile.of(profile).get}.get ))
         case _ => Option.empty
       }
     }
