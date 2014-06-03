@@ -40,7 +40,7 @@
                     <input type="hidden" ng-model="user.id" value="0">
 
                     <dl class=" ">
-                        <dd><input type="text" ng-model="user.username" value="" placeholder="username" required></dd>
+                        <dd><input type="text" ng-model="user.login" value="" placeholder="login" required></dd>
                     </dl>
 
                     <dl class=" ">
@@ -60,23 +60,19 @@
                         [ <a href="" ng-click="createUser(user)">Create user</a> ]
                     </dl>
 
-                    <span>{{users.length}} users</span>
-
-                    <div>
-                        <ul class="no-bullet" ng-repeat="user in users">
-                            <li>
-                                <button>EDIT</button>
-                                <button>DELETE</button>
-                                {{user.username}} <small>{{user.profile}}</small>
-                            </li>
-                        </ul>
-                    </div>
-
                 </form>
 
+                <span>{{users.length}} users</span>
+                <div>
+                    <ul class="no-bullet" ng-repeat="user in users">
+                        <li>
+                            <button>EDIT</button>
+                            [ <a href="" ng-click="deleteUser(user.id)">DELETE</a> ]
+                            {{user.login}} <span class="bold small">({{user.profile}})</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
-
 
         </div>
         <div id="tabs-1">

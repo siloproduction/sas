@@ -40,23 +40,22 @@ object Admin extends Controller with Secured {
     Ok(views.html.admin.page.pageForm(page.id, Page.asUpdateFormId(id), PageForm.update(page)))
   }
 
-
   def createUser = IsAdmin { username => implicit request =>
-    val requestForm: Form[User] = userBindingForm.bindFromRequest()
-    requestForm.fold(
-      formWithErrors => BadRequest(views.html.admin.user.userForm(0, User.asCreateFormId, formWithErrors)),
-      {case (user) => {
-        try {
-          UserDao.create(user)
-          Ok(views.html.admin.user.userForm(0, User.asCreateFormId, UserForm.create))
-        } catch {
-          case e: Exception => {
-            InternalServerError(e.getMessage)
-          }
+    try {
+      userBindingForm.bind(request.body.asJson.get).fold(
+        formWithErrors => BadRequest(views.html.admin.user.userForm(0, User.asCreateFormId, formWithErrors)),
+        user => {
+            UserDao.create(user)
+            Ok
         }
-      }}
-    )
+      )
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
+
   def updateUser(id: Long) = IsAdmin { username => implicit request =>
     val requestForm: Form[User] = userBindingForm.bindFromRequest()
     requestForm.fold(

@@ -19,17 +19,42 @@ angular
         });
     })
 
-function AdminUserCtrl($scope) {
-  var EMPTY_USER = {id: 0, username: '', password: '', profile: 'User'};
+function AdminUserCtrl($scope, $http) {
+  var EMPTY_USER = {id: 0, login: '', password: '', profile: 'User'};
 
   $scope.users = [];
   $scope.user = EMPTY_USER;
 
-
+  $scope.refreshUsers = function() {
+    $http.get('/admin/getUsersJson')
+        .success(function(data, status, headers, config) {
+            $scope.users = data;
+        })
+        .error(function(data, status, headers, config) {
+            window.alert(data);
+        });
+  };
+  $scope.refreshUsers();
 
   $scope.createUser = function(user) {
-    $scope.user = angular.copy(user);
-    $scope.users.push(user);
+    var userToCreate = angular.copy(user);
+    $http.post('/admin/user', userToCreate)
+        .success(function(data, status, headers, config) {
+            $scope.users.push(userToCreate);
+        })
+        .error(function(data, status, headers, config) {
+            window.alert(data);
+        });
+  };
+
+  $scope.deleteUser = function(userId) {
+    $http.delete('/admin/user/' + userId)
+        .success(function(data, status, headers, config) {
+            $scope.refreshUsers();
+        })
+        .error(function(data, status, headers, config) {
+            window.alert(data);
+        });
   };
 
   $scope.userCount = function() {
