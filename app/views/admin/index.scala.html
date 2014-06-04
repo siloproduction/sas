@@ -18,71 +18,60 @@
 @main("Admin page", user, scripts) {
 
     <script type="text/javascript">
-        $(function() {
-            $( "#admin-tabs" ).tabs();
-        });
         admin.fillCurrentUsers();
     </script>
 
     <div id="admin-tabs">
-        <ul>
-            <li><a href="#tabs-4">Angular</a></li>
-            <li><a href="#tabs-1">User</a></li>
-            <li><a href="#tabs-2">Category</a></li>
-            <li><a href="#tabs-3">Page</a></li>
-        </ul>
-        <div id="tabs-4">
 
+        <tabset>
+            <tab heading="Angular">
+                <div ng-controller="AdminUserCtrl">
+                    <br>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-plus" ng-click="creationIsClosed = !creationIsClosed"></button>
+                        <span class="bold">{{users.length}} users</span>
+                        <br><br>
 
+                        <div collapse="creationIsClosed">
+                            <form>
+                                <input type="hidden" ng-model="user.id" value="0">
 
-            <div ng-controller="AdminUserCtrl">
-                <form>
-                    <input type="hidden" ng-model="user.id" value="0">
+                                <dl class=" ">
+                                    <dd><input type="text" ng-model="user.login" value="" placeholder="login" required></dd>
+                                </dl>
 
-                    <dl class=" ">
-                        <dd><input type="text" ng-model="user.login" value="" placeholder="login" required></dd>
-                    </dl>
+                                <dl class=" ">
+                                    <dd><input type="password" ng-model="user.password" size="10" placeholder="xxxxxx" required></dd>
+                                </dl>
 
-                    <dl class=" ">
-                        <dd><input type="password" ng-model="user.password" size="10" placeholder="xxxxxx" required></dd>
-                    </dl>
+                                <dl class=" " >
+                                    <dd>
+                                        <select name="profile" ng-model="user.profile" >
+                                            <option value="User">User</option>
+                                            <option value="Admin">Admin</option>
+                                        </select>
+                                    </dd>
+                                </dl>
 
-                    <dl class=" " >
-                        <dd>
-                            <select name="profile" ng-model="user.profile" >
-                                <option value="User">User</option>
-                                <option value="Admin">Admin</option>
-                            </select>
-                        </dd>
-                    </dl>
+                                <dl class=" " >
+                                    <button type="button" class="btn btn-sm btn-info" ng-click="createUser(user)">Create this user</button>
+                                </dl>
+                            </form>
+                        </div>
 
-                    <dl class=" " >
-                        [ <a href="" ng-click="createUser(user)">Create user</a> ]
-                    </dl>
-
-                </form>
-
-                <span>{{users.length}} users</span>
-                <div>
-                    <ul class="no-bullet" ng-repeat="user in users">
-                        <li>
-                            <button>EDIT</button>
-                            [ <a href="" ng-click="deleteUser(user.id)">DELETE</a> ]
-                            {{user.login}} <span class="bold small">({{user.profile}})</span>
-                        </li>
-                    </ul>
+                        <ul class="no-bullet" ng-repeat="user in users">
+                            <li>
+                                <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil"></button>
+                                <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(user.id)"></button>
+                                {{user.login}} <span class="bold small">({{user.profile}})</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-
-        </div>
-        <div id="tabs-1">
-            @userPanel
-        </div>
-        <div id="tabs-2">
-            @categoryPanel
-        </div>
-        <div id="tabs-3">
-            @pagePanel
-        </div>
+            </tab>
+            <tab heading="User">@userPanel</tab>
+            <tab heading="Category">@categoryPanel</tab>
+            <tab heading="Page">@pagePanel</tab>
+        </tabset>
     </div>
 }

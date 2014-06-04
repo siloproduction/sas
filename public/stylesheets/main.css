@@ -1,9 +1,10 @@
-html, body {height: 100%;}
+html, body {
+    height: 100%;
+    font-size: 90%;
+}
 body {
     color: #404040;
-	font-family: 'RosarioRegular', Verdana, Helvetica, sans-serif;
-	font-size:0.9em;
-    font-weight: normal;
+	font-weight: normal;
     line-height: 18px;
     margin: 0;
 	background: url("../images/background.jpg") repeat top left transparent;
@@ -22,6 +23,9 @@ body:before {/* thanks to Maleika (Kohoutec)
 }
 .small {
     font-size: 12px;
+}
+.no-padding {
+    padding: 0px;!important
 }
 .wysiwyg-frame {
     width: auto;
