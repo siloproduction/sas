@@ -5,10 +5,10 @@
 
 @id match {
     case 0 => {
-        <form id="@formId-form" onsubmit="admin.userCreateFormSubmit(this);return false;">
+        <form id="@formId-form" >
     }
     case _ => {
-        <form id="@formId-form" onsubmit="admin.userUpdateFormSubmit(this, '@id');return false;">
+        <form id="@formId-form" >
     }
 }
 

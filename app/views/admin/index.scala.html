@@ -4,22 +4,9 @@
 
 @scripts = {
     <script type="text/javascript" src="@routes.Assets.at("javascripts/ang-admin.js")"></script>
-
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/jquery.wysiwyg.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.colorpicker.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.cssWrap.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.image.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.link.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/jwysiwyg/controls/wysiwyg.table.js")"></script>
-
-    <link type="text/css" rel="stylesheet" media="screen" href="@routes.Assets.at("javascripts/jwysiwyg/jquery.wysiwyg.css")" />
 }
 
 @main("Admin page", user, scripts) {
-
-    <script type="text/javascript">
-        admin.fillCurrentUsers();
-    </script>
 
     <div id="admin-tabs">
 
@@ -28,7 +15,7 @@
                 <div ng-controller="AdminUserCtrl">
                     <br>
                     <div>
-                        <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-plus" ng-click="creationIsClosed = !creationIsClosed"></button>
+                        <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-plus" ng-click="creationIsClosed = !creationIsClosed" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
                         <span class="bold">{{users.length}} users</span>
                         <br><br>
 
@@ -62,16 +49,14 @@
                         <ul class="no-bullet" ng-repeat="user in users">
                             <li>
                                 <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil"></button>
-                                <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(user.id)"></button>
-                                {{user.login}} <span class="bold small">({{user.profile}})</span>
+                                <!--<button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(user.id)"></button>-->
+                                <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(user.id, user.login)"></button>
+                                {{user.login}} <span class="bold small text-info">({{user.profile}})</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </tab>
-            <tab heading="User">@userPanel</tab>
-            <tab heading="Category">@categoryPanel</tab>
-            <tab heading="Page">@pagePanel</tab>
         </tabset>
     </div>
 }

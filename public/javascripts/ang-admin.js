@@ -1,6 +1,6 @@
-angular.module('project', ['ui.bootstrap']);
+var adminApp = angular.module('project', ['ui.bootstrap'])
 
-function AdminUserCtrl($scope, $http) {
+adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal) {
   var EMPTY_USER = {id: 0, login: '', password: '', profile: 'User'};
 
   $scope.users = [];
@@ -22,24 +22,47 @@ function AdminUserCtrl($scope, $http) {
     var userToCreate = angular.copy(user);
     $http.post('/admin/user', userToCreate)
         .success(function(data, status, headers, config) {
-            $scope.users.push(userToCreate);
+            $scope.users.push(data);
         })
         .error(function(data, status, headers, config) {
             window.alert(data);
         });
   };
 
-  $scope.deleteUser = function(userId) {
-    $http.delete('/admin/user/' + userId)
-        .success(function(data, status, headers, config) {
-            $scope.refreshUsers();
-        })
-        .error(function(data, status, headers, config) {
-            window.alert(data);
-        });
+  $scope.deleteUser = function(userId, userLogin) {
+    openConfirmDialog("Do you really want to delete " + userLogin + "?", function() {
+        $http.delete('/admin/user/' + userId)
+            .success(function(data, status, headers, config) {
+                $scope.refreshUsers();
+            })
+            .error(function(data, status, headers, config) {
+                window.alert(data);
+            });
+    });
   };
 
   $scope.userCount = function() {
     return $scope.users.size;
   };
-}
+
+  var openConfirmDialog = function(content, yesCallback) {
+      var modalInstance = $modal.open({
+        templateUrl: '/assets/templates/dialog_confirm.html',
+        controller: DialogConfirmCtrl,
+        resolve: {
+            title: function () {
+                return "Confirmation";
+            },
+            message: function () {
+                return content;
+            }
+        }
+      });
+      modalInstance.result.then(function () {
+        yesCallback();
+      }, function () {
+        console.log('Modal dismissed at: ' + new Date());
+      });
+  };
+
+});

@@ -4,10 +4,10 @@
 
 @id match {
     case 0 => {
-        <form id="@formId-form" onsubmit="admin.pageCreateFormSubmit(this);return false;">
+        <form id="@formId-form" >
     }
     case _ => {
-        <form id="@formId-form" onsubmit="admin.pageUpdateFormSubmit(this, '@id');return false;">
+        <form id="@formId-form" >
     }
 }
 
@@ -46,5 +46,4 @@
         args = 'id -> formId.concat("-data"), '_label -> "data", 'rows -> 6, 'cols -> "80", '_showConstraints -> false, 'class -> "richtext_panel"
     )
 
-    <input id="pagePreviewUpdate" type="button" value="preview" onclick="admin.popupPagePreview('@formId-data');"/>
 </form>

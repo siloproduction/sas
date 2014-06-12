@@ -1,3 +1,4 @@
+/*
 $(document).ready(function() {
  
     //rotation speed and timer
@@ -77,3 +78,4 @@ $(document).ready(function() {
 function rotate() {
     $('#next').click();
 }
+*/

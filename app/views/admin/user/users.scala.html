@@ -4,16 +4,6 @@
     <ul class="no-bullet">
         @for(user <- users) {
            <li>
-               <button
-                   id="admin-list-user-edit-@user.id"
-                   onclick="admin.userOpenUpdateDialog('@user.id');">
-                       EDIT
-               </button>
-
-               <button
-                   onclick="admin.deleteUser('@routes.Admin.deleteUser(user.id)', '@user.login')">
-                       DELETE</button>
-
                @user.login <small>(@user.profile)</small>
            </li>
         }

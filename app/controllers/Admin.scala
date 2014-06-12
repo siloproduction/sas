@@ -45,8 +45,8 @@ object Admin extends Controller with Secured {
       userBindingForm.bind(request.body.asJson.get).fold(
         formWithErrors => BadRequest(views.html.admin.user.userForm(0, User.asCreateFormId, formWithErrors)),
         user => {
-            UserDao.create(user)
-            Ok
+          val userId = UserDao.create(user)
+          Ok(Json.toJson(UserDao.findById(userId)))
         }
       )
     } catch {

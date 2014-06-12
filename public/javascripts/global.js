@@ -1,3 +1,4 @@
+/*
 var lang = {
 
     isDefined: function(element) {
@@ -102,3 +103,4 @@ var utils = {
             });
     }
 }
+*/

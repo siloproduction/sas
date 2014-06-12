@@ -5,13 +5,11 @@
         @for(category <- categories) {
             <li>
                 <button
-                    id="admin-list-category-edit-@category.id"
-                    onclick="admin.categoryOpenUpdateDialog('@category.id');">
+                    id="admin-list-category-edit-@category.id">
                         EDIT
                 </button>
 
-                <button
-                    onclick="admin.deleteCategory('@routes.Admin.deleteCategory(category.id)', '@category.name')">
+                <button>
                         DELETE</button>
 
                 @category.name <small>(id: @category.id, enabled: @category.enabled)</small>

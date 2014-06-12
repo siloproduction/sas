@@ -1,4 +1,5 @@
-$(document).ready(function(){  
+/*
+$(document).ready(function(){
   
   	var isShown = false;
     $("ul.topnav li").hover(function() { //When trigger is clicked...  
@@ -27,4 +28,5 @@ $(document).ready(function(){
             $(this).removeClass("subhover"); //On hover out, remove class "subhover"  
     });  
   
-});  
+});
+ */

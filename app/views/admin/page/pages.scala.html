@@ -5,13 +5,11 @@
         @for(page <- pages) {
         <li>
             <button
-                    id="admin-list-page-edit-@page.id"
-                    onclick="admin.pageOpenUpdateDialog('@page.id');">
+                    id="admin-list-page-edit-@page.id">
                 EDIT
             </button>
 
-            <button
-                    onclick="admin.deletePage('@routes.Admin.deletePage(page.id)', '@page.name')">
+            <button>
                 DELETE</button>
 
             @page.name <small>(@page.categoryName, enabled= @page.enabled, rank= @page.rank)</small>

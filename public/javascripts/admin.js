@@ -1,3 +1,4 @@
+/*
 var dialogCreateUserPopup = null;
 var dialogCreateCategoryPopup = null;
 var dialogCreatePagePopup = null;
@@ -300,3 +301,4 @@ $(document).ready( function() {
 
     utils.setupAllWysiwyg();
 });
+*/
