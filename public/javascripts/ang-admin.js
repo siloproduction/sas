@@ -1,9 +1,10 @@
 var adminApp = angular.module('project', ['ui.bootstrap'])
 
-adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal) {
+adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
   var EMPTY_USER = {id: 0, login: '', password: '', profile: 'User'};
 
   $scope.users = [];
+  $scope.usersAttributes = {};
   $scope.user = EMPTY_USER;
   $scope.creationIsClosed = true;
 
@@ -29,6 +30,18 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal) {
         });
   };
 
+  $scope.updateUser = function(user) {
+    openConfirmDialog("Do you really want to modify " + user.login + "?", function() {
+        $http.post('/admin/user/' + user.id, user)
+            .success(function(data, status, headers, config) {
+                // nothing
+            })
+            .error(function(data, status, headers, config) {
+                getUserAttributes(user)["errors"] = data;
+            });
+    });
+  };
+
   $scope.deleteUser = function(userId, userLogin) {
     openConfirmDialog("Do you really want to delete " + userLogin + "?", function() {
         $http.delete('/admin/user/' + userId)
@@ -43,6 +56,32 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal) {
 
   $scope.userCount = function() {
     return $scope.users.size;
+  };
+
+  $scope.editUserToggle = function(user) {
+    var isToggled = getUserAttributes(user)["toggled"] == true;
+    getUserAttributes(user)["toggled"] = !isToggled;
+  };
+
+  $scope.editUserIsToggled = function(user) {
+    return getUserAttributes(user)["toggled"] == true;
+  };
+
+  $scope.editUserErrors = function(user) {
+    var errors = getUserAttributes(user)["errors"];
+    if (angular.isUndefined(errors)) {
+        return {};
+    }
+    return errors;
+  }
+
+  var getUserAttributes = function(user) {
+    var attributes = $scope.usersAttributes[user.id];
+    if (angular.isUndefined(attributes)) {
+        attributes = [];
+        $scope.usersAttributes[user.id] = attributes;
+    }
+    return attributes;
   };
 
   var openConfirmDialog = function(content, yesCallback) {

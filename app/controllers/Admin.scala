@@ -60,12 +60,11 @@ object Admin extends Controller with Secured {
     val requestForm: Form[User] = userBindingForm.bindFromRequest()
     requestForm.fold(
       formWithErrors => {
-        val userId = requestForm.data("id").toLong
-        BadRequest(views.html.admin.user.userForm(userId, User.asUpdateFormId(id), formWithErrors))
+        BadRequest(formWithErrors.errorsAsJson)
       },
       {case (user) => {
         UserDao.update(user)
-        Ok(views.html.admin.user.userForm(user.id, User.asUpdateFormId(id), requestForm))
+        NoContent
       }}
     )
   }
@@ -73,7 +72,7 @@ object Admin extends Controller with Secured {
     try {
       UserDao.delete(id) match {
         case 0 => NotFound("No user has been removed")
-        case _ => Ok("Success")
+        case _ => NoContent
       }
     } catch {
       case e: Exception => {

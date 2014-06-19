@@ -46,12 +46,43 @@
                             </form>
                         </div>
 
-                        <ul class="no-bullet" ng-repeat="user in users">
+                        <ul class="no-bullet" ng-repeat="editingUser in users">
                             <li>
-                                <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil"></button>
-                                <!--<button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(user.id)"></button>-->
-                                <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(user.id, user.login)"></button>
-                                {{user.login}} <span class="bold small text-info">({{user.profile}})</span>
+                                <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil" ng-click="editUserToggle(editingUser)" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+                                <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteUser(editingUser.id, editingUser.login)"></button>
+                                {{editingUser.login}} <span class="bold small text-info">({{editingUser.profile}})</span>
+
+                                <div collapse="!editUserIsToggled(editingUser)">
+                                    <br>
+                                    <form>
+                                        <input type="hidden" ng-model="editingUser.id" ng-value="editingUser.id">
+
+                                        <dl class=" ">
+                                            <dd><input type="text" ng-model="editingUser.login" ng-value="editingUser.login" placeholder="login" required></dd>
+                                        </dl>
+
+                                        <dl class=" ">
+                                            <dd><input type="password" ng-model="editingUser.password" ng-value="editingUser.password" size="10" placeholder="xxxxxx" required></dd>
+                                        </dl>
+
+                                        <dl class=" " >
+                                            <dd>
+                                                <select name="profile" ng-model="editingUser.profile" ng-value="editingUser.profile" >
+                                                    <option value="User">User</option>
+                                                    <option value="Admin">Admin</option>
+                                                </select>
+                                            </dd>
+                                        </dl>
+                                        <div ng-init="errors = editUserErrors(editingUser)">
+                                            <div ng-if="errors.login" ng-repeat="error in errors.login">
+                                                Login: {{error}}
+                                            </div>
+                                        </div>
+                                        <dl class=" " >
+                                            <button type="button" class="btn btn-sm btn-info" ng-click="updateUser(editingUser)">Apply changes</button>
+                                        </dl>
+                                    </form>
+                                </div>
                             </li>
                         </ul>
                     </div>
