@@ -73,11 +73,16 @@
                                                 </select>
                                             </dd>
                                         </dl>
-                                        <div ng-init="errors = editUserErrors(editingUser)">
-                                            <div ng-if="errors.login" ng-repeat="error in errors.login">
-                                                Login: {{error}}
+
+
+                                        <div ng-hide="editUserErrorsIsEmpty(editingUser)"><div class="alert alert-danger">
+                                            <div ng-repeat="(name, errors) in editUserErrors(editingUser)">
+                                                <div ng-repeat="error in errors">
+                                                    <span class="label label-danger">{{name}}</span> {{error}}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </div></div>
+
                                         <dl class=" " >
                                             <button type="button" class="btn btn-sm btn-info" ng-click="updateUser(editingUser)">Apply changes</button>
                                         </dl>

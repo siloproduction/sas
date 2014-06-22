@@ -68,12 +68,13 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) 
   };
 
   $scope.editUserErrors = function(user) {
-    var errors = getUserAttributes(user)["errors"];
-    if (angular.isUndefined(errors)) {
-        return {};
-    }
-    return errors;
-  }
+    return getUserAttributes(user)["errors"];
+  };
+
+  $scope.editUserErrorsIsEmpty = function(user) {
+    var errors = $scope.editUserErrors(user);
+    return utils.isEmpty(errors);
+  };
 
   var getUserAttributes = function(user) {
     var attributes = $scope.usersAttributes[user.id];
