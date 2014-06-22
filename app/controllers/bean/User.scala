@@ -15,28 +15,49 @@ object User {
 }
 object UserForm {
 
-  def update(user: User): Form[User] =  create().fill(user)
+  def update(): Form[User] = {
+    Form(mapping(
+      "id" -> longNumber,
+      "login" -> text
+        .verifying("3 characters minimum", fields => fields match {
+        case (msg) => msg.size > 2
+      })
+        .verifying("no space allowed", fields => fields match {
+        case (msg) => !msg.contains(" ")
+      }),
+      "password" -> optional(text)
+        .verifying("8 characters minimum", fields => fields match {
+        case (msg) => msg.getOrElse("moreThanSeven").size > 7
+      }),
+      "profile" -> text
+        .verifying("admin or user", fields => fields match {
+        case (msg) => UserProfile.of(msg).isDefined
+      })
+    )
+      ((id, login, password, profile) => User(id, login, password, UserProfile.of(profile).get))
+      ((user) => Some(user.id, user.login, user.password, user.profile.toString))
+  )}
 
   def create() =  {
     Form(mapping(
       "id" -> longNumber,
       "login" -> text
-                .verifying("3 characters minimum", fields => fields match {
-                  case (msg) => msg.size > 2
-                })
-                .verifying("no space allowed", fields => fields match {
-                  case (msg) => !msg.contains(" ")
-                }),
+        .verifying("3 characters minimum", fields => fields match {
+        case (msg) => msg.size > 2
+      })
+        .verifying("no space allowed", fields => fields match {
+        case (msg) => !msg.contains(" ")
+      }),
       "password" -> text
-                .verifying("8 characters minimum", fields => fields match {
-                  case (msg) => msg.size > 7
-                }),
+        .verifying("8 characters minimum", fields => fields match {
+        case (msg) => msg.size > 7
+      }),
       "profile" -> text
-                .verifying("admin or user", fields => fields match {
-                  case (msg) => UserProfile.of(msg).isDefined
-                })
-    )((id, login, password, profile) => User(id, login, Some(password), UserProfile.of(profile).get))
-     ((user) => Some(user.id, user.login, user.password.getOrElse(""), user.profile.toString))
+        .verifying("admin or user", fields => fields match {
+        case (msg) => UserProfile.of(msg).isDefined
+      })
     )
-  }
+      ((id, login, password, profile) => User(id, login, Some(password), UserProfile.of(profile).get))
+      ((user) => Some(user.id, user.login, user.password.orNull, user.profile.toString))
+    )}
 }

@@ -27,6 +27,11 @@ body:before {/* thanks to Maleika (Kohoutec)
 .no-padding {
     padding: 0px;!important
 }
+.form-collapse {
+    border-left: 1px solid #ddd;
+    padding-left: 15px;
+    margin-left: 15px;
+}
 .wysiwyg-frame {
     width: auto;
 }
@@ -164,3 +169,8 @@ div.wysiwyg iframe {
 	margin-top: 20px;
 }
 .clear {clear:both}
+
+.form-medium select,
+.form-medium input {
+    width: 200px;
+}

@@ -51,11 +51,30 @@ object UserDao {
   }
 
   def update(user: User): Unit = {
+    if (user.password.isDefined) {
+      updateWithPassword(user)
+    } else {
+      updateWithoutPassword(user)
+    }
+  }
+
+  def updateWithPassword(user: User): Unit = {
     DB.withConnection { implicit connection =>
       SQL("UPDATE users SET login={login}, password={password}, profile={profile}" +
         " WHERE users.id={id}").on(
         'login -> user.login,
         'password -> user.password,
+        'profile -> user.profile.toString,
+        'id -> user.id
+      ).executeUpdate()
+    }
+  }
+
+  def updateWithoutPassword(user: User): Unit = {
+    DB.withConnection { implicit connection =>
+      SQL("UPDATE users SET login={login}, profile={profile}" +
+        " WHERE users.id={id}").on(
+        'login -> user.login,
         'profile -> user.profile.toString,
         'id -> user.id
       ).executeUpdate()

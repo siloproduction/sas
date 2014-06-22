@@ -6,10 +6,11 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) 
   $scope.users = [];
   $scope.usersAttributes = {};
   $scope.user = EMPTY_USER;
+  $scope.userAttributes = {};
   $scope.creationIsClosed = true;
 
   $scope.refreshUsers = function() {
-    $http.get('/admin/getUsersJson')
+    $http.get('/admin/user')
         .success(function(data, status, headers, config) {
             $scope.users = data;
         })
@@ -23,18 +24,19 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) 
     var userToCreate = angular.copy(user);
     $http.post('/admin/user', userToCreate)
         .success(function(data, status, headers, config) {
+            $scope.userAttributes["errors"] = {};
             $scope.users.push(data);
         })
         .error(function(data, status, headers, config) {
-            window.alert(data);
+            $scope.userAttributes["errors"] = data;
         });
   };
 
   $scope.updateUser = function(user) {
     openConfirmDialog("Do you really want to modify " + user.login + "?", function() {
-        $http.post('/admin/user/' + user.id, user)
+        $http.put('/admin/user/' + user.id, user)
             .success(function(data, status, headers, config) {
-                // nothing
+                getUserAttributes(user)["errors"] = {};
             })
             .error(function(data, status, headers, config) {
                 getUserAttributes(user)["errors"] = data;
@@ -65,6 +67,15 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) 
 
   $scope.editUserIsToggled = function(user) {
     return getUserAttributes(user)["toggled"] == true;
+  };
+
+  $scope.createUserErrors = function() {
+    return $scope.userAttributes["errors"];
+  };
+
+  $scope.createUserErrorsIsEmpty = function() {
+    var errors = $scope.userAttributes["errors"];
+    return utils.isEmpty(errors);
   };
 
   $scope.editUserErrors = function(user) {

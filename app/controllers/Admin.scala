@@ -14,6 +14,7 @@ import play.api.libs.json.Json
 object Admin extends Controller with Secured {
 
   val userBindingForm = UserForm.create()
+  val userUpdateBindingForm = UserForm.update()
   val categoryBindingForm = CategoryForm.create()
   val pageBindingForm = PageForm.create()
 
@@ -23,11 +24,6 @@ object Admin extends Controller with Secured {
 
   def index = IsAdmin { username => implicit request =>
     Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
-  }
-
-  def getUpdateUserForm(id: Long) = IsAdmin { username => implicit request =>
-    val user = UserDao.findById(id)
-    Ok(views.html.admin.user.userForm(user.id, User.asUpdateFormId(id), UserForm.update(user)))
   }
 
   def getUpdateCategoryForm(id: Long) = IsAdmin { username => implicit request =>
@@ -40,10 +36,14 @@ object Admin extends Controller with Secured {
     Ok(views.html.admin.page.pageForm(page.id, Page.asUpdateFormId(id), PageForm.update(page)))
   }
 
+  def getUsers = IsAdmin { username => implicit request =>
+    Ok(Json.toJson(UserDao.findAll()))
+  }
+
   def createUser = IsAdmin { username => implicit request =>
     try {
-      userBindingForm.bind(request.body.asJson.get).fold(
-        formWithErrors => BadRequest(views.html.admin.user.userForm(0, User.asCreateFormId, formWithErrors)),
+      userBindingForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
         user => {
           val userId = UserDao.create(user)
           Ok(Json.toJson(UserDao.findById(userId)))
@@ -57,16 +57,19 @@ object Admin extends Controller with Secured {
   }
 
   def updateUser(id: Long) = IsAdmin { username => implicit request =>
-    val requestForm: Form[User] = userBindingForm.bindFromRequest()
-    requestForm.fold(
-      formWithErrors => {
-        BadRequest(formWithErrors.errorsAsJson)
-      },
-      {case (user) => {
-        UserDao.update(user)
-        NoContent
-      }}
-    )
+    try {
+      userUpdateBindingForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+        user => {
+          UserDao.update(user)
+          NoContent
+        }
+      )
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
   def deleteUser(id: Long) = IsAdmin { username => implicit request =>
     try {
@@ -167,19 +170,11 @@ object Admin extends Controller with Secured {
     }
   }
 
-  def getUsers = IsAdmin { username => implicit request =>
-    Ok(views.html.admin.user.users(UserDao.findAll()))
-  }
-
   def getCategories = IsAdmin { username => implicit request =>
     Ok(views.html.admin.category.categories(CategoryDao.findAll()))
   }
 
   def getPages = IsAdmin { username => implicit request =>
     Ok(views.html.admin.page.pages(PageDao.findAll()))
-  }
-
-  def getUsersJson = IsAdmin { username => implicit request =>
-    Ok(Json.toJson(UserDao.findAll()))
   }
 }

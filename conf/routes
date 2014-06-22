@@ -22,11 +22,9 @@ GET     /authenticate               controllers.Application.authenticate
 GET     /admin/                     controllers.Admin.index
 
 ### User
-GET     /admin/getUsers             controllers.Admin.getUsers
-GET     /admin/getUsersJson             controllers.Admin.getUsersJson
+GET     /admin/user                 controllers.Admin.getUsers
 POST    /admin/user                 controllers.Admin.createUser
-POST    /admin/user/:id             controllers.Admin.updateUser(id: Long)
-GET     /admin/user/:id             controllers.Admin.getUpdateUserForm(id: Long)
+PUT     /admin/user/:id             controllers.Admin.updateUser(id: Long)
 DELETE  /admin/user/:id             controllers.Admin.deleteUser(id: Long)
 
 ### Category
