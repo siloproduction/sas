@@ -11,7 +11,7 @@ trait Secured {
     /**
      * Retrieve the connected user email.
      */
-    private def username(request: RequestHeader) = request.session.get("user.login")
+    private def username(request: RequestHeader) = request.session.get("user.email")
 
     /**
      * Redirect to login if the user in not authorized.
@@ -41,6 +41,7 @@ trait Secured {
       request.session.get("user.id") match {
         case x:Some[String] => Option.apply(User.apply(
           id = x.get.toLong,
+          email = request.session.get("user.email").get,
           login = request.session.get("user.login").get,
           password = None,
           profile = request.session.get("user.profile").map { profile => bean.UserProfile.of(profile).get}.get ))

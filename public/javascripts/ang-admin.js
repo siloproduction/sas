@@ -1,7 +1,7 @@
 var adminApp = angular.module('project', ['ui.bootstrap'])
 
 adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
-  var EMPTY_USER = {id: 0, login: '', password: '', profile: 'User'};
+  var EMPTY_USER = {id: 0, email: '',login: '', password: '', profile: 'User'};
 
   $scope.users = [];
   $scope.usersAttributes = {};

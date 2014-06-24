@@ -15,6 +15,7 @@ object JsonWriters {
 
   implicit val userReads: Reads[User] = (
     (__ \ "id").read[Long] ~
+    (__ \ "email").read[String] ~
     (__ \ "login").read[String] ~
     (__ \ "password").readNullable[String] ~
     (__ \ "profile").read[UserProfile]
@@ -23,6 +24,7 @@ object JsonWriters {
   implicit val userWrites = new Writes[User] {
     def writes(user: User) = Json.obj(
       "id" -> user.id,
+      "email" -> user.email,
       "login" -> user.login,
       "profile" -> user.profile.toString
     )

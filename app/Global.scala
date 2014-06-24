@@ -1,3 +1,4 @@
+import org.mindrot.jbcrypt.BCrypt
 import play.api.mvc._
 import scala.concurrent.Future
 

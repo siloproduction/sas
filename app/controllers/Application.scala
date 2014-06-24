@@ -48,6 +48,7 @@ object Application extends Controller with Secured {
             .withSession(
               "user.id" -> user.id.toString,
               "user.profile" -> user.profile.toString,
+              "user.email" -> user.email,
               "user.login" -> user.login)
         }
         catch{

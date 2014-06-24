@@ -7,24 +7,24 @@ import anorm._
 import anorm.SqlParser._
 import controllers.bean.{Credentials, UserProfile, User}
 import controllers.{InvalidCredentialsException, UserNotFoundException}
+import org.mindrot.jbcrypt.BCrypt
 
-/**
- * @Author("bltCrew")
- */
 object UserDao {
+
+  val FIELDS = "id, email, login, profile"
 
   val parser = {
     get[Pk[Long]]("id") ~
+    get[String]("email") ~
     get[String]("login") ~
-    get[String]("password") ~
     get[String]("profile") map {
-      case id~login~password~profile => User(id.get, login, Some(password), UserProfile.withName(profile))
+      case id~email~login~profile => User(id.get, email, login, None, UserProfile.withName(profile))
     }
   }
 
   def findAll(): Seq[User] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from users order by login asc").as(parser *)
+      SQL(s"select ${FIELDS} from users order by login asc").as(parser *)
     }
   }
 
@@ -39,9 +39,10 @@ object UserDao {
   def create(user: User): Long = {
     try {
       DB.withConnection { implicit connection =>
-        SQL("insert into users(login, password, profile) values ({login}, {password}, {profile})").on(
+        SQL("insert into users(email, login, password, profile) values ({email}, {login}, {password}, {profile})").on(
+          'email -> user.email,
           'login -> user.login,
-          'password -> user.password,
+          'password -> encryptPassword(user),
           'profile -> user.profile.toString
         ).executeInsert().get
       }
@@ -60,10 +61,11 @@ object UserDao {
 
   def updateWithPassword(user: User): Unit = {
     DB.withConnection { implicit connection =>
-      SQL("UPDATE users SET login={login}, password={password}, profile={profile}" +
+      SQL("UPDATE users SET email={email}, login={login}, password={password}, profile={profile}" +
         " WHERE users.id={id}").on(
+        'email -> user.email,
         'login -> user.login,
-        'password -> user.password,
+        'password -> encryptPassword(user),
         'profile -> user.profile.toString,
         'id -> user.id
       ).executeUpdate()
@@ -72,8 +74,9 @@ object UserDao {
 
   def updateWithoutPassword(user: User): Unit = {
     DB.withConnection { implicit connection =>
-      SQL("UPDATE users SET login={login}, profile={profile}" +
+      SQL("UPDATE users SET email={email}, login={login}, profile={profile}" +
         " WHERE users.id={id}").on(
+        'email -> user.email,
         'login -> user.login,
         'profile -> user.profile.toString,
         'id -> user.id
@@ -83,31 +86,37 @@ object UserDao {
 
   def findById(id: Long): User = {
     DB.withConnection { implicit  connection =>
-      SQL("select * from users where id={id}").on(
+      SQL(s"select ${FIELDS} from users where id={id}").on(
         'id -> id
+      ).as(parser *).head
+    }
+  }
+
+  def findByEmail(email: String): User = {
+    DB.withConnection { implicit  connection =>
+      SQL(s"select ${FIELDS} from users where email={email}").on(
+        'email -> email
       ).as(parser *).head
     }
   }
 
   def login(credentials: Credentials): User = {
     DB.withConnection { implicit connection =>
-      val userOption = SQL("select * from users where login = {login}")
-        .on('login -> credentials.login)
-        .parse(parser *)
-        .headOption
+      val passwordRowOption = SQL(s"select password from users where email = {email}")
+        .on('email -> credentials.email)
+        .singleOpt()
 
-      userOption match {
-        case None => throw new UserNotFoundException("user with login: " + credentials.login + "has not been found")
-        case user:Some[User] => { user.get.password match {
-            case None => throw new UserNotFoundException("user with login: " + credentials.login + "has no password")
-            case pwd:Some[String] => { pwd.get match {
-                case credentials.password => user.get
-                case _ => throw new InvalidCredentialsException("Invalid credentials")
-              }
-            }
+      passwordRowOption match {
+        case None => throw new UserNotFoundException("user with email: " + credentials.email + "has not been found")
+        case passwordRow:Some[Row] => {
+          BCrypt.checkpw(credentials.password, passwordRow.get[String]("password")) match {
+              case true => findByEmail(credentials.email)
+              case false => throw new InvalidCredentialsException("Invalid credentials")
           }
         }
       }
     }
   }
+
+  def encryptPassword(user: User) = BCrypt.hashpw(user.password.get, BCrypt.gensalt(12))
 }
