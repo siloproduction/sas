@@ -8,11 +8,6 @@ import play.api.data.Forms._
 case class User(id: Long = 0, email: String, login: String, password: Option[String] = None, profile: UserProfile) {
   def credentials = Credentials(email, password.get)
 }
-object User {
-  def asUpdateFormId(user: User): String = asUpdateFormId(user.id)
-  def asUpdateFormId(id: Long) = "admin-update-user-" + id
-  val asCreateFormId = "admin-create-user"
-}
 object UserForm {
 
   def update(): Form[User] = {

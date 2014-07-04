@@ -19,7 +19,7 @@ object CategoryDao {
     get[Option[String]]("link") ~
     get[Int]("rank") ~
     get[Boolean]("enabled") map {
-      case id~name~parent~link~rank~enabled => Category(id.get, name, CategoryDao.findByIdOption(parent).getOrElse(Category.noCategory), link, rank, enabled)
+      case id~name~parent~link~rank~enabled => Category(id.get, name, CategoryDao.findByIdOption(parent), link, rank, enabled)
     }
   }
 
@@ -47,7 +47,7 @@ object CategoryDao {
     DB.withConnection { implicit connection =>
       SQL("insert into category(name, parent, link, rank, enabled) values ({name}, {parent}, {link}, {rank}, {enabled})").on(
         'name -> category.name,
-        'parent -> category.parent.id,
+        'parent -> category.parent.get.id,
         'link -> category.link,
         'rank -> category.rank,
         'enabled -> category.enabled
@@ -64,7 +64,7 @@ object CategoryDao {
         " WHERE category.id={id}").on(
           'id -> category.id,
           'name -> category.name,
-          'parent -> category.parent.id,
+          'parent -> category.parent.get.id,
           'link -> category.link,
           'rank -> category.rank,
           'enabled -> category.enabled

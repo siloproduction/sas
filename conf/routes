@@ -28,14 +28,14 @@ PUT     /admin/user/:id             controllers.Admin.updateUser(id: Long)
 DELETE  /admin/user/:id             controllers.Admin.deleteUser(id: Long)
 
 ### Category
-GET     /admin/getCategories        controllers.Admin.getCategories
+GET     /admin/category             controllers.Admin.getCategories
 POST    /admin/category             controllers.Admin.createCategory
 POST    /admin/category/:id         controllers.Admin.updateCategory(id: Long)
 GET     /admin/category/:id         controllers.Admin.getUpdateCategoryForm(id: Long)
 DELETE  /admin/category/:id         controllers.Admin.deleteCategory(id: Long)
 
 ### Page
-GET     /admin/getPages             controllers.Admin.getPages
+GET     /admin/page                 controllers.Admin.getPages
 POST    /admin/page                 controllers.Admin.createPage
 POST    /admin/page/:id             controllers.Admin.updatePage(id: Long)
 GET     /admin/page/:id             controllers.Admin.getUpdatePageForm(id: Long)

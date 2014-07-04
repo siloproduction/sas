@@ -7,15 +7,11 @@ import controllers.dao.CategoryDao
 case class Page(
        id: Long = 0,
        name: String,
-       category: Option[Category],
+       category: Category = Category.noCategory,
        permanentLink: String,
        data: String,
        rank: Int,
-       enabled: Boolean) {
-
-
-  def categoryName = category.getOrElse(Category.noCategory).name
-}
+       enabled: Boolean)
 
 object Page {
 
@@ -25,7 +21,7 @@ object Page {
 
   val PAGE_NOT_FOUND = Page(
     name = "Page not found",
-    category = None,
+    category = Category.noCategory,
     permanentLink = "404",
     data = "404 - Oops this page cannot be found!",
     rank = 0,
@@ -44,9 +40,9 @@ object PageForm {
                 .verifying("3 characters minimum", fields => fields match {
                   case (name) => name.size > 2
                 }),
-      "category" -> optional(longNumber)
+      "category" -> longNumber
                 .verifying("Must match an existing category", fields => fields match {
-                  case (categoryId) => categoryId.isDefined && CategoryDao.isValidParent(categoryId.get)
+                  case (categoryId) => CategoryDao.isValidParent(categoryId)
                 }),
       "permanentLink" -> text
                 .verifying("No space allowed", fields => fields match {
@@ -56,9 +52,9 @@ object PageForm {
       "rank" -> number,
       "enabled" -> boolean
     )((id, name, category, permanentLink, data, rank, enabled) => {
-        Page(id, name, CategoryDao.findByIdOption(category), permanentLink, data, rank, enabled)
+        Page(id, name, CategoryDao.findById(category), permanentLink, data, rank, enabled)
     })
-     ((page) => Some(page.id, page.name, page.category.map(_.id), page.permanentLink, page.data, page.rank, page.enabled))
+     ((page) => Some(page.id, page.name, page.category.id, page.permanentLink, page.data, page.rank, page.enabled))
     )
   }
 }

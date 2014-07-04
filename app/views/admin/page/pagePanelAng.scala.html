@@ -1,0 +1,146 @@
+<div ng-controller="AdminPageCtrl">
+    <br>
+    <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-plus" ng-click="creationIsClosed = !creationIsClosed" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+    <span class="bold">{{pages.length}} pages</span>
+    <br><br>
+
+    <div collapse="creationIsClosed">
+        <form class="form-horizontal form-collapse" role="form" ng-submit="createPage(page)">
+
+            <input type="hidden" ng-model="page.id" value="0">
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" ng-model="page.name" value="" placeholder="What's the page name?" required>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Category</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="category" ng-model="page.category" ng-repeat="category in categories">
+                        <option value="{{category.id}}">{{category.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Permanent link</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="page.link" placeholder="the_link_of_my_page" required>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Rank</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" ng-model="page.rank" placeholder="5" required>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Enabled</label>
+                <div class="col-sm-2">
+                    <input type="checkbox" class="form-control" ng-model="page.enabled">
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Data</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" ng-model="page.data"></textarea>
+                </div>
+            </div>
+
+            <div ng-hide="createPageErrorsIsEmpty()"><div class="alert alert-danger">
+                <div ng-repeat="(name, errors) in createPageErrors()">
+                    <div ng-repeat="error in errors">
+                        <span class="label label-danger">{{name}}</span> {{error}}
+                    </div>
+                </div>
+            </div></div>
+
+            <div class="form-group">
+                <div class="col-sm-1">&nbsp;</div>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-sm btn-info">Create this page</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <ul class="no-bullet" ng-repeat="editingPage in pages">
+        <li>
+            <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil" ng-click="editPageToggle(editingPage)" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+            <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deletePage(editingPage.id, editingPage.name)"></button>
+            {{editingPage.name}} <span class="bold small text-info">({{editingPage.category.name}})</span>
+
+            <div collapse="!editPageIsToggled(editingPage)">
+                <br>
+                <form class="form-horizontal form-collapse" role="form" ng-submit="updatePage(editingPage)">
+                    <input type="hidden" ng-model="editingPage.id" ng-value="editingPage.id">
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" ng-model="editingPage.name" value="" placeholder="What's the editingPage name?" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Category</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="category" ng-model="editingPage.category" ng-repeat="category in categories">
+                                <option value="{{category.id}}">{{category.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Permanent link</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="editingPage.link" placeholder="the_link_of_my_page" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Rank</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" ng-model="editingPage.rank" placeholder="5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Enabled</label>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="form-control" ng-model="editingPage.enabled">
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Data</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" ng-model="editingPage.data"></textarea>
+                        </div>
+                    </div>
+
+                    <div ng-hide="editPageErrorsIsEmpty(editingPage)"><div class="alert alert-danger">
+                        <div ng-repeat="(name, errors) in editPageErrors(editingPage)">
+                            <div ng-repeat="error in errors">
+                                <span class="label label-danger">{{name}}</span> {{error}}
+                            </div>
+                        </div>
+                    </div></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-1">&nbsp;</div>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-sm btn-info">Apply changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+    </ul>
+</div>

@@ -6,16 +6,15 @@ import play.api.data._
 import play.api.data.Forms._
 import controllers.dao.{PageDao, CategoryDao}
 
-case class Category(id: Long, name: String, parent: Category, link: Option[String] = Option.empty, rank: Int = 0, enabled: Boolean) {
-  lazy val pages = PageDao.findByCategoryId(id)
+case class Category(id: Long, name: String, parent: Option[Category], link: Option[String] = Option.empty, rank: Int = 0, enabled: Boolean) {
+  def pages() = PageDao.findByCategoryId(id)
 
-  def isCategoryNone() = (Category.NONE_ID == id) && (Category.NONE_NAME == name)
-  def isParentLoop() = id == parent.id
-  def canBePersisted = !isParentLoop() || parent.isCategoryNone()
+  def hasParentLoop() = parent.isDefined && id == parent.get.id // MUST LOOP ON ITS PARENT TOO
+  def canBePersisted = !hasParentLoop() && id != Category.NONE_ID
 }
 object Category {
 
-  def noCategory = Category(id = NONE_ID, name = NONE_NAME, parent = null, enabled = false)
+  def noCategory = Category(id = NONE_ID, name = NONE_NAME, parent = None, enabled = false)
 
   def asUpdateFormId(category: Category): String = asUpdateFormId(category.id)
   def asUpdateFormId(id: Long) = "admin-update-category-" + id
@@ -46,8 +45,11 @@ object CategoryForm {
       "rank" -> number,
       "enabled" -> boolean
     )
-     ((id, name, parent, link, rank, enabled) => Category(id, name, CategoryDao.findById(parent), link, rank, enabled))
-     ((category) => Some(category.id, category.name, category.parent.id, category.link, category.rank, category.enabled))
+     ((id, name, parent, link, rank, enabled) => Category(id, name, Some(CategoryDao.findById(parent)), link, rank, enabled))
+     ((category) => Some(category.id, category.name, category.parent match {
+       case Some(parent) => parent.id
+       case _ => -1
+     }, category.link, category.rank, category.enabled))
       verifying("The parent cannot be itself", _.canBePersisted)
     )
   }

@@ -18,9 +18,9 @@ object Admin extends Controller with Secured {
   val categoryBindingForm = CategoryForm.create()
   val pageBindingForm = PageForm.create()
 
-  def createUserPanel: Html = views.html.admin.user.userPanel(UserForm.create())
+  def createUserPanel: Html = views.html.admin.user.userPanel()
   def createCategoryPanel: Html = views.html.admin.category.categoryPanel(CategoryForm.create())
-  def createPagePanel: Html = views.html.admin.page.pagePanel(PageForm.create())
+  def createPagePanel: Html = views.html.admin.page.pagePanelAng()
 
   def index = IsAdmin { username => implicit request =>
     Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
@@ -171,10 +171,10 @@ object Admin extends Controller with Secured {
   }
 
   def getCategories = IsAdmin { username => implicit request =>
-    Ok(views.html.admin.category.categories(CategoryDao.findAll()))
+    Ok(Json.toJson(CategoryDao.findAll()))
   }
 
   def getPages = IsAdmin { username => implicit request =>
-    Ok(views.html.admin.page.pages(PageDao.findAll()))
+    Ok(Json.toJson(PageDao.findAll()))
   }
 }

@@ -25,16 +25,16 @@ insert into category(id, name, rank, enabled) values (0, 'None', 1, FALSE);
 CREATE TABLE page (
   id                        SERIAL PRIMARY KEY,
   name                      VARCHAR(255) NOT NULL,
-  categoryId                BIGINT DEFAULT NULL references category(id),
+  categoryId                BIGINT references category(id),
   permanentLink             VARCHAR(255) DEFAULT NULL,
   data                      TEXT NOT NULL DEFAULT '',
   rank                      INTEGER NOT NULL,
   enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE'
 );
-INSERT INTO page (name, permanentLink, data, rank, enabled) VALUES
-                ('PRESENTATION', 'accueil_presentation', 'UNE PRESENTATION', 1, true);
-INSERT INTO page (name, permanentLink, data, rank, enabled) VALUES
-                ('NEWS', 'accueil_news', 'LES NEWS', 1, true);
+INSERT INTO page (name, categoryId, permanentLink, data, rank, enabled) VALUES
+                ('PRESENTATION', 0, 'accueil_presentation', 'UNE PRESENTATION', 1, true);
+INSERT INTO page (name, categoryId, permanentLink, data, rank, enabled) VALUES
+                ('NEWS', 0, 'accueil_news', 'LES NEWS', 1, true);
 
 # --- !Downs
 

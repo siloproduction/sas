@@ -10,7 +10,7 @@
             <li>
                 <a>@category.name</a>
                 <ul class="subnav">
-                    @category.pages.map { page =>
+                    @category.pages().map { page =>
                         <li><a href="/page/@page.permanentLink">@page.name</a></li>
                     }
                 </ul>

@@ -18,12 +18,12 @@ object PageDao {
   val parser = {
     get[Pk[Long]]("id") ~
     get[String]("name") ~
-    get[Option[Long]]("categoryId") ~
+    get[Long]("categoryId") ~
     get[String]("permanentLink") ~
     get[String]("data") ~
     get[Int]("rank") ~
     get[Boolean]("enabled") map {
-      case id~name~categoryId~permanentLink~data~rank~enabled => Page(id.get, name, CategoryDao.findByIdOption(categoryId), permanentLink, data, rank, enabled)
+      case id~name~categoryId~permanentLink~data~rank~enabled => Page(id.get, name, CategoryDao.findById(categoryId), permanentLink, data, rank, enabled)
     }
   }
 
@@ -38,7 +38,7 @@ object PageDao {
       SQL("insert into page(name, categoryId, permanentLink, data, rank, enabled)" +
         " values ({name}, {categoryId}, {permanentLink}, {data}, {rank}, {enabled})").on(
         'name -> page.name,
-        'categoryId -> page.category.map(_.id),
+        'categoryId -> page.category.id,
         'permanentLink -> page.permanentLink,
         'data -> page.data,
         'rank -> page.rank,
@@ -53,7 +53,7 @@ object PageDao {
         " WHERE page.id={id}").on(
         'id -> page.id,
         'name -> page.name,
-        'categoryId-> page.category.get.id,
+        'categoryId-> page.category.id,
         'permanentLink -> page.permanentLink,
         'data -> page.data,
         'rank -> page.rank,

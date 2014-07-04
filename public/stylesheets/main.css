@@ -174,3 +174,6 @@ div.wysiwyg iframe {
 .form-medium input {
     width: 200px;
 }
+.form-medium input[type="checkbox"] {
+    width: 20px;
+}
