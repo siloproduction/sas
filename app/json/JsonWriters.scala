@@ -51,13 +51,13 @@ object JsonWriters {
     )(Page.apply _)
 
   implicit val pageWrites: Writes[Page] = (
-    (JsPath \ "id").write[Long] and
-    (JsPath \ "name").write[String] and
-    (JsPath \ "category").lazyWrite(categoryWrites) and
-    (JsPath \ "permanentLink").write[String] and
-    (JsPath \ "data").write[String] and
-    (JsPath \ "rank").write[Int] and
-    (JsPath \ "enabled").write[Boolean]
+    (__ \ "id").write[Long] and
+    (__ \ "name").write[String] and
+    (__ \ "category").lazyWrite(categoryLightWrites) and
+    (__ \ "permanentLink").write[String] and
+    (__ \ "data").write[String] and
+    (__ \ "rank").write[Int] and
+    (__ \ "enabled").write[Boolean]
     )(unlift(Page.unapply))
 
   implicit val categoryReads: Reads[Category] = (
@@ -69,28 +69,24 @@ object JsonWriters {
     (__ \ "enabled").read[Boolean]
     )(Category.apply _)
 
-  implicit val categoryWrites = new Writes[Category] {
-    def writes(category: Category) = {
-      val parentId = category.parent match {
-        case Some(p) => p.id
-        case _ => -1
-      }
-      Json.obj(
-        "id" -> category.id,
-        "name" -> category.name,
-        "parent" -> parentId,
-        "link" -> category.link.orNull,
-        "rank" -> category.rank,
-        "enabled" -> category.enabled
-      )
-    }
-  }
+  implicit val categoryWrites: Writes[Category] = (
+    (JsPath \ "id").write[Long] and
+    (JsPath \ "name").write[String] and
+    (JsPath \ "parent").lazyWriteNullable(categoryLightWrites) and
+    (JsPath \ "link").writeNullable[String] and
+    (JsPath \ "rank").write[Int] and
+    (JsPath \ "enabled").write[Boolean]
+    )(unlift(Category.unapply))
+
+  val categoryLightWrites: Writes[Category] = (
+    (JsPath \ "id").write[Long] and
+    (JsPath \ "name").write[String]
+    ).apply(c => (c.id, c.name))
 
   def categoryByIdReads = new Reads[Category] {
     def reads(json: JsValue): JsResult[Category] = json match {
       case JsNumber(id) => {
         try {
-          System.err.println(1)
           JsSuccess(CategoryDao.findById(id.toLong))
         } catch {
           case _: NoSuchElementException => JsError(s"Category not found '${id}'")

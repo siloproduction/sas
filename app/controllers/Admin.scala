@@ -20,24 +20,22 @@ object Admin extends Controller with Secured {
 
   def createUserPanel: Html = views.html.admin.user.userPanel()
   def createCategoryPanel: Html = views.html.admin.category.categoryPanel(CategoryForm.create())
-  def createPagePanel: Html = views.html.admin.page.pagePanelAng()
+  def createPagePanel: Html = views.html.admin.page.pagePanel()
 
   def index = IsAdmin { username => implicit request =>
     Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
   }
 
-  def getUpdateCategoryForm(id: Long) = IsAdmin { username => implicit request =>
-    val category = CategoryDao.findById(id)
-    Ok(views.html.admin.category.categoryForm(category.id, Category.asUpdateFormId(id), CategoryForm.update(category)))
-  }
-
-  def getUpdatePageForm(id: Long) = IsAdmin { username => implicit request =>
-    val page = PageDao.findById(id)
-    Ok(views.html.admin.page.pageForm(page.id, Page.asUpdateFormId(id), PageForm.update(page)))
-  }
-
   def getUsers = IsAdmin { username => implicit request =>
     Ok(Json.toJson(UserDao.findAll()))
+  }
+
+  def getCategories = IsAdmin { username => implicit request =>
+    Ok(Json.toJson(CategoryDao.findAll()))
+  }
+
+  def getPages = IsAdmin { username => implicit request =>
+    Ok(Json.toJson(PageDao.findAll()))
   }
 
   def createUser = IsAdmin { username => implicit request =>
@@ -71,6 +69,7 @@ object Admin extends Controller with Secured {
       }
     }
   }
+
   def deleteUser(id: Long) = IsAdmin { username => implicit request =>
     try {
       UserDao.delete(id) match {
@@ -129,52 +128,45 @@ object Admin extends Controller with Secured {
   }
 
   def createPage = IsAdmin { username => implicit request =>
-    val requestForm: Form[Page] = pageBindingForm.bindFromRequest()
-    requestForm.fold(
-      formWithErrors => BadRequest(views.html.admin.page.pageForm(0, Page.asCreateFormId, formWithErrors)),
-      {case (page) =>
-        try {
-            PageDao.create(page)
-            Ok(views.html.admin.page.pageForm(0, Page.asCreateFormId, PageForm.create()))
-        } catch {
-          case e: Exception => {
-            InternalServerError(e.getMessage)
-          }
-        }
-      }
-    )
-  }
-  def updatePage(id: Long) = IsAdmin { username => implicit request =>
-    val requestForm: Form[Page] = pageBindingForm.bindFromRequest()
-    requestForm.fold(
-      formWithErrors => {
-        val pageId = requestForm.data("id").toLong
-        BadRequest(views.html.admin.page.pageForm(pageId, Page.asUpdateFormId(id), formWithErrors))
-      },
-      {case (page) =>
-        PageDao.update(page)
-        Ok(views.html.admin.page.pageForm(page.id, Page.asUpdateFormId(id), requestForm))
-      }
-    )
-  }
-  def deletePage(id: Long) = IsAdmin { username => implicit request =>
     try {
-      PageDao.delete(id) match {
-        case 0 => NotFound("No page has been removed")
-        case _ => Ok("Success")
-      }
+      pageBindingForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+        page => {
+          val pageId = PageDao.create(page)
+          Ok(Json.toJson(PageDao.findById(pageId)))
+        }
+      )
     } catch {
       case e: Exception => {
         InternalServerError(e.getMessage)
       }
     }
   }
-
-  def getCategories = IsAdmin { username => implicit request =>
-    Ok(Json.toJson(CategoryDao.findAll()))
+  def updatePage(id: Long) = IsAdmin { username => implicit request =>
+    try {
+      pageBindingForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+        page => {
+          PageDao.update(page)
+          NoContent
+        }
+      )
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
-
-  def getPages = IsAdmin { username => implicit request =>
-    Ok(Json.toJson(PageDao.findAll()))
+  def deletePage(id: Long) = IsAdmin { username => implicit request =>
+    try {
+      PageDao.delete(id) match {
+        case 0 => NotFound("No page has been removed")
+        case _ => NoContent
+      }
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 }

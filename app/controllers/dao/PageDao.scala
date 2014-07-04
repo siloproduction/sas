@@ -33,17 +33,21 @@ object PageDao {
     }
   }
 
-  def create(page: Page): Unit = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into page(name, categoryId, permanentLink, data, rank, enabled)" +
-        " values ({name}, {categoryId}, {permanentLink}, {data}, {rank}, {enabled})").on(
-        'name -> page.name,
-        'categoryId -> page.category.id,
-        'permanentLink -> page.permanentLink,
-        'data -> page.data,
-        'rank -> page.rank,
-        'enabled -> page.enabled
-      ).executeUpdate()
+  def create(page: Page): Long = {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("insert into page(name, categoryId, permanentLink, data, rank, enabled)" +
+          " values ({name}, {categoryId}, {permanentLink}, {data}, {rank}, {enabled})").on(
+          'name -> page.name,
+          'categoryId -> page.category.id,
+          'permanentLink -> page.permanentLink,
+          'data -> page.data,
+          'rank -> page.rank,
+          'enabled -> page.enabled
+        ).executeInsert().get
+      }
+    } catch {
+      case e: Exception => throw new DAOException("Cannot create page: " + e.getMessage)
     }
   }
 

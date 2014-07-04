@@ -15,7 +15,7 @@ CREATE TABLE category (
   id                        SERIAL PRIMARY KEY,
   name                      VARCHAR(255) NOT NULL,
   parent                    BIGINT DEFAULT NULL references category(id),
-  link                      VARCHAR(255) DEFAULT '',
+  link                      VARCHAR(255) DEFAULT NULL,
   rank                      INTEGER NOT NULL,
   enabled                   BOOLEAN  NOT NULL DEFAULT 'TRUE',
   UNIQUE (name,parent)

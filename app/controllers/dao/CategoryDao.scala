@@ -43,15 +43,19 @@ object CategoryDao {
     }
   }
 
-  def create(category: Category): Unit = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into category(name, parent, link, rank, enabled) values ({name}, {parent}, {link}, {rank}, {enabled})").on(
-        'name -> category.name,
-        'parent -> category.parent.get.id,
-        'link -> category.link,
-        'rank -> category.rank,
-        'enabled -> category.enabled
-      ).executeUpdate()
+  def create(category: Category): Long = {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("insert into category(name, parent, link, rank, enabled) values ({name}, {parent}, {link}, {rank}, {enabled})").on(
+          'name -> category.name,
+          'parent -> category.parent.get.id,
+          'link -> category.link,
+          'rank -> category.rank,
+          'enabled -> category.enabled
+        ).executeInsert().get
+      }
+    } catch {
+      case e: Exception => throw new DAOException("Cannot create category: " + e.getMessage)
     }
   }
 

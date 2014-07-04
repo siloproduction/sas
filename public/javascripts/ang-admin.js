@@ -163,8 +163,10 @@ adminApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) 
   };
 
   $scope.updatePage = function(page) {
+    var pageForJson = angular.copy(page);
+    pageForJson.category = page.category.id;
     openConfirmDialog("Do you really want to modify " + page.name + "?", function() {
-        $http.put('/admin/page/' + page.id, page)
+        $http.put('/admin/page/' + page.id, pageForJson)
             .success(function(data, status, headers, config) {
                 getPageAttributes(page)["errors"] = {};
             })

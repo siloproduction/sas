@@ -6,7 +6,7 @@ import play.api.data._
 import play.api.data.Forms._
 import controllers.dao.{PageDao, CategoryDao}
 
-case class Category(id: Long, name: String, parent: Option[Category], link: Option[String] = Option.empty, rank: Int = 0, enabled: Boolean) {
+case class Category(id: Long, name: String, parent: Option[Category], link: Option[String] = Option.empty, rank: Int = 1, enabled: Boolean) {
   def pages() = PageDao.findByCategoryId(id)
 
   def hasParentLoop() = parent.isDefined && id == parent.get.id // MUST LOOP ON ITS PARENT TOO

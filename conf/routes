@@ -18,7 +18,6 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
 ############### Admin
-GET     /authenticate               controllers.Application.authenticate
 GET     /admin/                     controllers.Admin.index
 
 ### User
@@ -30,13 +29,11 @@ DELETE  /admin/user/:id             controllers.Admin.deleteUser(id: Long)
 ### Category
 GET     /admin/category             controllers.Admin.getCategories
 POST    /admin/category             controllers.Admin.createCategory
-POST    /admin/category/:id         controllers.Admin.updateCategory(id: Long)
-GET     /admin/category/:id         controllers.Admin.getUpdateCategoryForm(id: Long)
+PUT     /admin/category/:id         controllers.Admin.updateCategory(id: Long)
 DELETE  /admin/category/:id         controllers.Admin.deleteCategory(id: Long)
 
 ### Page
 GET     /admin/page                 controllers.Admin.getPages
 POST    /admin/page                 controllers.Admin.createPage
-POST    /admin/page/:id             controllers.Admin.updatePage(id: Long)
-GET     /admin/page/:id             controllers.Admin.getUpdatePageForm(id: Long)
+PUT     /admin/page/:id             controllers.Admin.updatePage(id: Long)
 DELETE  /admin/page/:id             controllers.Admin.deletePage(id: Long)
