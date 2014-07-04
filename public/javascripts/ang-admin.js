@@ -1,4 +1,4 @@
-var adminApp = angular.module('project', ['ui.bootstrap'])
+var adminApp = angular.module('project', ['ui.bootstrap', 'ui.tinymce'])
 
 adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
   var EMPTY_USER = {id: 0, email: '',login: '', password: '', profile: 'User'};
@@ -248,4 +248,8 @@ adminApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) 
       });
   };
 
+  $scope.tinymceOptions = {
+    plugins: 'print textcolor link image code fullscreen',
+    toolbar: "undo redo styleselect bold italic advlist link image forecolor backcolor | alignleft aligncenter alignright | fullscreen print code"
+  };
 });
