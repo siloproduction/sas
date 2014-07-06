@@ -1,6 +1,4 @@
-var adminApp = angular.module('project', ['ui.bootstrap', 'ui.tinymce'])
-
-adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
+angApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
   var EMPTY_USER = {id: 0, email: '',login: '', password: '', profile: 'User'};
 
   $scope.users = [];
@@ -118,7 +116,7 @@ adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) 
 
 });
 
-adminApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) {
+angApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) {
   var DEFAULT_PAGE = {id: 0, name: '',category: 0, rank: 5, enabled: false, data: 'Initial content'};
 
   $scope.categories = [];
@@ -252,4 +250,122 @@ adminApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) 
     plugins: 'print textcolor link image code fullscreen',
     toolbar: "undo redo styleselect bold italic advlist link image forecolor backcolor | alignleft aligncenter alignright | fullscreen print code"
   };
+});
+
+angApp.controller('AdminCategoryCtrl', function ($scope, $http, $modal, $timeout) {
+  var EMPTY_CATEGORY = {id: -1, name: '', parent: 0, link: '', rank: 5, enabled: true};
+
+  $scope.categories = [];
+  $scope.categoriesAttributes = {};
+  $scope.category = EMPTY_CATEGORY;
+  $scope.categoryAttributes = {};
+  $scope.creationIsClosed = true;
+
+  $scope.refreshCategories = function() {
+    $http.get('/admin/category')
+        .success(function(data, status, headers, config) {
+            $scope.categories = data;
+        })
+        .error(function(data, status, headers, config) {
+            window.alert(data);
+        });
+  };
+  $scope.refreshCategories();
+
+  $scope.createCategory = function(category) {
+    var categoryToCreate = angular.copy(category);
+    $http.post('/admin/category', categoryToCreate)
+        .success(function(data, status, headers, config) {
+            $scope.categoryAttributes["errors"] = {};
+            $scope.categories.push(data);
+        })
+        .error(function(data, status, headers, config) {
+            $scope.categoryAttributes["errors"] = data;
+        });
+  };
+
+  $scope.updateCategory = function(category) {
+    openConfirmDialog("Do you really want to modify " + category.login + "?", function() {
+        $http.put('/admin/category/' + category.id, category)
+            .success(function(data, status, headers, config) {
+                getCategoryAttributes(category)["errors"] = {};
+            })
+            .error(function(data, status, headers, config) {
+                getCategoryAttributes(category)["errors"] = data;
+            });
+    });
+  };
+
+  $scope.deleteCategory = function(categoryId, categoryLogin) {
+    openConfirmDialog("Do you really want to delete " + categoryLogin + "?", function() {
+        $http.delete('/admin/category/' + categoryId)
+            .success(function(data, status, headers, config) {
+                $scope.refreshCategories();
+            })
+            .error(function(data, status, headers, config) {
+                window.alert(data);
+            });
+    });
+  };
+
+  $scope.categoryCount = function() {
+    return $scope.categories.size;
+  };
+
+  $scope.editCategoryToggle = function(category) {
+    var isToggled = getCategoryAttributes(category)["toggled"] == true;
+    getCategoryAttributes(category)["toggled"] = !isToggled;
+  };
+
+  $scope.editCategoryIsToggled = function(category) {
+    return getCategoryAttributes(category)["toggled"] == true;
+  };
+
+  $scope.createCategoryErrors = function() {
+    return $scope.categoryAttributes["errors"];
+  };
+
+  $scope.createCategoryErrorsIsEmpty = function() {
+    var errors = $scope.categoryAttributes["errors"];
+    return utils.isEmpty(errors);
+  };
+
+  $scope.editCategoryErrors = function(category) {
+    return getCategoryAttributes(category)["errors"];
+  };
+
+  $scope.editCategoryErrorsIsEmpty = function(category) {
+    var errors = $scope.editCategoryErrors(category);
+    return utils.isEmpty(errors);
+  };
+
+  var getCategoryAttributes = function(category) {
+    var attributes = $scope.categoriesAttributes[category.id];
+    if (angular.isUndefined(attributes)) {
+        attributes = [];
+        $scope.categoriesAttributes[category.id] = attributes;
+    }
+    return attributes;
+  };
+
+  var openConfirmDialog = function(content, yesCallback) {
+      var modalInstance = $modal.open({
+        templateUrl: '/assets/templates/dialog_confirm.html',
+        controller: DialogConfirmCtrl,
+        resolve: {
+            title: function () {
+                return "Confirmation";
+            },
+            message: function () {
+                return content;
+            }
+        }
+      });
+      modalInstance.result.then(function () {
+        yesCallback();
+      }, function () {
+        console.log('Modal dismissed at: ' + new Date());
+      });
+  };
+
 });

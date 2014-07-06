@@ -1,20 +1,23 @@
 @(user: Option[bean.User])
 
-<div id="breadcrumbs">
+<div id="breadcrumbs" ng-controller="DropdownCtrl">
+
     <ul class="topnav">
         <ul class="topnav">
             <li>
                 <a href="@routes.Application.index">ACCUEIL</a>
             </li>
             @for(category <- dao.CategoryDao.findAllVisible()) {
-            <li>
-                <a>@category.name</a>
-                <ul class="subnav">
-                    @category.pages().map { page =>
+                <li class="dropdown" on-toggle="toggled(open)">
+                    <a href class="dropdown-toggle">
+                      @category.name
+                    </a>
+                    <ul class="dropdown-menu">
+                      @category.pages().map { page =>
                         <li><a href="/page/@page.permanentLink">@page.name</a></li>
-                    }
-                </ul>
-            </li>
+                      }
+                    </ul>
+                </li>
             }
         </ul>
     </ul>
@@ -26,4 +29,5 @@
             </a>
         </li>
     </ul>
+
 </div>

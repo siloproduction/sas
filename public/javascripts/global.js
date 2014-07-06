@@ -1,3 +1,5 @@
+var angApp = angular.module('project', ['ui.bootstrap', 'ui.tinymce']);
+
 var utils = {
 
     isEmpty: function (obj) {

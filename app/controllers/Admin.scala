@@ -19,7 +19,7 @@ object Admin extends Controller with Secured {
   val pageBindingForm = PageForm.create()
 
   def createUserPanel: Html = views.html.admin.user.userPanel()
-  def createCategoryPanel: Html = views.html.admin.category.categoryPanel(CategoryForm.create())
+  def createCategoryPanel: Html = views.html.admin.category.categoryPanel()
   def createPagePanel: Html = views.html.admin.page.pagePanel()
 
   def index = IsAdmin { username => implicit request =>
@@ -37,6 +37,7 @@ object Admin extends Controller with Secured {
   def getPages = IsAdmin { username => implicit request =>
     Ok(Json.toJson(PageDao.findAll()))
   }
+
 
   def createUser = IsAdmin { username => implicit request =>
     try {
@@ -86,39 +87,40 @@ object Admin extends Controller with Secured {
 
 
   def createCategory = IsAdmin { username => implicit request =>
-    val requestFrom: Form[Category] = categoryBindingForm.bindFromRequest()
-    requestFrom.fold(
-      formWithErrors => BadRequest(views.html.admin.category.categoryForm(0, Category.asCreateFormId, formWithErrors)),
-      {case (category) => {
-        try {
-          CategoryDao.create(category)
-          Ok(views.html.admin.category.categoryForm(0, Category.asCreateFormId, CategoryForm.create()))
-        } catch {
-          case e: Exception => {
-            InternalServerError(e.getMessage)
-          }
+    try {
+      categoryBindingForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+        category => {
+          val categoryId = CategoryDao.create(category)
+          Ok(Json.toJson(CategoryDao.findById(categoryId)))
         }
-      }}
-    )
+      )
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
   def updateCategory(id: Long) = IsAdmin { username => implicit request =>
-    val requestForm: Form[Category] = categoryBindingForm.bindFromRequest()
-    requestForm.fold(
-      formWithErrors => {
-        val categoryId = requestForm.data("id").toLong
-        BadRequest(views.html.admin.category.categoryForm(categoryId, Category.asUpdateFormId(id), formWithErrors))
-      },
-      {case (category) => {
-        CategoryDao.update(category)
-        Ok(views.html.admin.category.categoryForm(category.id, Category.asUpdateFormId(id), requestForm))
-      }}
-    )
+    try {
+      categoryBindingForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+        category => {
+          CategoryDao.update(category)
+          NoContent
+        }
+      )
+    } catch {
+      case e: Exception => {
+        InternalServerError(e.getMessage)
+      }
+    }
   }
   def deleteCategory(id: Long) = IsAdmin { username => implicit request =>
     try {
       CategoryDao.delete(id) match {
         case 0 => NotFound("No category has been removed")
-        case _ => Ok("Success")
+        case _ => NoContent
       }
     } catch {
       case e: Exception => {
@@ -126,6 +128,7 @@ object Admin extends Controller with Secured {
       }
     }
   }
+
 
   def createPage = IsAdmin { username => implicit request =>
     try {

@@ -1,22 +1,128 @@
-@(entityForm: Form[bean.Category])
+<div ng-controller="AdminCategoryCtrl">
+    <br>
+    <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-plus" ng-click="creationIsClosed = !creationIsClosed" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+    <span class="bold">{{categories.length}} categories</span>
+    <br><br>
 
-@import helper._
+    <div collapse="creationIsClosed">
+        <form class="form-horizontal form-collapse" role="form" ng-submit="createCategory(category)">
 
-@defining("admin-create-category") { formId =>
+            <input type="hidden" ng-model="category.id" value="-1">
 
-<div id="@formId">
-    @views.html.admin.category.categoryForm(0, formId, entityForm)
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="category.name" value="" placeholder="What's the category name?" required>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Parent</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="category" ng-model="category.parent" ng-options="category.id as category.name for category in categories"></select>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Link</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="category.link" placeholder="www.google.com">
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Rank</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" ng-model="category.rank" placeholder="5" required>
+                </div>
+            </div>
+
+            <div class="form-group form-medium">
+                <label class="col-sm-1 control-label">Enabled</label>
+                <div class="col-sm-2">
+                    <input type="checkbox" class="form-control" ng-model="category.enabled">
+                </div>
+            </div>
+
+            <div ng-hide="createCategoryErrorsIsEmpty()"><div class="alert alert-danger">
+                <div ng-repeat="(name, errors) in createCategoryErrors()">
+                    <div ng-repeat="error in errors">
+                        <span class="label label-danger">{{name}}</span> {{error}}
+                    </div>
+                </div>
+            </div></div>
+
+            <div class="form-group">
+                <div class="col-sm-1">&nbsp;</div>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-sm btn-info">Create this category</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <ul class="no-bullet" ng-repeat="editingCategory in categories">
+        <li>
+            <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil" ng-click="editCategoryToggle(editingCategory)" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
+            <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteCategory(editingCategory.id, editingCategory.name)"></button>
+            {{editingCategory.name}} <span class="bold small text-info">({{editingCategory.parent.name}})</span>
+
+            <div collapse="!editCategoryIsToggled(editingCategory)">
+                <br>
+                <form class="form-horizontal form-collapse" role="form" ng-submit="updateCategory(editingCategory)">
+                    <input type="hidden" ng-model="editingCategory.id" ng-value="editingCategory.id">
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="editingCategory.name" value="" placeholder="What's the category name?" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Parent</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="category" ng-model="editingCategory.parent.id" ng-options="category.id as category.name for category in categories"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Link</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="editingCategory.permanentLink" placeholder="the_link_of_my_category">
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Rank</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" ng-model="editingCategory.rank" placeholder="5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-medium">
+                        <label class="col-sm-1 control-label">Enabled</label>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="form-control" ng-model="editingCategory.enabled">
+                        </div>
+                    </div>
+
+                    <div ng-hide="editCategoryErrorsIsEmpty(editingCategory)"><div class="alert alert-danger">
+                        <div ng-repeat="(name, errors) in editCategoryErrors(editingCategory)">
+                            <div ng-repeat="error in errors">
+                                <span class="label label-danger">{{name}}</span> {{error}}
+                            </div>
+                        </div>
+                    </div></div>
+
+                    <div class="form-group">
+                        <div class="col-sm-1">&nbsp;</div>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-sm btn-info">Apply changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+    </ul>
 </div>
-
-<p class="buttons">
-    <button id="@formId-submit" >
-        <span class="ui-button-text">Create a category</span>
-    </button>
-</p>
-
-
-<div id="admin-list-category-container">
-
-</div>
-
-}
