@@ -3,11 +3,14 @@ html, body {
     font-size: 90%;
 }
 body {
-    color: #404040;
+	font-family: ArchitectsDaughter;
 	font-weight: normal;
+	letter-spacing: 1px;
     line-height: 18px;
+    color: #404040;
     margin: 0;
-	background: url("../images/background.jpg") repeat top left transparent;
+    background-color:lightslategray;
+	/*background: url("../images/background.jpg") repeat top left transparent;*/
 }
 a {color:#404040;}
 /*Opera Fix

@@ -247,8 +247,9 @@ angApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) {
   };
 
   $scope.tinymceOptions = {
+    fontsize_formats: "8pt 9pt 10pt 11pt 12pt 20pt 26pt 30pt 36pt",
     plugins: 'print textcolor link image code fullscreen',
-    toolbar: "undo redo styleselect bold italic advlist link image forecolor backcolor | alignleft aligncenter alignright | fullscreen print code"
+    toolbar: "undo redo styleselect fontsizeselect bold italic advlist link image forecolor backcolor | alignleft aligncenter alignright | fullscreen print code"
   };
 });
 

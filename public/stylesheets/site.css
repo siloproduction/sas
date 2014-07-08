@@ -1,60 +1,8 @@
 @font-face {
-    font-family: 'RosarioRegular';
-    src: url('fonts/Rosario-Regular-webfont.eot');
-    src: url('fonts/Rosario-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Rosario-Regular-webfont.woff') format('woff'),
-         url('fonts/Rosario-Regular-webfont.ttf') format('truetype'),
-         url('fonts/Rosario-Regular-webfont.svg#RosarioRegular') format('svg');
+    font-family: 'ArchitectsDaughter';
+    src: url('fonts/ArchitectsDaughter.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'RosarioItalic';
-    src: url('fonts/Rosario-Italic-webfont.eot');
-    src: url('fonts/Rosario-Italic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Rosario-Italic-webfont.woff') format('woff'),
-         url('fonts/Rosario-Italic-webfont.ttf') format('truetype'),
-         url('fonts/Rosario-Italic-webfont.svg#RosarioItalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'RosarioBold';
-    src: url('fonts/Rosario-Bold-webfont.eot');
-    src: url('fonts/Rosario-Bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Rosario-Bold-webfont.woff') format('woff'),
-         url('fonts/Rosario-Bold-webfont.ttf') format('truetype'),
-         url('fonts/Rosario-Bold-webfont.svg#RosarioBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'RosarioBoldItalic';
-    src: url('fonts/Rosario-BoldItalic-webfont.eot');
-    src: url('fonts/Rosario-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/Rosario-BoldItalic-webfont.woff') format('woff'),
-         url('fonts/Rosario-BoldItalic-webfont.ttf') format('truetype'),
-         url('fonts/Rosario-BoldItalic-webfont.svg#RosarioBoldItalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'BebasNeue';
-    src: url('fonts/BebasNeue.eot');
-    src: url('fonts/BebasNeue.eot?#iefix') format('embedded-opentype'),
-         url('fonts/BebasNeue.ttf') format('truetype'),
-         url('fonts/BebasNeue.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-
 }
   
 .container-fluid:after {
@@ -83,23 +31,16 @@
 	background: url("../images/breadcrumb.png") repeat top left transparent;
 	width: 980px;
 	height: 40px;
-    margin: 0 auto;
+    margin: 0px auto;
 }
 #breadcrumbs .icon{
 	height: 20px;
 }
 #banner {
-	margin-top: 15px;
-}
-#bannerLogo {
-    margin-left:50px;
-	-moz-box-shadow: -1px -1px 10px 2px #444;
-	-webkit-box-shadow: -1px -1px 10px 2px #444;
-	box-shadow: -1px -1px 10px 2px #444;
-}
-#bannerRight {
-    position:relative;
-    top:70px;
+	background: url("../images/bannerName.png") no-repeat top left transparent;
+    opacity:0.7;
+	width: 1000px;
+	height: 194px;
 }
 .section {
 	padding-top: 10px;
@@ -134,6 +75,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
 .no-bullet {
     list-style-type: none;
 }
+.texture-paper {
+    background: url("../images/paper.png") repeat top left transparent;
+}
 .shadow-left {
 	-moz-box-shadow: -1px -1px 3px 2px #666666;
 	-webkit-box-shadow: -1px -1px 3px 2px #666666;
@@ -146,10 +90,4 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
 }
 .vertical-middle {
 	vertical-align:middle;
-}
-.margin-right-medium {
-	margin-right: 20px;
-}
-.margin-left-medium {
-	margin-left: 20px;
 }
