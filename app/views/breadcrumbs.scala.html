@@ -1,23 +1,34 @@
 @(user: Option[bean.User])
 
-<div id="breadcrumbs" ng-controller="DropdownCtrl">
+@dropdownElement(category: bean.Category, isSub: Boolean) = {
+<li class="dropdown" on-toggle="toggled(open)">
+    <a class="dropdown-toggle">
+        @category.name @if(isSub) { > }
+    </a>
+    <ul class="dropdown-menu topnav-sub">
+        @* DOES NOT TOGGLE THE DROPDOWN
+        @category.subCategories().map { cat =>
+            @dropdownElement(cat, true)
+        }*@
+        @category.pages().map { page =>
+            <li><a href="/page/@page.permanentLink">@page.name</a></li>
+        }
+    </ul>
+</li>
+}
+
+<div id="breadcrumbsAppEl" ng-controller="BreadcrumbsCtrl">
 
     <ul class="topnav">
         <ul class="topnav">
             <li>
                 <a href="@routes.Application.index">ACCUEIL</a>
             </li>
-            @for(category <- dao.CategoryDao.findAllVisible()) {
-                <li class="dropdown" on-toggle="toggled(open)">
-                    <a href class="dropdown-toggle">
-                      @category.name
-                    </a>
-                    <ul class="dropdown-menu">
-                      @category.pages().map { page =>
-                        <li><a href="/page/@page.permanentLink">@page.name</a></li>
-                      }
-                    </ul>
-                </li>
+            @for(category <- bean.Category.noCategory.subCategories()) {
+                @dropdownElement(category, false)
+            }
+            @bean.Category.noCategory.pages().map { page =>
+                <li><a href="/page/@page.permanentLink">@page.name</a></li>
             }
         </ul>
     </ul>
@@ -29,5 +40,4 @@
             </a>
         </li>
     </ul>
-
 </div>

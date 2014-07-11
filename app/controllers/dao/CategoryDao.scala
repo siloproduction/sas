@@ -37,9 +37,9 @@ object CategoryDao {
     }
   }
 
-  def findAllVisible(): Seq[Category] = {
+  def findChildrenOf(id: Long): Seq[Category] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from category where id > 0 and enabled = true order by rank asc").as(parser *)
+      SQL("select * from category where parent={id} and enabled = true order by rank asc").on('id -> id).as(parser *)
     }
   }
 

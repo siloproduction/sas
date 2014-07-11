@@ -1,4 +1,7 @@
-ul.topnav {  
+ul.topnav .topnav-sub {
+    background-color:black;
+}
+ul.topnav   {
     list-style: none;  
     padding: 0 20px;  
     margin: 0;  
@@ -16,14 +19,17 @@ ul.topnav li {
     z-index: 100;
 }
 ul.topnav li a{  
-    padding: 10px 5px;  
-    color: #fff;  
+    padding: 10px 5px;
+    color: #fff;
     display: block;  
     text-decoration: none;  
     float: left;
 }  
-ul.topnav li a:hover{  
+ul.topnav li a:hover{
+    color: red;
     background: no-repeat center top;
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }  
 ul.topnav li span { /*--Drop down trigger styles--*/  
     width: 17px;  
@@ -55,4 +61,4 @@ html ul.topnav li ul.subnav li a {
 }  
 html ul.topnav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
     background: #222 url(../images/submenu_hover.gif) no-repeat top left;
-}  
+}

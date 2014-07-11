@@ -27,13 +27,13 @@
 	margin: 0 auto;
 	width: 90%;
 }
-#breadcrumbs {
+#breadcrumbsAppEl {
 	background: url("../images/breadcrumb.png") repeat top left transparent;
 	width: 980px;
 	height: 40px;
     margin: 0px auto;
 }
-#breadcrumbs .icon{
+#breadcrumbsAppEl .icon{
 	height: 20px;
 }
 #banner {

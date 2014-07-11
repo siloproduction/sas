@@ -1,7 +1,7 @@
 @(title: String, user: Option[bean.User], scripts: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
-<html ng-app="project">
+<html>
     <head>
         <title>@title</title>
 
@@ -81,9 +81,9 @@
         <script type="text/javascript" src="@routes.Assets.at("javascripts/admin.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/imageSlider.js")"></script>
 
-        <!-- include dropdown plugin -->
-        <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/dropdown.css")">
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/dropdown.js")"></script>
+        <!-- include breadcrumbs -->
+        <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/breadcrumbs.css")">
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/breadcrumbs.js")"></script>
 
         <!-- more scripts from sub pages -->
         @scripts

@@ -1,4 +1,6 @@
-angApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
+var adminApp = angular.module('adminApp', ['ui.bootstrap', 'ui.tinymce']);
+
+adminApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
   var EMPTY_USER = {id: 0, email: '',login: '', password: '', profile: 'User'};
 
   $scope.users = [];
@@ -116,7 +118,7 @@ angApp.controller('AdminUserCtrl', function ($scope, $http, $modal, $timeout) {
 
 });
 
-angApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) {
+adminApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) {
   var DEFAULT_PAGE = {id: 0, name: '',category: 0, rank: 5, enabled: false, data: 'Initial content'};
 
   $scope.categories = [];
@@ -253,7 +255,7 @@ angApp.controller('AdminPageCtrl', function ($scope, $http, $modal, $timeout) {
   };
 });
 
-angApp.controller('AdminCategoryCtrl', function ($scope, $http, $modal, $timeout) {
+adminApp.controller('AdminCategoryCtrl', function ($scope, $http, $modal, $timeout) {
   var EMPTY_CATEGORY = {id: -1, name: '', parent: 0, link: '', rank: 5, enabled: true};
 
   $scope.categories = [];
@@ -369,4 +371,8 @@ angApp.controller('AdminCategoryCtrl', function ($scope, $http, $modal, $timeout
       });
   };
 
+});
+
+utils.addLoadEvent(function () {
+    angular.bootstrap(document.getElementById("adminAppEl"), ['adminApp']);
 });

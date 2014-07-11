@@ -68,7 +68,7 @@ object PageDao {
 
   def findByCategoryId(categoryId: Long): Seq[Page] = {
     DB.withConnection { implicit  connection =>
-      SQL("select * from page where categoryId={categoryId} order by rank asc").on(
+      SQL("select * from page where categoryId={categoryId} and enabled=true order by rank asc").on(
         'categoryId -> categoryId
       ).as(parser *)
     }

@@ -1,5 +1,3 @@
-var angApp = angular.module('project', ['ui.bootstrap', 'ui.tinymce']);
-
 var utils = {
 
     isEmpty: function (obj) {
@@ -31,8 +29,25 @@ var utils = {
         }
 
         return true;
+    },
+
+
+    addLoadEvent: function(func) {
+      var oldonload = window.onload;
+      if (typeof window.onload != 'function') {
+        window.onload = func;
+      } else {
+        window.onload = function() {
+          if (oldonload) {
+            oldonload();
+          }
+          func();
+        }
+      }
     }
+
 };
+
 
 /*
 var lang = {

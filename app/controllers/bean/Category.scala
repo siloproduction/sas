@@ -8,7 +8,9 @@ import controllers.dao.{PageDao, CategoryDao}
 
 case class Category(id: Long, name: String, parent: Option[Category], link: Option[String] = Option.empty, rank: Int = 1, enabled: Boolean) {
   def pages() = PageDao.findByCategoryId(id)
+  def subCategories() = CategoryDao.findChildrenOf(id)
 
+  def hasNoneParent = parent.isEmpty || parent.equals(Category.noCategory)
   def hasParentLoop() = parent.isDefined && id == parent.get.id // MUST LOOP ON ITS PARENT TOO
   def canBePersisted = !hasParentLoop() && id != Category.NONE_ID
 }

@@ -3,14 +3,14 @@
 @import helper._
 
 @scripts = {
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/ang-admin.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/tinymce/angularjs-tinymce.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/tinymce/tinymce.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/tinymce/angularjs-tinymce.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/ang-admin.js")"></script>
 }
 
 @main("Admin page", user, scripts) {
 
-    <div id="admin-tabs">
+    <div id="adminAppEl" ng-controller="AdminUserCtrl">
 
         <tabset>
             <tab heading="Category">
