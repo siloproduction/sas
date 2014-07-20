@@ -10,6 +10,7 @@ import play.api.templates.Html
 import controllers.bean.User
 import controllers.bean.Category
 import play.api.libs.json.Json
+import play.Logger
 
 object Admin extends Controller with Secured {
 
@@ -23,19 +24,47 @@ object Admin extends Controller with Secured {
   def createPagePanel: Html = views.html.admin.page.pagePanel()
 
   def index = IsAdmin { username => implicit request =>
-    Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
+    try {
+      Ok(views.html.admin.index(user, createUserPanel,createCategoryPanel, createPagePanel))
+    } catch {
+      case e: Exception => {
+        Logger.of("ADMIN").error("Cannot render Index", e)
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
   def getUsers = IsAdmin { username => implicit request =>
-    Ok(Json.toJson(UserDao.findAll()))
+    try {
+      Ok(Json.toJson(UserDao.findAll()))
+    } catch {
+      case e: Exception => {
+        Logger.of("ADMIN").error("Cannot get all User", e)
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
   def getCategories = IsAdmin { username => implicit request =>
-    Ok(Json.toJson(CategoryDao.findAll()))
+    try {
+      Ok(Json.toJson(CategoryDao.findAll()))
+    } catch {
+      case e: Exception => {
+        Logger.of("ADMIN").error("Cannot get all Category", e)
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
   def getPages = IsAdmin { username => implicit request =>
-    Ok(Json.toJson(PageDao.findAll()))
+    try {
+      Ok(Json.toJson(PageDao.findAll()))
+    } catch {
+      case e: Exception => {
+        Logger.of("ADMIN").error("Cannot get all Page", e)
+        InternalServerError(e.getMessage)
+      }
+    }
   }
 
 
@@ -50,6 +79,7 @@ object Admin extends Controller with Secured {
       )
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot create User", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -66,6 +96,7 @@ object Admin extends Controller with Secured {
       )
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot update User", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -79,6 +110,7 @@ object Admin extends Controller with Secured {
       }
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot delete User", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -97,6 +129,7 @@ object Admin extends Controller with Secured {
       )
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot create Category", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -112,6 +145,7 @@ object Admin extends Controller with Secured {
       )
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot update Category", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -124,6 +158,7 @@ object Admin extends Controller with Secured {
       }
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot delete Category", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -141,6 +176,7 @@ object Admin extends Controller with Secured {
       )
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot create Page", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -156,6 +192,7 @@ object Admin extends Controller with Secured {
       )
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot update Page", e)
         InternalServerError(e.getMessage)
       }
     }
@@ -168,6 +205,7 @@ object Admin extends Controller with Secured {
       }
     } catch {
       case e: Exception => {
+        Logger.of("ADMIN").error("Cannot delete Page", e)
         InternalServerError(e.getMessage)
       }
     }

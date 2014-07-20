@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="form-group form-medium">
+            <!--<div class="form-group form-medium">
                 <label class="col-sm-1 control-label">Parent</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="category" ng-model="category.parent" ng-options="category.id as category.name for category in categories"></select>
@@ -28,7 +28,9 @@
                 <div class="col-sm-10">
                     <input type="text" class="form-control" ng-model="category.link" placeholder="www.google.com">
                 </div>
-            </div>
+            </div>-->
+            <input type="hidden" ng-model="category.parent" value="0">
+            <input type="hidden" ng-model="category.permanentLink" value="">
 
             <div class="form-group form-medium">
                 <label class="col-sm-1 control-label">Rank</label>
@@ -65,7 +67,7 @@
         <li>
             <button type="button" class="btn btn-sm btn-info glyphicon glyphicon-pencil" ng-click="editCategoryToggle(editingCategory)" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0"></button>
             <button type="button" class="btn btn-sm btn-danger glyphicon glyphicon-trash" ng-click="deleteCategory(editingCategory.id, editingCategory.name)"></button>
-            {{editingCategory.name}} <span class="bold small text-info">({{editingCategory.parent.name}})</span>
+            {{editingCategory.name}} <span class="bold small text-info">(rank:{{editingCategory.rank}})</span>
 
             <div collapse="!editCategoryIsToggled(editingCategory)">
                 <br>
@@ -79,7 +81,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group form-medium">
+                    <!--<div class="form-group form-medium">
                         <label class="col-sm-1 control-label">Parent</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="category" ng-model="editingCategory.parent.id" ng-options="category.id as category.name for category in categories"></select>
@@ -91,7 +93,10 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" ng-model="editingCategory.permanentLink" placeholder="the_link_of_my_category">
                         </div>
-                    </div>
+                    </div>-->
+
+                    <input type="hidden" ng-model="editingCategory.parent.id" value="0">
+                    <input type="hidden" ng-model="editingCategory.permanentLink" value="">
 
                     <div class="form-group form-medium">
                         <label class="col-sm-1 control-label">Rank</label>
