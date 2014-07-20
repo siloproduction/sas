@@ -59,7 +59,8 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
 
         <!-- ANGULAR -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.8/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.0/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.0/angular-route.js"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/controllers/dialog_confirm.js")"></script>
 
         <!-- ANGULAR UI-->
@@ -80,6 +81,7 @@
         <script type="text/javascript" src="@routes.Assets.at("javascripts/global.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/admin.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/imageSlider.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/body.js")"></script>
 
         <!-- include breadcrumbs -->
         <link type="text/css" rel="stylesheet" href="@routes.Assets.at("stylesheets/breadcrumbs.css")">
@@ -87,9 +89,11 @@
 
         <!-- more scripts from sub pages -->
         @scripts
+
+        <base href="/" />
     </head>
     <body>
-        <div class="container-fluid no-padding shadow-left  texture-paper">
+        <div id="pageAppEl" class="container-fluid no-padding shadow-left  texture-paper">
             @views.html.breadcrumbs(user)
             @views.html.banner()
             @views.html.bodyColumn(content)

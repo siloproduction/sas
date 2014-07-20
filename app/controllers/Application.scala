@@ -9,6 +9,7 @@ import play.api.data.Forms._
 import views._
 import play.api.templates.Html
 import controllers.bean.Credentials
+import play.api.libs.json.{JsObject, JsString, JsValue}
 
 object Application extends Controller with Secured {
 
@@ -18,12 +19,33 @@ object Application extends Controller with Secured {
   def index = Action { implicit request =>
     Ok(indexView(user))
   }
+  def contentIndex = Action { implicit request =>
+    Ok(JsObject(Seq(
+      "title" -> JsString("Anne Hengy - Conte"),
+      "content" -> JsString(views.html.contentIndex.render(PageDao.findPageTop(), PageDao.findPageBottom()).body)
+    )));
+  }
+
 
   def page(permanentLink: String) = Action { implicit request =>
     try {
       val page = PageDao.findByPermanentLink(permanentLink)
       page.enabled match {
         case true => Ok(views.html.page(user, page))
+        case false => TemporaryRedirect("/")
+      }
+    } catch {
+      case e:Exception => BadRequest(views.html.page(user, Page.PAGE_NOT_FOUND))
+    }
+  }
+  def contentPage(permanentLink: String) = Action { implicit request =>
+    try {
+      val page = PageDao.findByPermanentLink(permanentLink)
+      page.enabled match {
+        case true => Ok(JsObject(Seq(
+                        "title" -> JsString(page.name),
+                        "content" -> JsString(page.data)
+                    )))
         case false => TemporaryRedirect("/")
       }
     } catch {

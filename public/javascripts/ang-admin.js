@@ -374,7 +374,3 @@ adminApp.controller('AdminCategoryCtrl', function ($scope, $http, $modal, $timeo
   };
 
 });
-
-utils.addLoadEvent(function () {
-    angular.bootstrap(document.getElementById("adminAppEl"), ['adminApp']);
-});

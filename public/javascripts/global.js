@@ -44,10 +44,23 @@ var utils = {
           func();
         }
       }
+    },
+
+    changeDocumentTitle: function(title) {
+      document.title = title;
     }
 
 };
 
+utils.addLoadEvent(function () {
+
+    var modules = ['breadcrumbsApp', 'bodyApp'];
+    var adminAppEl = document.getElementById("adminAppEl");
+    if (adminAppEl) {
+        modules.push('adminApp');
+    }
+    angular.bootstrap(document.getElementById("pageAppEl"), modules);
+});
 
 /*
 var lang = {

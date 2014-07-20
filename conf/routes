@@ -17,6 +17,11 @@ GET     /page/:permanentLink        controllers.Application.page(permanentLink: 
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
+############### Content
+GET     /content/index              controllers.Application.contentIndex
+GET     /content/page/:permanentLink controllers.Application.contentPage(permanentLink: String)
+
+
 ############### Admin
 GET     /admin/                     controllers.Admin.index
 

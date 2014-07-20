@@ -1,7 +1,8 @@
 @(content: Html)
 
-<div id="bodyColumn" class="content">
-    <div id="contentBox">
+<div id="bodyAppEl" class="content" ng-controller="BodyCtrl">
+    <div id="contentBox" ng-if="isInitialPage">
         @content
     </div>
+    <div ng-view></div>
 </div>

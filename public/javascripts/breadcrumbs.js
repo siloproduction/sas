@@ -1,9 +1,2 @@
-var breadcrumbsApp = angular.module('breadcrumbsApp', ['ui.bootstrap']);
+var breadcrumbsApp = angular.module('breadcrumbsApp', []);
 
-breadcrumbsApp.controller('BreadcrumbsCtrl', function ($scope) {
-
-});
-
-utils.addLoadEvent(function () {
-    angular.bootstrap(document.getElementById("breadcrumbsAppEl"), ['breadcrumbsApp']);
-});

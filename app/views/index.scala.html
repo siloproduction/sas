@@ -3,15 +3,5 @@
 @import helper._
 
 @main("Anne Hengy - Conte", user) {
-
-    <div class="home-section">
-        <div class="home-block-top pull-left full-width">
-            <div class="home-block-content">@Html(pageTop.data)</div>
-        </div>
-        <div class="home-block-center pull-left">
-            <div class="home-block-news">@Html(pageBottom.data)</div>
-        </div>
-        <div class="home-block-bottom pull-left full-width"> </div>
-    </div>
-
+    @views.html.contentIndex(pageTop, pageBottom)
 }

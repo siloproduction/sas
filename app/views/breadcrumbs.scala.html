@@ -11,24 +11,24 @@
             @dropdownElement(cat, true)
         }*@
         @category.pages().map { page =>
-            <li><a href="/page/@page.permanentLink">@page.name</a></li>
+            <li><a href="page/@page.permanentLink">@page.name</a></li>
         }
     </ul>
 </li>
 }
 
-<div id="breadcrumbsAppEl" ng-controller="BreadcrumbsCtrl">
+<div id="breadcrumbsAppEl">
 
     <ul class="topnav">
         <ul class="topnav">
             <li>
-                <a href="@routes.Application.index">ACCUEIL</a>
+                <a href="/">ACCUEIL</a>
             </li>
             @for(category <- bean.Category.noCategory.subCategories()) {
                 @dropdownElement(category, false)
             }
             @bean.Category.noCategory.pages().map { page =>
-                <li><a href="/page/@page.permanentLink">@page.name</a></li>
+                <li><a href="page/@page.permanentLink" >@page.name</a></li>
             }
         </ul>
     </ul>
