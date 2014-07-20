@@ -288,8 +288,10 @@ adminApp.controller('AdminCategoryCtrl', function ($scope, $http, $modal, $timeo
   };
 
   $scope.updateCategory = function(category) {
+    var categoryForJson = angular.copy(category);
+    categoryForJson.parent = category.parent.id;
     openConfirmDialog("Do you really want to modify " + category.login + "?", function() {
-        $http.put('/admin/category/' + category.id, category)
+        $http.put('/admin/category/' + category.id, categoryForJson)
             .success(function(data, status, headers, config) {
                 getCategoryAttributes(category)["errors"] = {};
             })
