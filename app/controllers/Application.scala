@@ -21,7 +21,11 @@ object Application extends Controller with Secured {
 
   def page(permanentLink: String) = Action { implicit request =>
     try {
-      Ok(views.html.page(user, PageDao.findByPermanentLink(permanentLink)))
+      val page = PageDao.findByPermanentLink(permanentLink)
+      page.enabled match {
+        case true => Ok(views.html.page(user, page))
+        case false => TemporaryRedirect("/")
+      }
     } catch {
       case e:Exception => BadRequest(views.html.page(user, Page.PAGE_NOT_FOUND))
     }
