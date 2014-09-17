@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>beta</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+	
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    
+    
+    
+    <!-- Le styles -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/animate.min.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body data-ng-app="MonApp">
+	<nav id="pages-nav">
+	    <ul nav-menu="active">
+		    <li class="left" id="logo">
+		        <a href="#/"><img src="img/logo.png" alt=""><!--{{asset('img/logo.png')}}--></a>
+		    </li>
+			<li class="left">
+			    <input class="search-query" type="text" placeholder="Recherche">
+		    </li>
+		           	                 
+	        <li class="right">
+	            <a href="" title="" data-rel="envent-focus"><h3>SUPPORT</h3></a>
+			</li>
+			<li class="right">
+	            <a href="#Bitcoin" title="Bitcoin" data-rel="methods"><h3>BITCOIN</h3></a>
+	        </li>
+			<li class="right">
+	            <a href="#/events" title="event" data-rel="event"><h3>EVENTS</h3></a>
+	        </li>
+			<li class="right">
+			    <a href="#/" title="Home" data-rel="home"><h3>HOME</h3></a>
+		    </li>
+	    </ul>
+    </nav>	
+    <div data-ng-controller="SlideCtrl" data-ng-view class="{{ui.direction}} wrapper-outer"></div>
+	<div class="ng-lecture"></div> 				
+	</body>
+
+    <script src="js/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.2.16/angular-route.min.js"></script>
+    <script src="js/jquery-1.11.0.js"></script>
+	<script src="https://code.angularjs.org/1.2.16/angular-sanitize.min.js"></script>
+    <script src="js/angular-strap.js"></script>
+    <script src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular-touch.min.js"></script>
+    <script src="js/angular-touch.min.js.map"></script>
+	<script src="js/app.js"></script>
+	<script src="js/services/artiste.js"></script>
+	<script src="js/services/event.js"></script>
+	<script src="js/services/user.js"></script>
+    <script src="js/services/lieu.js"></script>
+	<script src="js/controllers/artistes.js"></script>
+	<script src="js/controllers/events.js"></script>
+	<script src="js/controllers/eventView.js"></script>
+	<script src="js/controllers/users.js"></script>
+	<script src="js/controllers/carousel.js"></script>
+	<script src="js/controllers/tabs.js"></script>
+    <script src="js/controllers/slide.js"></script>
+    <script src="js/controllers/lieu.js"></script>
+	<script src="js/tooltip.js"></script>
+	<script src="js/controllers/modal.js"></script>
+	<script src="js/directives/event.js"></script>
+    <script src="js/carousel.js"></script>
+
+  
+</html>

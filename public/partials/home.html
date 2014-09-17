@@ -1,0 +1,35 @@
+<div class="home">
+    <div id="content" ng-controller="CarouselDemoCtrl">
+
+        <carousel interval="myInterval">
+            <slide ng-repeat="slide in slides" active="slide.active">
+                <img ng-src="{{slide.image}}?{{$index}}" style="margin:auto;" />
+                <div class="carousel-caption">
+                    <h4>Slide {{$index}}</h4>
+                    <p>{{slide.text}}</p>
+                </div>
+            </slide>
+        </carousel>
+    </div>
+    <script id="template/carousel/carousel.html" type="text/ng-template">
+        <div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel">
+            <ol class="carousel-indicators" ng-show="slides().length > 1">
+                <li ng-repeat="slide in slides()" ng-class="{active: isActive(slide)}" ng-click="select(slide)"></li>
+            </ol>
+            <div class="carousel-inner" ng-transclude set-ng-animate="$parent.animate"></div>
+            <a ng-click="prev()" class="carousel-control left" ng-show="slides().length > 1">&lsaquo;</a>
+            <a ng-click="next()" class="carousel-control right" ng-show="slides().length > 1">&rsaquo;</a>
+        </div>
+    </script>
+    <div class=" row-fluid ng-search" data-spy="affix" data-offset-top="20">
+    </div>
+</div>		
+<div class="row-fluid pages_contain" >	
+    <div class="row-fluid span12" id="events_contener" data-ng-controller="EventsCtrl"><br/>
+        <ul>					   
+            <li class="row-fluid event_min_contener data-ng-event" data-ng-repeat="event in events | filter:{lieux:query}">
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
