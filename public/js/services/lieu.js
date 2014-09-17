@@ -6,7 +6,7 @@ app.factory ('LieuFactory', function ($http, $q){
 		if(factory.lieux ==! false){
 		deferred.resolve(factory.lieux);
 		}else{
-		$http.get('lieux.json')
+		$http.get('assets/json/lieux.json')
 			.success(function(data, status){
 			factory.lieux = data;
 			deferred.resolve(factory.lieux);

@@ -13,7 +13,7 @@ import play.api.libs.json.Json
 import play.Logger
 
 object Admin extends Controller with Secured {
-
+/*
   val userBindingForm = UserForm.create()
   val userUpdateBindingForm = UserForm.update()
   val categoryBindingForm = CategoryForm.create()
@@ -209,5 +209,5 @@ object Admin extends Controller with Secured {
         InternalServerError(e.getMessage)
       }
     }
-  }
+  }*/
 }

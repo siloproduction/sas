@@ -1,7 +1,75 @@
-@(user: Option[bean.User], pageTop: bean.Page, pageBottom: bean.Page)
+@(user: Option[bean.User], scripts: Html = Html(""))
 
-@import helper._
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>beta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-@main("Anne Hengy - Conte", user) {
-    @views.html.contentIndex(pageTop, pageBottom)
-}
+
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+
+    <!-- Le styles -->
+    <link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet" type="text/css">
+    <link href="@routes.Assets.at("css/bootstrap-responsive.min.css")" rel="stylesheet" type="text/css">
+    <link href="@routes.Assets.at("css/style.css")" rel="stylesheet" type="text/css">
+    <link href="@routes.Assets.at("css/animate.min.css")" rel="stylesheet" type="text/css">
+</head>
+
+<body data-ng-app="MonApp">
+<nav id="pages-nav">
+    <ul nav-menu="active">
+        <li class="left" id="logo">
+            <a href="#/"><img src="@routes.Assets.at("img/logo.png")" alt=""><!--{{asset('img/logo.png')}}--></a>
+        </li>
+        <li class="left">
+            <input class="search-query" type="text" placeholder="Recherche">
+        </li>
+
+        <li class="right">
+            <a href="" title="" data-rel="envent-focus"><h3>SUPPORT</h3></a>
+        </li>
+        <li class="right">
+            <a href="#Bitcoin" title="Bitcoin" data-rel="methods"><h3>BITCOIN</h3></a>
+        </li>
+        <li class="right">
+            <a href="#/events" title="event" data-rel="event"><h3>EVENTS</h3></a>
+        </li>
+        <li class="right">
+            <a href="#/" title="Home" data-rel="home"><h3>HOME</h3></a>
+        </li>
+    </ul>
+</nav>
+<div data-ng-controller="SlideCtrl" data-ng-view class="{{ui.direction}} wrapper-outer"></div>
+<div class="ng-lecture"></div>
+</body>
+
+<script src="@routes.Assets.at("js/angular.min.js")"></script>
+<script src="https://code.angularjs.org/1.2.16/angular-route.min.js"></script>
+<script src="@routes.Assets.at("js/jquery-1.11.0.js")"></script>
+<script src="https://code.angularjs.org/1.2.16/angular-sanitize.min.js"></script>
+<script src="@routes.Assets.at("js/angular-strap.js")"></script>
+<script src="@routes.Assets.at("js/ui-bootstrap-tpls-0.11.0.min.js")"></script>
+<script src="@routes.Assets.at("js/angular-animate.min.js")"></script>
+<script src="@routes.Assets.at("js/app.js")"></script>
+<script src="@routes.Assets.at("js/services/artiste.js")"></script>
+<script src="@routes.Assets.at("js/services/event.js")"></script>
+<script src="@routes.Assets.at("js/services/user.js")"></script>
+<script src="@routes.Assets.at("js/services/lieu.js")"></script>
+<script src="@routes.Assets.at("js/controllers/artistes.js")"></script>
+<script src="@routes.Assets.at("js/controllers/events.js")"></script>
+<script src="@routes.Assets.at("js/controllers/eventView.js")"></script>
+<script src="@routes.Assets.at("js/controllers/users.js")"></script>
+<script src="@routes.Assets.at("js/controllers/carousel.js")"></script>
+<script src="@routes.Assets.at("js/controllers/tabs.js")"></script>
+<script src="@routes.Assets.at("js/controllers/slide.js")"></script>
+<script src="@routes.Assets.at("js/controllers/lieu.js")"></script>
+<script src="@routes.Assets.at("js/tooltip.js")"></script>
+<script src="@routes.Assets.at("js/controllers/modal.js")"></script>
+<script src="@routes.Assets.at("js/directives/event.js")"></script>
+<script src="@routes.Assets.at("js/carousel.js")"></script>
+
+
+</html>

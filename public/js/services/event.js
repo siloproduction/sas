@@ -6,7 +6,7 @@ app.factory ('EventFactory', function ($http, $q){
 		if(factory.events ==! false){
 		deferred.resolve(factory.events);
 		}else{
-		$http.get('events.json')
+		$http.get('assets/json/events.json')
 			.success(function(data, status){
 			factory.events = data;
 			deferred.resolve(factory.events);

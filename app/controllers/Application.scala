@@ -14,11 +14,12 @@ import play.api.libs.json.{JsObject, JsString, JsValue}
 object Application extends Controller with Secured {
 
   val loginForm = LoginForm.create()
-  def indexView(user: Option[User]) = views.html.index(user, PageDao.findPageTop(), PageDao.findPageBottom())
+  def indexView(user: Option[User]) = views.html.index(user)
 
   def index = Action { implicit request =>
     Ok(indexView(user))
   }
+  /*
   def contentIndex = Action { implicit request =>
     Ok(JsObject(Seq(
       "title" -> JsString("Anne Hengy - Conte"),
@@ -51,10 +52,10 @@ object Application extends Controller with Secured {
     } catch {
       case e:Exception => BadRequest(views.html.page(user, Page.PAGE_NOT_FOUND))
     }
-  }
+  }*/
 
   def login = Action { implicit request =>
-    Ok(views.html.login(user, loginForm))
+    Ok(views.html.index(user))
   }
 
   def logout = Action {
@@ -66,7 +67,7 @@ object Application extends Controller with Secured {
   def authenticate = Action { implicit request =>
     val requestFrom: Form[Credentials] = loginForm.bindFromRequest()
     requestFrom.fold(
-      formWithErrors => BadRequest(views.html.login(user, formWithErrors)),
+      formWithErrors => BadRequest(views.html.index(user)),
       {case (credentials) => {
         try {
           val user = UserDao.login(credentials)
@@ -78,8 +79,8 @@ object Application extends Controller with Secured {
               "user.login" -> user.login)
         }
         catch{
-          case x:UserNotFoundException => Results.Redirect(routes.Application.login)
-          case x:InvalidCredentialsException => Results.Redirect(routes.Application.login)
+          case x:UserNotFoundException => Results.Redirect(routes.Application.index)
+          case x:InvalidCredentialsException => Results.Redirect(routes.Application.index)
         }
       }}
     )

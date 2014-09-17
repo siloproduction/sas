@@ -6,7 +6,7 @@
 		if(factory.users ==! false){
 		deferred.resolve(factory.users);
 		}else{
-		$http.get('users.json')
+		$http.get('assets/json/users.json')
 		.success(function(data, status){
 			factory.users = data;
 			deferred.resolve(factory.users);

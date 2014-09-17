@@ -1,14 +1,14 @@
 app.directive('ngEvent', function(){
   return{
     restrict : 'C',
-    templateUrl:'partials/_event.html'
+    templateUrl:'assets/partials/_event.html'
   }
 });
 
 app.directive('ngSearch', function(){
                 return{
                     restrict : 'C',
-                    templateUrl:'partials/_searchEvent.html'
+                    templateUrl:'assets/partials/_searchEvent.html'
                 } 
 
 });
@@ -17,21 +17,21 @@ app.directive('ngSearch', function(){
 app.directive('ngAddtab', function(){
     return{
         restrict : 'C',
-        templateUrl:'partials/_addtab.html'
+        templateUrl:'assets/partials/_addtab.html'
     }
 });
 
 app.directive('ngVideo', function(){
     return{
         restrict : 'C',
-        templateUrl:'partials/_video.html'
+        templateUrl:'assets/partials/_video.html'
     }
 });
 
 app.directive('ngMusique', function(){
               return{
                   restrict : 'C',
-                  templateUrl:'partials/_musique.html'
+                  templateUrl:'assets/partials/_musique.html'
               }
               
               });
@@ -71,7 +71,7 @@ app.directive('ngLecteur', function(){
 app.directive('ngLecture', function(){
     return{
         restrict : 'C',
-        templateUrl : 'partials/_lecteur.html'
+        templateUrl : 'assets/partials/_lecteur.html'
     }
 });
 
