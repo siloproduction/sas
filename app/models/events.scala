@@ -8,13 +8,14 @@ import anorm.SqlParser._
 import play.api.libs.json.Json
 import play.api.libs.json._
 
-case class Event(id: Pk[Long], name: String)
+case class Event(id: Pk[Long], name: String, userId: Pk[Long])
 
 object Event {
   private val EventParser: RowParser[Event] = {
     get[Pk[Long]]("id") ~
-    get[String]("name") map {
-      case id ~ name  => Event(id, name)
+    get[String]("name") ~
+    get[Pk[Long]]("userId") map {
+      case id ~ name ~ userId => Event(id, name, userId)
     }
   }
 
@@ -36,7 +37,7 @@ object Event {
     DB.withConnection { implicit connection =>
       SQL("""
             INSERT INTO events(name)
-            VALUES({name})
+            VALUES({name}, 0)
           """).on(
         'name -> name)
       .executeUpdate
