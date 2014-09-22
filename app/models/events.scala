@@ -42,9 +42,6 @@ object Event {
       .executeUpdate
     }
   }
-
-
-
 }
 
 
