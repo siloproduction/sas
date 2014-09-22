@@ -1,4 +1,13 @@
 # --- !Ups
+CREATE TABLE events (
+  id                        SERIAL PRIMARY KEY,
+  name                      VARCHAR(255) NOT NULL
+);
+INSERT INTO events (name) VALUES ('event1');
+INSERT INTO events (name) VALUES ('event2');
+INSERT INTO events (name) VALUES ('event3');
+INSERT INTO events (name) VALUES ('event4');
+INSERT INTO events (name) VALUES ('event5');
 
 CREATE TABLE users (
   id                        SERIAL PRIMARY KEY,
@@ -40,3 +49,4 @@ INSERT INTO page (name, categoryId, permanentLink, data, rank, enabled) VALUES
 
 DROP TABLE IF EXISTS page;
 DROP TABLE IF EXISTS users, category;
+DROP TABLE IF EXISTS bar;

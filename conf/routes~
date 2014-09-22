@@ -1,0 +1,46 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+############test
+GET /hello controllers.Application.hello(n : string)
+
+###############
+GET     /login                      controllers.Application.login
+GET     /logout                     controllers.Application.logout
+POST    /authenticate               controllers.Application.authenticate
+
+# Home page
+GET     /                           controllers.Application.index
+
+# Show a page
+GET     /page/:permanentLink        controllers.Application.page(permanentLink: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+
+############### Admin
+GET     /authenticate               controllers.Application.authenticate
+GET     /admin/                     controllers.Admin.index
+
+### User
+GET     /admin/getUsers             controllers.Admin.getUsers
+POST    /admin/user                 controllers.Admin.createUser
+POST    /admin/user/:id             controllers.Admin.updateUser(id: Long)
+GET     /admin/user/:id             controllers.Admin.getUpdateUserForm(id: Long)
+DELETE  /admin/user/:id             controllers.Admin.deleteUser(id: Long)
+
+### Category
+GET     /admin/getCategories        controllers.Admin.getCategories
+POST    /admin/category             controllers.Admin.createCategory
+POST    /admin/category/:id         controllers.Admin.updateCategory(id: Long)
+GET     /admin/category/:id         controllers.Admin.getUpdateCategoryForm(id: Long)
+DELETE  /admin/category/:id         controllers.Admin.deleteCategory(id: Long)
+
+### Page
+GET     /admin/getPages             controllers.Admin.getPages
+POST    /admin/page                 controllers.Admin.createPage
+POST    /admin/page/:id             controllers.Admin.updatePage(id: Long)
+GET     /admin/page/:id             controllers.Admin.getUpdatePageForm(id: Long)
+DELETE  /admin/page/:id             controllers.Admin.deletePage(id: Long)

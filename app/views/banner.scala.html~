@@ -1,0 +1,13 @@
+<div id="banner">
+    <div class="pull-left margin-left-medium">
+        <a id="bannerLeft" href="@routes.Application.index">
+            <img id="bannerLogo" src="@routes.Assets.at("images/header.jpg")" alt="ANNE HENGY">
+        </a>
+    </div>
+    <div id="bannerRight" class="pull-right margin-right-medium">
+        <img id="bannerRightLogo" src="@routes.Assets.at("images/bannerName.png")" alt="ANNE HENGY">
+    </div>
+    <div class="clear">
+        <hr>
+    </div>
+</div>

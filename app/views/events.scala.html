@@ -1,0 +1,8 @@
+@(events: Seq[Event])
+
+@events.map { event =>
+<li>
+    @event.id
+    @event.name
+</li>
+}
