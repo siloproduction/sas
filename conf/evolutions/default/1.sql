@@ -1,4 +1,14 @@
 # --- !Ups
+CREATE TABLE test (
+  id                        SERIAL PRIMARY KEY,
+  name                      VARCHAR(255) NOT NULL
+);
+INSERT INTO test (name) VALUES ('event1');
+INSERT INTO test (name) VALUES ('event2');
+INSERT INTO test (name) VALUES ('event3');
+INSERT INTO test (name) VALUES ('event4');
+INSERT INTO test (name) VALUES ('event5');
+
 CREATE TABLE users (
   id                        SERIAL PRIMARY KEY,
   email                     VARCHAR(255) NOT NULL,
@@ -21,6 +31,7 @@ INSERT INTO events (name, userId) VALUES ('event3', 1);
 
 
 # --- !Downs
+DROP TABLE IF EXISTS test;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS users;
 

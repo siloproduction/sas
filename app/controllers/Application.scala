@@ -21,9 +21,10 @@ object Application extends Controller {
   }
 
   def event(id: Int) = Action {
-    val event: Option[Event] = Event.find(id)
+    //val event: Option[Event] = Event.find(id)
+    val eventWrites = Event.find(id)
 
-    Ok(views.html.event(event))
+    Ok(views.html.event(eventWrites))
   }
 
   def addEvent(name: String) = Action {

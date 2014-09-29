@@ -2,15 +2,28 @@ package models
 
 import play.api.db._
 import play.api.Play.current
-
 import anorm._
 import anorm.SqlParser._
 import play.api.libs.json.Json
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 case class Event(id: Pk[Long], name: String, userId: Pk[Long])
 
 object Event {
+
+  /*implicit val eventWrites: Writes[Event] = (
+    (JsPath \ "id").write[Pk[Long]] and
+      (JsPath \ "name").write[String] and
+      (JsPath \ "userId").writeNullable[Pk[Long]]
+    )(unlift(Event.unapply))*/
+  implicit def pkWrites[T : Writes]: Writes[Pk[T]] = Writes {
+    case anorm.Id(t) => implicitly[Writes[T]].writes(t)
+    case anorm.NotAssigned => JsNull
+  }
+  implicit val eventWrites = Json.writes[Event]
+
+
   private val EventParser: RowParser[Event] = {
     get[Pk[Long]]("id") ~
     get[String]("name") ~
